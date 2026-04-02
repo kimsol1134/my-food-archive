@@ -1,5 +1,25 @@
 # 📱 [마이 맛집 아카이브] MVP 구현 계획서
 
+## 진행 체크리스트
+
+- [x] Task 1: Flutter 프로젝트 생성 및 패키지 의존성 추가
+- [x] Task 2: iOS 권한 설정
+- [x] Task 3: 컬러/타이포그래피 상수 및 앱 테마 설정
+- [x] Task 4: ArchiveItem 데이터 모델 및 Hive 로컬 DB 서비스
+- [x] Task 5: Provider 상태 관리 계층
+- [ ] Task 6: HomeScreen UI (갤러리 그리드 + Empty State + FAB)
+- [ ] Task 7: DetailScreen UI
+- [ ] Task 8: AddEditRecordScreen UI (폼 레이아웃)
+- [ ] Task 9: 3개 화면 간 네비게이션 연결
+- [ ] Task 10: 사진 선택 서비스 및 EXIF 메타데이터 추출
+- [ ] Task 11: Gemini Vision AI 서비스 연동
+- [ ] Task 12: 저장 기능 완성 (Create + Update + searchKeyword 생성)
+- [ ] Task 13: 삭제 기능 완성
+- [ ] Task 14: 실시간 키워드 검색 기능
+- [ ] Task 15: 사진 재선택 기능
+- [ ] Task 16: 에러 처리, 토스트 메시지 마무리
+- [ ] Task 17: 전체 통합 테스트 및 UI 폴리시
+
 ## 프로젝트 개요
 
 백엔드 없이 기기 로컬에 모든 데이터를 저장하는 개인용 맛집 아카이브 iOS 앱.
