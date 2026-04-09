@@ -8,12 +8,15 @@ import '../models/archive_item.dart';
 
 class ArchiveGridCard extends StatelessWidget {
   final ArchiveItem item;
+  final VoidCallback? onTap;
 
-  const ArchiveGridCard({super.key, required this.item});
+  const ArchiveGridCard({super.key, required this.item, this.onTap});
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return GestureDetector(
+      onTap: onTap,
+      child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         AspectRatio(
@@ -52,6 +55,7 @@ class ArchiveGridCard extends StatelessWidget {
           overflow: TextOverflow.ellipsis,
         ),
       ],
+      ),
     );
   }
 }

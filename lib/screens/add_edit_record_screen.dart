@@ -114,7 +114,7 @@ class _AddEditRecordScreenState extends State<AddEditRecordScreen> {
                 enabled: _isSaveEnabled,
                 onPressed: () {
                   // TODO: Task 12 - 저장 로직 구현
-                  Navigator.pop(context);
+                  Navigator.of(context).popUntil((route) => route.isFirst);
                 },
               ),
               const SizedBox(height: 24),

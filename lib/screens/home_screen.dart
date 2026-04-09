@@ -6,6 +6,8 @@ import '../constants/app_colors.dart';
 import '../constants/app_text_styles.dart';
 import '../providers/archive_provider.dart';
 import '../widgets/archive_grid_card.dart';
+import 'detail_screen.dart';
+import 'add_edit_record_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -49,8 +51,19 @@ class HomeScreen extends StatelessWidget {
                         childAspectRatio: 0.8,
                       ),
                       itemCount: items.length,
-                      itemBuilder: (_, index) =>
-                          ArchiveGridCard(item: items[index]),
+                      itemBuilder: (_, index) {
+                        final item = items[index];
+                        return ArchiveGridCard(
+                          item: item,
+                          onTap: () {
+                            Navigator.of(context).push(
+                              CupertinoPageRoute(
+                                builder: (_) => DetailScreen(item: item),
+                              ),
+                            );
+                          },
+                        );
+                      },
                     );
                   },
                 ),
@@ -155,7 +168,11 @@ class _AddFab extends StatelessWidget {
         child: InkWell(
           customBorder: const CircleBorder(),
           onTap: () {
-            // Task 10에서 PhotoService.pickImage 호출 + AddEditRecordScreen 이동 연결.
+            Navigator.of(context).push(
+              CupertinoPageRoute(
+                builder: (_) => const AddEditRecordScreen(),
+              ),
+            );
           },
           child: const Center(
             child: Icon(

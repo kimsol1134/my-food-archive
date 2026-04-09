@@ -8,6 +8,7 @@ import '../constants/app_colors.dart';
 import '../constants/app_text_styles.dart';
 import '../models/archive_item.dart';
 import '../providers/archive_provider.dart';
+import 'add_edit_record_screen.dart';
 
 class DetailScreen extends StatelessWidget {
   final ArchiveItem item;
@@ -23,7 +24,11 @@ class DetailScreen extends StatelessWidget {
           IconButton(
             icon: const Icon(CupertinoIcons.pencil),
             onPressed: () {
-              // TODO: Task 9 - AddEditRecordScreen 수정 모드로 이동
+              Navigator.of(context).push(
+                CupertinoPageRoute(
+                  builder: (_) => AddEditRecordScreen(existingItem: item),
+                ),
+              );
             },
           ),
           IconButton(
