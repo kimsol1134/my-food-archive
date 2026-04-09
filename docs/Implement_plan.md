@@ -8,8 +8,8 @@
 - [x] Task 4: ArchiveItem 데이터 모델 및 Hive 로컬 DB 서비스
 - [x] Task 5: Provider 상태 관리 계층
 - [x] Task 6: HomeScreen UI (갤러리 그리드 + Empty State + FAB)
-- [ ] Task 7: DetailScreen UI
-- [ ] Task 8: AddEditRecordScreen UI (폼 레이아웃)
+- [x] Task 7: DetailScreen UI
+- [x] Task 8: AddEditRecordScreen UI (폼 레이아웃)
 - [ ] Task 9: 3개 화면 간 네비게이션 연결
 - [ ] Task 10: 사진 선택 서비스 및 EXIF 메타데이터 추출
 - [ ] Task 11: Gemini Vision AI 서비스 연동
