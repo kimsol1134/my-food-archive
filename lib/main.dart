@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import 'constants/app_colors.dart';
 import 'providers/archive_provider.dart';
+import 'screens/home_screen.dart';
 import 'services/local_db_service.dart';
 
 void main() async {
@@ -49,9 +50,7 @@ class MyApp extends StatelessWidget {
             child: child!,
           );
         },
-        home: const Scaffold(
-          backgroundColor: AppColors.background,
-        ),
+        home: const HomeScreen(),
       ),
     );
   }

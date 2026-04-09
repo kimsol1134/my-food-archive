@@ -7,7 +7,7 @@
 - [x] Task 3: 컬러/타이포그래피 상수 및 앱 테마 설정
 - [x] Task 4: ArchiveItem 데이터 모델 및 Hive 로컬 DB 서비스
 - [x] Task 5: Provider 상태 관리 계층
-- [ ] Task 6: HomeScreen UI (갤러리 그리드 + Empty State + FAB)
+- [x] Task 6: HomeScreen UI (갤러리 그리드 + Empty State + FAB)
 - [ ] Task 7: DetailScreen UI
 - [ ] Task 8: AddEditRecordScreen UI (폼 레이아웃)
 - [ ] Task 9: 3개 화면 간 네비게이션 연결
