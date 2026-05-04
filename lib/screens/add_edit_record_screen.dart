@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
@@ -6,11 +7,14 @@ import 'package:flutter/material.dart';
 import '../constants/app_colors.dart';
 import '../constants/app_text_styles.dart';
 import '../models/archive_item.dart';
+import '../services/exif_service.dart';
+import '../services/location_service.dart';
 
 class AddEditRecordScreen extends StatefulWidget {
   final ArchiveItem? existingItem;
+  final String? imagePath;
 
-  const AddEditRecordScreen({super.key, this.existingItem});
+  const AddEditRecordScreen({super.key, this.existingItem, this.imagePath});
 
   bool get isEditMode => existingItem != null;
 
@@ -24,6 +28,9 @@ class _AddEditRecordScreenState extends State<AddEditRecordScreen> {
   late final TextEditingController _menuController;
   late final TextEditingController _categoryController;
 
+  late String _currentImagePath;
+  DateTime? _currentDate;
+
   bool _isSaveEnabled = false;
 
   @override
@@ -35,8 +42,38 @@ class _AddEditRecordScreenState extends State<AddEditRecordScreen> {
     _menuController = TextEditingController(text: item?.menuName ?? '');
     _categoryController = TextEditingController(text: item?.category ?? '');
 
+    _currentImagePath = item?.imagePath ?? widget.imagePath ?? '';
+    _currentDate = item?.date;
+
     _isSaveEnabled = _restaurantController.text.trim().isNotEmpty;
     _restaurantController.addListener(_onRestaurantChanged);
+
+    if (!widget.isEditMode &&
+        widget.imagePath != null &&
+        widget.imagePath!.isNotEmpty) {
+      unawaited(_runExifPipeline());
+    }
+  }
+
+  Future<void> _runExifPipeline() async {
+    final result = await ExifService().extract(widget.imagePath!);
+    if (!mounted) return;
+
+    if (_currentDate == null && result.date != null) {
+      setState(() => _currentDate = result.date);
+    }
+
+    if (!result.hasGps) return;
+
+    final region = await LocationService().reverseGeocode(
+      latitude: result.latitude!,
+      longitude: result.longitude!,
+    );
+    if (!mounted) return;
+
+    if (region.isNotEmpty && _locationController.text.trim().isEmpty) {
+      _locationController.text = region;
+    }
   }
 
   void _onRestaurantChanged() {
@@ -82,7 +119,7 @@ class _AddEditRecordScreenState extends State<AddEditRecordScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              _ImagePreview(imagePath: widget.existingItem?.imagePath),
+              _ImagePreview(imagePath: _currentImagePath),
               const SizedBox(height: 24),
               _buildTextField(
                 controller: _restaurantController,
@@ -108,7 +145,7 @@ class _AddEditRecordScreenState extends State<AddEditRecordScreen> {
                 placeholder: '예: 한식, 양식, 카페',
               ),
               const SizedBox(height: 12),
-              _DateField(date: widget.existingItem?.date),
+              _DateField(date: _currentDate),
               const SizedBox(height: 32),
               _SaveButton(
                 enabled: _isSaveEnabled,
@@ -164,19 +201,19 @@ class _AddEditRecordScreenState extends State<AddEditRecordScreen> {
 }
 
 class _ImagePreview extends StatelessWidget {
-  final String? imagePath;
+  final String imagePath;
 
-  const _ImagePreview({this.imagePath});
+  const _ImagePreview({required this.imagePath});
 
   @override
   Widget build(BuildContext context) {
-    if (imagePath != null && imagePath!.isNotEmpty) {
+    if (imagePath.isNotEmpty) {
       return ClipRRect(
         borderRadius: BorderRadius.circular(10),
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxHeight: 240),
           child: Image.file(
-            File(imagePath!),
+            File(imagePath),
             width: double.infinity,
             fit: BoxFit.cover,
             errorBuilder: (context, error, stackTrace) => _placeholder(),

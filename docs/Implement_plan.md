@@ -11,7 +11,7 @@
 - [x] Task 7: DetailScreen UI
 - [x] Task 8: AddEditRecordScreen UI (폼 레이아웃)
 - [x] Task 9: 3개 화면 간 네비게이션 연결
-- [ ] Task 10: 사진 선택 서비스 및 EXIF 메타데이터 추출
+- [x] Task 10: 사진 선택 서비스 및 EXIF 메타데이터 추출
 - [ ] Task 11: Gemini Vision AI 서비스 연동
 - [ ] Task 12: 저장 기능 완성 (Create + Update + searchKeyword 생성)
 - [ ] Task 13: 삭제 기능 완성

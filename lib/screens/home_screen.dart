@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import '../constants/app_colors.dart';
 import '../constants/app_text_styles.dart';
 import '../providers/archive_provider.dart';
+import '../services/photo_service.dart';
 import '../widgets/archive_grid_card.dart';
 import 'detail_screen.dart';
 import 'add_edit_record_screen.dart';
@@ -144,8 +145,34 @@ class _EmptyState extends StatelessWidget {
   }
 }
 
-class _AddFab extends StatelessWidget {
+class _AddFab extends StatefulWidget {
   const _AddFab();
+
+  @override
+  State<_AddFab> createState() => _AddFabState();
+}
+
+class _AddFabState extends State<_AddFab> {
+  final PhotoService _photoService = PhotoService();
+  bool _busy = false;
+
+  Future<void> _handleTap() async {
+    if (_busy) return;
+    setState(() => _busy = true);
+
+    final imagePath = await _photoService.pickAndPersistImage();
+
+    if (!mounted) return;
+    setState(() => _busy = false);
+
+    if (imagePath == null) return;
+
+    Navigator.of(context).push(
+      CupertinoPageRoute(
+        builder: (_) => AddEditRecordScreen(imagePath: imagePath),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -167,13 +194,7 @@ class _AddFab extends StatelessWidget {
         shape: const CircleBorder(),
         child: InkWell(
           customBorder: const CircleBorder(),
-          onTap: () {
-            Navigator.of(context).push(
-              CupertinoPageRoute(
-                builder: (_) => const AddEditRecordScreen(),
-              ),
-            );
-          },
+          onTap: _handleTap,
           child: const Center(
             child: Icon(
               CupertinoIcons.add,
