@@ -1,0 +1,1 @@
+{"flutter":{"platforms":{"ios":{"default":{"projectId":"my-food-archive-dbc0c","appId":"1:460952543906:ios:d924fd03c377aa79172dfb","uploadDebugSymbols":false,"fileOutput":"ios/Runner/GoogleService-Info.plist"}},"dart":{"lib/firebase_options.dart":{"projectId":"my-food-archive-dbc0c","configurations":{"ios":"1:460952543906:ios:d924fd03c377aa79172dfb"}}}}}}

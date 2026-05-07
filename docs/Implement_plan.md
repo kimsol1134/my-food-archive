@@ -12,7 +12,7 @@
 - [x] Task 8: AddEditRecordScreen UI (폼 레이아웃)
 - [x] Task 9: 3개 화면 간 네비게이션 연결
 - [x] Task 10: 사진 선택 서비스 및 EXIF 메타데이터 추출
-- [ ] Task 11: Gemini Vision AI 서비스 연동
+- [x] Task 11: Gemini Vision AI 서비스 연동 (Firebase AI Logic)
 - [ ] Task 12: 저장 기능 완성 (Create + Update + searchKeyword 생성)
 - [ ] Task 13: 삭제 기능 완성
 - [ ] Task 14: 실시간 키워드 검색 기능
@@ -23,14 +23,14 @@
 ## 프로젝트 개요
 
 백엔드 없이 기기 로컬에 모든 데이터를 저장하는 개인용 맛집 아카이브 iOS 앱.
-사진 업로드 시 EXIF에서 날짜/위치를 자동 추출하고, Gemini Vision API로 메뉴/카테고리를 자동 태깅하며, 사용자는 식당명만 입력하면 된다.
+사진 업로드 시 EXIF에서 날짜/위치를 자동 추출하고, Firebase AI Logic을 통해 Gemini Vision API로 메뉴/카테고리를 자동 태깅하며, 사용자는 식당명만 입력하면 된다. API 키는 Firebase가 자체 보관하여 앱에 노출되지 않는다.
 
 ## PRD 핵심 기능 5가지 (구현 범위)
 
 | # | 기능 | 설명 |
 |---|------|------|
 | ① | 사진 업로드 + EXIF 추출 | 촬영 날짜, GPS 기반 지역명 자동 저장 |
-| ② | Vision AI 자동 태깅 | Gemini API로 메뉴명/카테고리 자동 분류 |
+| ② | Vision AI 자동 태깅 | Firebase AI Logic을 통해 Gemini Vision API로 메뉴명/카테고리 자동 분류 (키 노출 없음) |
 | ③ | 최소 수동 입력 | 식당 이름만 직접 타이핑 |
 | ④ | 키워드 검색 | 지역+메뉴+식당명 조합 실시간 필터링 |
 | ⑤ | 갤러리 뷰 | Grid 형태 사진 썸네일 나열 + 상세 보기 |
@@ -50,7 +50,7 @@ Task 1 (프로젝트 생성)
                 └─> Task 8 (AddEditRecordScreen UI)
                      └─> Task 9 (네비게이션 연결) ← Task 6, 7도 필요
                           └─> Task 10 (사진 선택 + EXIF)
-                               └─> Task 11 (Gemini AI 연동)
+                               └─> Task 11 (Firebase AI Logic + Gemini)
                                     └─> Task 12 (저장 기능)
                                          ├─> Task 13 (삭제 기능)
                                          ├─> Task 14 (검색 기능)
@@ -103,7 +103,7 @@ lib/
   - `image_picker` (갤러리 사진 선택)
   - `exif` (EXIF 메타데이터 추출)
   - `geocoding` (역지오코딩)
-  - `google_generative_ai` (Gemini Vision API)
+  - `firebase_core`, `firebase_ai`, `firebase_app_check` (Firebase AI Logic을 통한 Gemini Vision; 키는 Firebase 서버 보관)
   - `uuid` (고유 ID 생성)
   - `path_provider` (로컬 파일 경로)
 - `dev_dependencies`에 추가:
@@ -376,28 +376,40 @@ lib/
 
 ---
 
-## Task 11: Gemini Vision AI 서비스 연동
+## Task 11: Gemini Vision AI 서비스 연동 (Firebase AI Logic)
 
-**목표:** Gemini API를 호출하여 음식 사진에서 메뉴명과 카테고리를 자동 추출하고, 폼에 결과를 채운다.
+**목표:** Firebase AI Logic을 통해 Gemini Vision 모델을 호출하여 음식 사진에서 메뉴명과 카테고리를 자동 추출하고, 폼에 결과를 채운다. **API 키는 Firebase가 보관하므로 앱 코드/번들에 노출되지 않는다.**
+
+**전제 조건 (10.1 절에서 완료):**
+- Firebase 프로젝트 생성 + iOS 앱 등록
+- `GoogleService-Info.plist`를 `ios/Runner/`에 추가
+- `flutterfire configure` 실행 → `lib/firebase_options.dart` 자동 생성
+- App Check 활성화 (iOS = App Attest 우선 / DeviceCheck fallback)
+- Firebase 콘솔에서 Firebase AI Logic + Gemini API 활성화
 
 **구현할 기능:**
+- `lib/main.dart` 초기화:
+  - `await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform)`
+  - `await FirebaseAppCheck.instance.activate(appleProvider: AppleProvider.appAttest)`
 - `lib/services/vision_ai_service.dart` 생성:
-  - Gemini API 키 관리 (MVP 단계 상수 허용)
+  - `firebase_ai` SDK로 Gemini Vision 모델 인스턴스 생성: `FirebaseAI.googleAI().generativeModel(model: 'gemini-2.5-flash')`
   - `analyzeImage(String imagePath)`:
-    - `google_generative_ai` 패키지로 Gemini Vision 모델 호출
+    - 이미지 파일을 바이트로 읽어 `Content.multi([TextPart(prompt), InlineDataPart('image/jpeg', bytes)])` 형태로 호출
     - 프롬프트: "제공된 음식 사진을 분석하여 메뉴명과 카테고리(한식, 중식, 일식, 양식, 카페/디저트 등)를 파악해라. 응답은 반드시 `{"menu": "메뉴이름", "category": "카테고리명"}` 형태의 순수 JSON 포맷으로만 반환하라."
     - 응답 JSON 파싱 → `AiResult` 모델 반환
-  - **Fail-Safe**: 타임아웃 15초, 네트워크 오류/API 실패/JSON 파싱 실패 시 null 반환
+  - **Fail-Safe**: 타임아웃 15초, 네트워크 오류/Firebase AI 실패/JSON 파싱 실패/App Check 토큰 거부 시 null 반환
 - `lib/models/ai_result.dart` 생성:
   - `String menuName`, `String category`
 - AddEditRecordScreen 생성 모드 로직 통합:
   - 화면 진입 시:
     1. 로딩 오버레이 표시 (반투명 검정 `black.withOpacity(0.3)` + `CupertinoActivityIndicator` + "AI가 사진을 분석하고 있어요..." + `IgnorePointer` 터치 차단)
-    2. EXIF 추출 + 역지오코딩과 Gemini API 호출을 `Future.wait`으로 병렬 실행
+    2. EXIF 추출 + 역지오코딩과 Firebase AI 호출을 `Future.wait`으로 병렬 실행
     3. 완료 시 로딩 제거, 결과를 각 TextField controller에 설정
-  - API 실패 시: 로딩 제거 + "정보를 직접 입력해 주세요" 토스트 + 빈 TextField 제공
+  - 실패 시: 로딩 제거 + "정보를 직접 입력해 주세요" 토스트 + 빈 TextField 제공
 
 **예상 수정 파일:**
+- `lib/main.dart` (Firebase + App Check 초기화)
+- `lib/firebase_options.dart` (`flutterfire configure`로 자동 생성)
 - `lib/services/vision_ai_service.dart` (신규)
 - `lib/models/ai_result.dart` (신규)
 - `lib/screens/add_edit_record_screen.dart` (로딩 오버레이 + AI/EXIF 병렬 호출)
@@ -406,6 +418,8 @@ lib/
 - 음식 사진 선택 시 로딩 오버레이 → AI 분석 완료 후 메뉴명/카테고리 자동 채움
 - 로딩 중 화면 터치 차단 동작 확인
 - 네트워크 끊긴 상태: 타임아웃 후 빈 폼 + 안내 메시지 표시
+- App Check 토큰 발급 실패 시에도 빈 폼 + 안내 토스트로 정상 처리
+- 앱 코드 어디에도 Gemini API 키가 들어가지 않음 (`grep -r "AIza" lib/` 결과 0건)
 - 앱 크래시 없이 모든 실패 케이스 정상 처리
 
 ---
