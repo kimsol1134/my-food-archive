@@ -9,9 +9,12 @@ import 'firebase_options.dart';
 import 'providers/archive_provider.dart';
 import 'screens/home_screen.dart';
 import 'services/local_db_service.dart';
+import 'utils/app_paths.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  await AppPaths.init();
 
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await FirebaseAppCheck.instance.activate(

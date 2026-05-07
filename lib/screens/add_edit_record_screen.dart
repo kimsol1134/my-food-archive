@@ -3,15 +3,19 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:uuid/uuid.dart';
 
 import '../constants/app_colors.dart';
 import '../constants/app_text_styles.dart';
 import '../models/ai_result.dart';
 import '../models/archive_item.dart';
 import '../models/exif_result.dart';
+import '../providers/archive_provider.dart';
 import '../services/exif_service.dart';
 import '../services/location_service.dart';
 import '../services/vision_ai_service.dart';
+import '../utils/app_paths.dart';
 
 class AddEditRecordScreen extends StatefulWidget {
   final ArchiveItem? existingItem;
@@ -63,8 +67,9 @@ class _AddEditRecordScreenState extends State<AddEditRecordScreen> {
   }
 
   Future<void> _runAnalysisPipeline(String imagePath) async {
-    final exifFuture = _resolveExifAndLocation(imagePath);
-    final aiFuture = VisionAIService().analyzeImage(imagePath);
+    final absolutePath = AppPaths.resolve(imagePath);
+    final exifFuture = _resolveExifAndLocation(absolutePath);
+    final aiFuture = VisionAIService().analyzeImage(absolutePath);
 
     final results = await Future.wait([exifFuture, aiFuture]);
     if (!mounted) return;
@@ -135,6 +140,52 @@ class _AddEditRecordScreenState extends State<AddEditRecordScreen> {
     }
   }
 
+  Future<void> _handleSave() async {
+    final restaurantName = _restaurantController.text.trim();
+    final location = _locationController.text.trim();
+    final menuName = _menuController.text.trim();
+    final category = _categoryController.text.trim();
+
+    final searchKeyword = ArchiveItem.generateSearchKeyword(
+      restaurantName: restaurantName,
+      menuName: menuName,
+      category: category,
+      location: location,
+    );
+
+    final provider = context.read<ArchiveProvider>();
+
+    if (widget.isEditMode) {
+      final existing = widget.existingItem!;
+      final updated = ArchiveItem(
+        id: existing.id,
+        imagePath: existing.imagePath,
+        restaurantName: restaurantName,
+        menuName: menuName,
+        category: category,
+        location: location,
+        date: _currentDate ?? existing.date,
+        searchKeyword: searchKeyword,
+      );
+      await provider.updateItem(updated);
+    } else {
+      final item = ArchiveItem(
+        id: const Uuid().v4(),
+        imagePath: _currentImagePath,
+        restaurantName: restaurantName,
+        menuName: menuName,
+        category: category,
+        location: location,
+        date: _currentDate,
+        searchKeyword: searchKeyword,
+      );
+      await provider.addItem(item);
+    }
+
+    if (!mounted) return;
+    Navigator.of(context).popUntil((route) => route.isFirst);
+  }
+
   @override
   void dispose() {
     _restaurantController.dispose();
@@ -203,10 +254,7 @@ class _AddEditRecordScreenState extends State<AddEditRecordScreen> {
                   const SizedBox(height: 32),
                   _SaveButton(
                     enabled: _isSaveEnabled && !_isAnalyzing,
-                    onPressed: () {
-                      // TODO: Task 12 - 저장 로직 구현
-                      Navigator.of(context).popUntil((route) => route.isFirst);
-                    },
+                    onPressed: _handleSave,
                   ),
                   const SizedBox(height: 24),
                 ],
@@ -312,7 +360,7 @@ class _ImagePreview extends StatelessWidget {
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxHeight: 240),
           child: Image.file(
-            File(imagePath),
+            File(AppPaths.resolve(imagePath)),
             width: double.infinity,
             fit: BoxFit.cover,
             errorBuilder: (context, error, stackTrace) => _placeholder(),

@@ -31,10 +31,10 @@ class PhotoService {
       }
 
       final ext = _resolveExtension(picked.path);
-      final newPath = '${imagesDir.path}/${const Uuid().v4()}$ext';
-      await File(picked.path).copy(newPath);
+      final fileName = '${const Uuid().v4()}$ext';
+      await File(picked.path).copy('${imagesDir.path}/$fileName');
 
-      return newPath;
+      return 'images/$fileName';
     } catch (_) {
       return null;
     }

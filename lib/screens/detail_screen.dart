@@ -8,6 +8,7 @@ import '../constants/app_colors.dart';
 import '../constants/app_text_styles.dart';
 import '../models/archive_item.dart';
 import '../providers/archive_provider.dart';
+import '../utils/app_paths.dart';
 import 'add_edit_record_screen.dart';
 
 class DetailScreen extends StatelessWidget {
@@ -118,7 +119,7 @@ class _DetailImage extends StatelessWidget {
         maxHeight: MediaQuery.of(context).size.height * 0.4,
       ),
       child: Image.file(
-        File(imagePath),
+        File(AppPaths.resolve(imagePath)),
         width: double.infinity,
         fit: BoxFit.cover,
         errorBuilder: (context, error, stackTrace) {
