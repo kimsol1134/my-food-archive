@@ -14,7 +14,7 @@
 - [x] Task 10: 사진 선택 서비스 및 EXIF 메타데이터 추출
 - [x] Task 11: Gemini Vision AI 서비스 연동 (Firebase AI Logic)
 - [x] Task 12: 저장 기능 완성 (Create + Update + searchKeyword 생성)
-- [ ] Task 13: 삭제 기능 완성
+- [x] Task 13: 삭제 기능 완성
 - [ ] Task 14: 실시간 키워드 검색 기능
 - [ ] Task 15: 사진 재선택 기능
 - [ ] Task 16: 에러 처리, 토스트 메시지 마무리

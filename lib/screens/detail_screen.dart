@@ -91,7 +91,7 @@ class DetailScreen extends StatelessWidget {
                   Provider.of<ArchiveProvider>(context, listen: false);
               final navigator = Navigator.of(context);
               final dialogNavigator = Navigator.of(dialogContext);
-              await provider.deleteItem(item.id);
+              await provider.deleteItem(item);
               dialogNavigator.pop();
               navigator.pop();
             },

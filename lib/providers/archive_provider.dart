@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 
 import '../models/archive_item.dart';
 import '../services/local_db_service.dart';
+import '../utils/app_paths.dart';
 
 class ArchiveProvider extends ChangeNotifier {
   final LocalDBService _dbService;
@@ -44,8 +47,16 @@ class ArchiveProvider extends ChangeNotifier {
     await loadItems();
   }
 
-  Future<void> deleteItem(String id) async {
-    await _dbService.deleteItem(id);
+  Future<void> deleteItem(ArchiveItem item) async {
+    await _dbService.deleteItem(item.id);
+    try {
+      final file = File(AppPaths.resolve(item.imagePath));
+      if (await file.exists()) {
+        await file.delete();
+      }
+    } catch (_) {
+      // 파일이 이미 없거나 삭제 실패해도 DB 삭제는 성공이므로 무시
+    }
     await loadItems();
   }
 
