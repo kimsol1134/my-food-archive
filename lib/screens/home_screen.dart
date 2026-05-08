@@ -40,7 +40,9 @@ class HomeScreen extends StatelessWidget {
                   builder: (context, provider, _) {
                     final items = provider.items;
                     if (items.isEmpty) {
-                      return const _EmptyState();
+                      return provider.searchQuery.trim().isEmpty
+                          ? const _EmptyState()
+                          : const _NoSearchResultState();
                     }
                     return GridView.builder(
                       padding: const EdgeInsets.only(top: 4, bottom: 24),
@@ -78,11 +80,35 @@ class HomeScreen extends StatelessWidget {
   }
 }
 
-class _SearchBar extends StatelessWidget {
+class _SearchBar extends StatefulWidget {
   const _SearchBar();
 
   @override
+  State<_SearchBar> createState() => _SearchBarState();
+}
+
+class _SearchBarState extends State<_SearchBar> {
+  final TextEditingController _controller = TextEditingController();
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void _handleChanged(String value) {
+    context.read<ArchiveProvider>().search(value);
+  }
+
+  void _handleClear() {
+    _controller.clear();
+    context.read<ArchiveProvider>().search('');
+    FocusScope.of(context).unfocus();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final hasText = _controller.text.isNotEmpty;
     return Container(
       height: 36,
       decoration: BoxDecoration(
@@ -91,9 +117,15 @@ class _SearchBar extends StatelessWidget {
       ),
       alignment: Alignment.center,
       child: TextField(
+        controller: _controller,
+        onChanged: (value) {
+          _handleChanged(value);
+          setState(() {});
+        },
         style: AppTextStyles.body,
         cursorColor: AppColors.primary,
         textAlignVertical: TextAlignVertical.center,
+        textInputAction: TextInputAction.search,
         decoration: InputDecoration(
           border: InputBorder.none,
           enabledBorder: InputBorder.none,
@@ -108,6 +140,21 @@ class _SearchBar extends StatelessWidget {
             size: 18,
           ),
           prefixIconConstraints: const BoxConstraints(
+            minWidth: 36,
+            minHeight: 36,
+          ),
+          suffixIcon: hasText
+              ? GestureDetector(
+                  onTap: _handleClear,
+                  behavior: HitTestBehavior.opaque,
+                  child: const Icon(
+                    CupertinoIcons.clear_circled_solid,
+                    color: AppColors.textSub,
+                    size: 18,
+                  ),
+                )
+              : null,
+          suffixIconConstraints: const BoxConstraints(
             minWidth: 36,
             minHeight: 36,
           ),
@@ -136,6 +183,32 @@ class _EmptyState extends StatelessWidget {
           const SizedBox(height: 16),
           Text(
             '아직 저장된 맛집이 없어요.',
+            style:
+                AppTextStyles.body.copyWith(color: AppColors.textSub),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _NoSearchResultState extends StatelessWidget {
+  const _NoSearchResultState();
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Icon(
+            CupertinoIcons.search,
+            size: 56,
+            color: AppColors.textSub,
+          ),
+          const SizedBox(height: 16),
+          Text(
+            '검색 결과가 없습니다',
             style:
                 AppTextStyles.body.copyWith(color: AppColors.textSub),
           ),
