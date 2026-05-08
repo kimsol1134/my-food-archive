@@ -14,6 +14,7 @@ import '../models/exif_result.dart';
 import '../providers/archive_provider.dart';
 import '../services/exif_service.dart';
 import '../services/location_service.dart';
+import '../services/photo_service.dart';
 import '../services/vision_ai_service.dart';
 import '../utils/app_paths.dart';
 
@@ -34,6 +35,8 @@ class _AddEditRecordScreenState extends State<AddEditRecordScreen> {
   late final TextEditingController _locationController;
   late final TextEditingController _menuController;
   late final TextEditingController _categoryController;
+
+  final PhotoService _photoService = PhotoService();
 
   late String _currentImagePath;
   DateTime? _currentDate;
@@ -64,6 +67,33 @@ class _AddEditRecordScreenState extends State<AddEditRecordScreen> {
         unawaited(_runAnalysisPipeline(widget.imagePath!));
       });
     }
+  }
+
+  Future<void> _handleReplaceImage() async {
+    if (widget.isEditMode || _isAnalyzing) return;
+
+    final newRelative = await _photoService.pickAndPersistImage();
+    if (newRelative == null) return;
+    if (!mounted) return;
+
+    final oldRelative = _currentImagePath;
+    if (oldRelative.isNotEmpty && oldRelative != newRelative) {
+      try {
+        await File(AppPaths.resolve(oldRelative)).delete();
+      } catch (_) {}
+    }
+
+    _locationController.clear();
+    _menuController.clear();
+    _categoryController.clear();
+
+    setState(() {
+      _currentImagePath = newRelative;
+      _currentDate = null;
+      _isAnalyzing = true;
+    });
+
+    unawaited(_runAnalysisPipeline(newRelative));
   }
 
   Future<void> _runAnalysisPipeline(String imagePath) async {
@@ -224,7 +254,12 @@ class _AddEditRecordScreenState extends State<AddEditRecordScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  _ImagePreview(imagePath: _currentImagePath),
+                  _ImagePreview(
+                    imagePath: _currentImagePath,
+                    onTap: widget.isEditMode ? null : _handleReplaceImage,
+                    showHint:
+                        !widget.isEditMode && _currentImagePath.isNotEmpty,
+                  ),
                   const SizedBox(height: 24),
                   _buildTextField(
                     controller: _restaurantController,
@@ -349,13 +384,20 @@ class _AnalyzingOverlay extends StatelessWidget {
 
 class _ImagePreview extends StatelessWidget {
   final String imagePath;
+  final VoidCallback? onTap;
+  final bool showHint;
 
-  const _ImagePreview({required this.imagePath});
+  const _ImagePreview({
+    required this.imagePath,
+    this.onTap,
+    this.showHint = false,
+  });
 
   @override
   Widget build(BuildContext context) {
+    final Widget content;
     if (imagePath.isNotEmpty) {
-      return ClipRRect(
+      content = ClipRRect(
         borderRadius: BorderRadius.circular(10),
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxHeight: 240),
@@ -367,8 +409,54 @@ class _ImagePreview extends StatelessWidget {
           ),
         ),
       );
+    } else {
+      content = _placeholder();
     }
-    return _placeholder();
+
+    final stack = Stack(
+      children: [
+        content,
+        if (showHint)
+          Positioned(
+            bottom: 8,
+            right: 8,
+            child: Container(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+              decoration: BoxDecoration(
+                color: Colors.black.withValues(alpha: 0.55),
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: const Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    CupertinoIcons.camera,
+                    size: 14,
+                    color: Colors.white,
+                  ),
+                  SizedBox(width: 6),
+                  Text(
+                    '사진 변경',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+      ],
+    );
+
+    if (onTap == null) return stack;
+    return GestureDetector(
+      onTap: onTap,
+      behavior: HitTestBehavior.opaque,
+      child: stack,
+    );
   }
 
   Widget _placeholder() {

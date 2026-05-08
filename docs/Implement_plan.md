@@ -16,7 +16,7 @@
 - [x] Task 12: 저장 기능 완성 (Create + Update + searchKeyword 생성)
 - [x] Task 13: 삭제 기능 완성
 - [x] Task 14: 실시간 키워드 검색 기능
-- [ ] Task 15: 사진 재선택 기능
+- [x] Task 15: 사진 재선택 기능
 - [ ] Task 16: 에러 처리, 토스트 메시지 마무리
 - [ ] Task 17: 전체 통합 테스트 및 UI 폴리시
 
