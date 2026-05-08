@@ -13,6 +13,33 @@ class LocalDBService {
       Hive.registerAdapter(ArchiveItemAdapter());
     }
     _box = await Hive.openBox<ArchiveItem>(_boxName);
+    await _rebuildSearchKeywords();
+  }
+
+  Future<void> _rebuildSearchKeywords() async {
+    for (final item in _box.values.toList()) {
+      final regenerated = ArchiveItem.generateSearchKeyword(
+        restaurantName: item.restaurantName,
+        menuName: item.menuName,
+        category: item.category,
+        location: item.location,
+      );
+      if (regenerated != item.searchKeyword) {
+        await _box.put(
+          item.id,
+          ArchiveItem(
+            id: item.id,
+            imagePath: item.imagePath,
+            restaurantName: item.restaurantName,
+            menuName: item.menuName,
+            category: item.category,
+            location: item.location,
+            date: item.date,
+            searchKeyword: regenerated,
+          ),
+        );
+      }
+    }
   }
 
   Future<void> addItem(ArchiveItem item) async {
@@ -39,12 +66,15 @@ class LocalDBService {
   }
 
   List<ArchiveItem> searchItems(String query) {
-    final normalizedQuery = query.replaceAll(' ', '');
-    if (normalizedQuery.isEmpty) return getAllItems();
-
-    final items = _box.values
-        .where((item) => item.searchKeyword.contains(normalizedQuery))
+    final tokens = query
+        .split(RegExp(r'\s+'))
+        .where((token) => token.isNotEmpty)
         .toList();
+    if (tokens.isEmpty) return getAllItems();
+
+    final items = _box.values.where((item) {
+      return tokens.every((token) => item.searchKeyword.contains(token));
+    }).toList();
     items.sort((a, b) {
       if (a.date == null && b.date == null) return 0;
       if (a.date == null) return 1;

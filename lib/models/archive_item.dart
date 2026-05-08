@@ -46,8 +46,8 @@ class ArchiveItem extends HiveObject {
     required String location,
   }) {
     return '${restaurantName.replaceAll(' ', '')}'
+        '${location.replaceAll(' ', '')}'
         '${menuName.replaceAll(' ', '')}'
-        '${category.replaceAll(' ', '')}'
-        '${location.replaceAll(' ', '')}';
+        '${category.replaceAll(' ', '')}';
   }
 }
