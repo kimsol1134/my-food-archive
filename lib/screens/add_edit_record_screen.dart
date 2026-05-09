@@ -17,6 +17,7 @@ import '../services/location_service.dart';
 import '../services/photo_service.dart';
 import '../services/vision_ai_service.dart';
 import '../utils/app_paths.dart';
+import '../widgets/toast_message.dart';
 
 class AddEditRecordScreen extends StatefulWidget {
   final ArchiveItem? existingItem;
@@ -72,10 +73,16 @@ class _AddEditRecordScreenState extends State<AddEditRecordScreen> {
   Future<void> _handleReplaceImage() async {
     if (widget.isEditMode || _isAnalyzing) return;
 
-    final newRelative = await _photoService.pickAndPersistImage();
-    if (newRelative == null) return;
+    final result = await _photoService.pickAndPersistImage();
     if (!mounted) return;
 
+    if (result.status == PhotoPickStatus.permissionDenied) {
+      AppToast.show(context, '설정에서 사진 권한을 허용해 주세요');
+      return;
+    }
+    if (result.status != PhotoPickStatus.success) return;
+
+    final newRelative = result.imagePath!;
     final oldRelative = _currentImagePath;
     if (oldRelative.isNotEmpty && oldRelative != newRelative) {
       try {
@@ -128,7 +135,7 @@ class _AddEditRecordScreenState extends State<AddEditRecordScreen> {
     setState(() => _isAnalyzing = false);
 
     if (aiResult == null) {
-      _showToast('정보를 직접 입력해 주세요');
+      AppToast.show(context, '정보를 직접 입력해 주세요');
     }
   }
 
@@ -142,25 +149,6 @@ class _AddEditRecordScreenState extends State<AddEditRecordScreen> {
       );
     }
     return _ExifBundle(date: exif.date, region: region);
-  }
-
-  void _showToast(String message) {
-    final messenger = ScaffoldMessenger.maybeOf(context);
-    if (messenger == null) return;
-    messenger
-      ..clearSnackBars()
-      ..showSnackBar(
-        SnackBar(
-          content: Text(message, style: const TextStyle(color: Colors.white)),
-          backgroundColor: Colors.black.withValues(alpha: 0.85),
-          behavior: SnackBarBehavior.floating,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-          duration: const Duration(seconds: 2),
-          margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
-        ),
-      );
   }
 
   void _onRestaurantChanged() {
@@ -213,6 +201,7 @@ class _AddEditRecordScreenState extends State<AddEditRecordScreen> {
     }
 
     if (!mounted) return;
+    AppToast.show(context, '저장되었습니다');
     Navigator.of(context).popUntil((route) => route.isFirst);
   }
 

@@ -9,6 +9,7 @@ import '../constants/app_text_styles.dart';
 import '../models/archive_item.dart';
 import '../providers/archive_provider.dart';
 import '../utils/app_paths.dart';
+import '../widgets/toast_message.dart';
 import 'add_edit_record_screen.dart';
 
 class DetailScreen extends StatelessWidget {
@@ -92,6 +93,8 @@ class DetailScreen extends StatelessWidget {
               final navigator = Navigator.of(context);
               final dialogNavigator = Navigator.of(dialogContext);
               await provider.deleteItem(item);
+              if (!context.mounted) return;
+              AppToast.show(context, '삭제되었습니다');
               dialogNavigator.pop();
               navigator.pop();
             },

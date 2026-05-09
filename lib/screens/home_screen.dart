@@ -7,6 +7,7 @@ import '../constants/app_text_styles.dart';
 import '../providers/archive_provider.dart';
 import '../services/photo_service.dart';
 import '../widgets/archive_grid_card.dart';
+import '../widgets/toast_message.dart';
 import 'detail_screen.dart';
 import 'add_edit_record_screen.dart';
 
@@ -233,18 +234,24 @@ class _AddFabState extends State<_AddFab> {
     if (_busy) return;
     setState(() => _busy = true);
 
-    final imagePath = await _photoService.pickAndPersistImage();
+    final result = await _photoService.pickAndPersistImage();
 
     if (!mounted) return;
     setState(() => _busy = false);
 
-    if (imagePath == null) return;
-
-    Navigator.of(context).push(
-      CupertinoPageRoute(
-        builder: (_) => AddEditRecordScreen(imagePath: imagePath),
-      ),
-    );
+    switch (result.status) {
+      case PhotoPickStatus.success:
+        Navigator.of(context).push(
+          CupertinoPageRoute(
+            builder: (_) => AddEditRecordScreen(imagePath: result.imagePath!),
+          ),
+        );
+      case PhotoPickStatus.permissionDenied:
+        AppToast.show(context, '설정에서 사진 권한을 허용해 주세요');
+      case PhotoPickStatus.cancelled:
+      case PhotoPickStatus.error:
+        break;
+    }
   }
 
   @override

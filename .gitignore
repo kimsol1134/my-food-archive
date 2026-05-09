@@ -50,3 +50,6 @@ android/app/google-services.json
 lib/firebase_options.dart
 firebase_app_id_file.json
 .firebaserc
+
+# QA verification artifacts
+qa_screenshots/

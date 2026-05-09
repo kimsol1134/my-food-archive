@@ -1,8 +1,18 @@
 import 'dart:io';
 
+import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:uuid/uuid.dart';
+
+enum PhotoPickStatus { success, cancelled, permissionDenied, error }
+
+class PhotoPickResult {
+  final PhotoPickStatus status;
+  final String? imagePath;
+
+  const PhotoPickResult({required this.status, this.imagePath});
+}
 
 class PhotoService {
   static const _allowedExtensions = {
@@ -16,14 +26,28 @@ class PhotoService {
 
   final ImagePicker _picker = ImagePicker();
 
-  Future<String?> pickAndPersistImage() async {
+  Future<PhotoPickResult> pickAndPersistImage() async {
+    XFile? picked;
     try {
-      final XFile? picked = await _picker.pickImage(
+      picked = await _picker.pickImage(
         source: ImageSource.gallery,
         imageQuality: 90,
       );
-      if (picked == null) return null;
+    } on PlatformException catch (e) {
+      final code = e.code.toLowerCase();
+      if (code.contains('denied') || code.contains('access')) {
+        return const PhotoPickResult(status: PhotoPickStatus.permissionDenied);
+      }
+      return const PhotoPickResult(status: PhotoPickStatus.error);
+    } catch (_) {
+      return const PhotoPickResult(status: PhotoPickStatus.error);
+    }
 
+    if (picked == null) {
+      return const PhotoPickResult(status: PhotoPickStatus.cancelled);
+    }
+
+    try {
       final docsDir = await getApplicationDocumentsDirectory();
       final imagesDir = Directory('${docsDir.path}/images');
       if (!await imagesDir.exists()) {
@@ -34,9 +58,12 @@ class PhotoService {
       final fileName = '${const Uuid().v4()}$ext';
       await File(picked.path).copy('${imagesDir.path}/$fileName');
 
-      return 'images/$fileName';
+      return PhotoPickResult(
+        status: PhotoPickStatus.success,
+        imagePath: 'images/$fileName',
+      );
     } catch (_) {
-      return null;
+      return const PhotoPickResult(status: PhotoPickStatus.error);
     }
   }
 
