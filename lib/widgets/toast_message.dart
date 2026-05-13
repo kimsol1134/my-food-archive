@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../constants/app_text_styles.dart';
+
 class AppToast {
   AppToast._();
 
@@ -95,11 +97,7 @@ class _ToastWidgetState extends State<_ToastWidget>
                 child: Text(
                   widget.message,
                   textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 15,
-                    fontWeight: FontWeight.w500,
-                  ),
+                  style: AppTextStyles.label.copyWith(color: Colors.white),
                 ),
               ),
             ),

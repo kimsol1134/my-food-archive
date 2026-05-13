@@ -223,9 +223,9 @@ class _AddEditRecordScreenState extends State<AddEditRecordScreen> {
         appBar: AppBar(
           leading: CupertinoButton(
             padding: EdgeInsets.zero,
-            child: const Text(
+            child: Text(
               '취소',
-              style: TextStyle(color: AppColors.primary, fontSize: 17),
+              style: AppTextStyles.body.copyWith(color: AppColors.primary),
             ),
             onPressed: () => Navigator.pop(context),
           ),
@@ -345,22 +345,18 @@ class _AnalyzingOverlay extends StatelessWidget {
       child: AbsorbPointer(
         child: ColoredBox(
           color: Colors.black.withValues(alpha: 0.3),
-          child: const Center(
+          child: Center(
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                CupertinoActivityIndicator(
+                const CupertinoActivityIndicator(
                   radius: 16,
                   color: Colors.white,
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 Text(
                   'AI가 사진을 분석하고 있어요...',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 15,
-                    fontWeight: FontWeight.w500,
-                  ),
+                  style: AppTextStyles.label.copyWith(color: Colors.white),
                 ),
               ],
             ),
@@ -465,13 +461,7 @@ class _ImagePreview extends StatelessWidget {
             color: AppColors.textSub,
           ),
           SizedBox(height: 8),
-          Text(
-            '사진이 여기에 표시됩니다',
-            style: TextStyle(
-              fontSize: 13,
-              color: AppColors.textSub,
-            ),
-          ),
+          Text('사진이 여기에 표시됩니다', style: AppTextStyles.caption),
         ],
       ),
     );
@@ -536,9 +526,9 @@ class _SaveButton extends StatelessWidget {
           ),
           elevation: 0,
         ),
-        child: const Text(
+        child: Text(
           '저장',
-          style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
+          style: AppTextStyles.body.copyWith(fontWeight: FontWeight.w600),
         ),
       ),
     );
