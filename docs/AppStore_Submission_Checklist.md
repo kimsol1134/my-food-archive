@@ -4,7 +4,7 @@
 > 이미 채워진 값(빌드, 번들 ID 등)은 "확인"만 하면 됩니다.
 
 작성일: 2026-05-19
-빌드: **1.0.0(4)** — Delivery UUID `8bbcb95f-3a4e-4502-b07f-8433f70b3361`
+빌드: **1.0.0(5)** — iPhone 전용 / 위치 권한 제거 / 런치 이미지 적용 / 빈 화면 개선
 Apple ID: `6770387817`
 배포 대상: **iPhone 전용** (iPad 미지원)
 
@@ -231,7 +231,7 @@ flutter run -d "iPhone 16 Pro Max"
 ## C-2. 프로모션 텍스트 (170자, 선택)
 
 ```
-사진 한 장으로 끝나는 맛집 기록. AI가 음식 이름과 식당을 자동으로 채워주고, 모든 기록은 내 아이폰에만 안전하게 저장됩니다. 광고 없음, 추적 없음, 회원가입 없음.
+AI가 사진을 분석해 메뉴 이름과 카테고리를 자동으로 채워주는 가장 간단한 음식 기록 앱. 모든 기록은 내 아이폰에만 저장되고, 광고도 추적도 회원가입도 없습니다.
 ```
 
 > 프로모션 텍스트는 심사 통과 후에도 새 빌드 없이 바꿀 수 있는 유일한 텍스트. 이벤트/시즌별 메시지에 활용 가능.
@@ -239,25 +239,28 @@ flutter run -d "iPhone 16 Pro Max"
 ## C-3. 설명 (4,000자, 필수)
 
 ```
-오늘 먹은 그 음식, 사진만 찍어두고 잊어버리진 않으셨나요?
+AI가 사진을 분석해 음식 이름과 카테고리를 자동으로 채워주는
+음식 사진 기록 앱입니다.
 
-My Food Archive는 음식 사진 한 장으로 끝나는 가장 단순한
+오늘 먹은 그 음식, 사진만 찍어두고 잊어버리진 않으셨나요?
+My Food Archive는 사진 한 장으로 끝나는 가장 단순한
 "먹은 것 일기" 앱입니다.
 
 ■ 사진 한 장이면 끝
-   갤러리에서 사진을 고르면 AI가 음식 이름과 식당 정보를
-   자동으로 추론해 채워줍니다. 손으로 다 적을 필요 없습니다.
+   갤러리에서 사진을 고르면 Google Gemini AI가 메뉴 이름과
+   음식 카테고리(한식·중식·일식·양식·카페/디저트 등)를
+   자동으로 분석해 채워줍니다. 손으로 다 적을 필요 없습니다.
 
-■ 위치는 EXIF로 자동 입력
-   사진에 담긴 촬영 위치를 읽어 동네 이름을 자동으로
-   채워드립니다. 위치 추적은 일절 하지 않습니다.
+■ 지역명은 사진에서 바로
+   사진에 담긴 EXIF 촬영 좌표를 읽어 동네 이름을 자동으로
+   채워드립니다. 실시간 위치 추적은 일절 하지 않습니다.
 
 ■ 내 디바이스에만 저장
    모든 기록은 여러분의 아이폰에만 저장됩니다. 회원가입
-   필요 없고, 클라우드 서버에 업로드되지 않습니다.
+   필요 없고, 운영자 서버에 업로드되지 않습니다.
 
 ■ 빠르게 다시 찾기
-   음식 이름, 식당명, 동네로 즉시 검색할 수 있습니다.
+   식당 이름, 메뉴, 카테고리, 동네로 즉시 검색할 수 있습니다.
 
 ■ 광고 없음, 추적 없음
    광고 SDK도, 행동 추적 SDK도 들어 있지 않습니다.
@@ -268,7 +271,7 @@ My Food Archive는 음식 사진 한 장으로 끝나는 가장 단순한
 ## C-4. 키워드 (100자, 쉼표 구분)
 
 ```
-음식,맛집,식단,다이어리,일기,푸드,사진,기록,AI,식당,푸드로그,다이어트,음식기록
+음식,맛집,식단,다이어리,일기,푸드,사진,기록,AI,메뉴,푸드로그,다이어트,음식기록
 ```
 
 > ⚠️ 쉼표 사이 공백 넣지 말 것 (글자 수 낭비). 앱 이름·부제에 이미 들어간 단어는 키워드에서 빼는 게 정석이지만 한국어는 토큰화가 다르므로 그냥 두어도 무방.
@@ -314,7 +317,7 @@ My Food Archive는 음식 사진 한 장으로 끝나는 가장 단순한
 | 작업 | 내용 |
 |---|---|
 | "빌드 추가" 클릭 | |
-| 선택 | **1.0.0 (4)** |
+| 선택 | **1.0.0 (5)** |
 | Processing 시간 | 업로드 후 10~30분. Processing이 끝나야 빌드 추가 가능 |
 | 수출 규정 | 자동 "면제됨" 표시됨 (Info.plist에 선언했기 때문) |
 
@@ -346,27 +349,42 @@ My Food Archive는 음식 사진 한 장으로 끝나는 가장 단순한
 This app is a personal food journal that stores all user data
 locally in Hive (on-device DB). It does not require sign-in.
 
-The app uses Google Gemini API (via Firebase AI Logic) to
-analyze a user-selected photo and suggest the food name and
-restaurant name when the user explicitly taps the "AI Analyze"
-button on the new-record screen. No other data is sent
+AI usage:
+The app uses Google Gemini (gemini-2.5-flash) via Firebase AI
+Logic to analyze a user-selected photo and suggest the menu
+name and food category (Korean, Chinese, Japanese, Western,
+Cafe/Dessert, etc.) when the user explicitly taps the
+"AI Analyze" button on the new-record screen. The restaurant
+name is entered manually by the user. No other data is sent
 off-device.
 
-Firebase App Check is used to verify API call legitimacy. The
+Permissions:
+- Photo library: required to import food photos selected by
+  the user. (NSPhotoLibraryUsageDescription)
+- Location: NOT requested. The app reads EXIF GPS coordinates
+  embedded in the user-selected photo and converts them to a
+  locality name via the on-device CLGeocoder
+  (no live location tracking, no NSLocationWhenInUseUsageDescription).
+
+Security:
+Firebase App Check verifies the legitimacy of API calls. The
 only encryption used is standard HTTPS (exempt under U.S.
 export regulations; declared via
 ITSAppUsesNonExemptEncryption = false).
 
 How to test:
-1. Launch the app. The home grid will be empty on first launch.
-2. Tap the "+" button to add a new record.
+1. Launch the app. The home grid will be empty on first launch
+   and will show an onboarding empty state with a "+ Add first
+   record" button.
+2. Tap the "+ Add first record" button (or the floating "+"
+   FAB later).
 3. Pick any food photo from the simulator's photo library
    (Photos app -> drag-and-drop a JPG/PNG to populate).
-4. The AI will automatically suggest a food name and restaurant
-   guess. Tap "Save".
+4. The AI automatically fills in the menu name and category.
+   Enter the restaurant name manually, then tap "Save".
 5. The record appears on the home grid.
 6. Tap the record to view details, or use the search bar to
-   filter by name/restaurant/region.
+   filter by menu name, restaurant name, or region.
 
 No demo account, login, or special configuration is required.
 ```
@@ -471,11 +489,14 @@ A. 앱 삭제 시 디바이스에 저장된 모든 음식 기록이 함께
 저장되며, 본 앱의 운영자 서버로 전송되거나 저장되지 않습니다.
 
 ### 3. 외부 서비스로의 전송
-앱은 사진 분석 기능을 제공하기 위해 사용자가 명시적으로
-"AI 분석"을 요청하는 경우에 한해, 해당 사진을 Google의
-Gemini API (Firebase AI Logic 경유)로 전송합니다.
+앱은 사진 분석 기능을 제공하기 위해 사용자가 새 기록
+화면에서 사진을 선택했을 때, 해당 사진을 Google의 Gemini
+API(Firebase AI Logic 경유, 모델: gemini-2.5-flash)로
+전송하여 메뉴 이름과 음식 카테고리(한식/중식/일식/양식/
+카페·디저트 등)를 자동 추출합니다.
 - 전송되는 데이터: 사용자가 선택한 사진 1장
-- 목적: 음식명/식당명 추정
+- 목적: 메뉴 이름·카테고리 자동 분석 (식당 이름은 사용자가
+  직접 입력)
 - 보관: Google의 정책을 따름
   (https://ai.google.dev/gemini-api/terms 참고)
 
@@ -483,9 +504,12 @@ Gemini API (Firebase AI Logic 경유)로 전송합니다.
 검증하기 위한 기기 식별 토큰을 Google에 전송합니다.
 
 ### 4. 위치 정보
-앱은 디바이스의 실시간 위치를 추적하지 않습니다.
-사진에 포함된 EXIF 좌표만 사용하며, 이를 지역명으로
-변환하기 위해 디바이스의 Geocoding API를 사용합니다.
+앱은 디바이스의 실시간 위치를 요청하거나 추적하지 않습니다.
+별도의 위치 권한도 요청하지 않습니다. 사용자가 선택한 사진에
+포함된 EXIF 촬영 좌표(위·경도)만 읽어, 이를 지역명으로
+변환하기 위해 디바이스 내장 Geocoding 기능을 사용합니다.
+EXIF가 없는 사진은 지역 정보가 비어 있을 뿐 다른 영향은
+없습니다.
 
 ### 5. 제3자 광고/분석 SDK
 본 앱은 광고 SDK 및 사용자 행동을 추적하는 분석 SDK를
@@ -510,13 +534,59 @@ Gemini API (Firebase AI Logic 경유)로 전송합니다.
 # ✅ PART E. 가격 및 사용 가능 여부 (Pricing and Availability)
 
 > 좌측 메뉴 **가격 및 사용 가능 여부**.
+>
+> ⚠️ **이 섹션을 채우지 않으면 "심사에 추가할 수 없음 — 가격에서 가격 등급을 선택해야 합니다." 오류가 발생합니다.**
 
-| 항목 | 값 |
+## E-1. 가격 등급 설정 (필수, 무료)
+
+좌측 메뉴 **가격 및 사용 가능 여부** 클릭 → 상단 **가격(Price)** 섹션.
+
+| 단계 | 작업 |
 |---|---|
-| **가격** | KRW 0 (무료) |
-| **사용 가능한 지역** | 전 세계 또는 대한민국만 — 선택 |
-| **사전 주문(Pre-Order)** | 사용 안 함 |
-| **앱 배포** | "App Store에서 사용 가능" 체크 |
+| 1 | "**가격 추가(Add Pricing)**" 또는 "**가격 등급 선택(Choose a Price Tier)**" 버튼 클릭 |
+| 2 | 가격 등급 드롭다운에서 **`KRW 0 (무료)`** 또는 **`USD 0 (Free / Tier 0)`** 선택 |
+| 3 | "**시작 날짜**" — 오늘 또는 비워두기 (기본값 = 즉시) |
+| 4 | "**종료 날짜**" — 비워두기 (영구 무료) |
+| 5 | 화면 우측 상단 **"다음(Next)"** 또는 **"저장(Save)"** 클릭 |
+
+> 💡 화면에 가격 표가 표 형태로 나오면, 표 첫 번째 행 "**기본 가격(Base Price)**" 라디오 버튼 클릭 → 드롭다운에서 **KRW 0 / Free** 선택 → 저장.
+
+### 무료 앱 확인
+
+저장 후 상단에 다음이 표시되어야 합니다:
+- **가격: 무료 (Free)** 또는 **KRW 0**
+- 빨간 경고 사라짐
+
+## E-2. 사용 가능한 지역 (Availability)
+
+같은 페이지의 **사용 가능한 지역** 섹션:
+
+| 항목 | 권장 값 |
+|---|---|
+| **사용 가능한 지역** | "**모든 지역(All countries or regions)**" 체크 → ✅ 175개국 자동 선택 |
+| **앱 배포** | "App Store에서 사용 가능" 체크 (기본값) |
+
+> 처음엔 **모든 지역**으로 출시하는 것을 추천합니다. 다국어 미지원이라도 한국 외 사용자가 직접 다운로드할 수 있게 두는 게 노출에 유리. 추후 특정 지역만으로 좁히기는 언제든 가능.
+
+## E-3. 사전 주문 (Pre-Order)
+
+→ **체크 해제** (사용 안 함). 1.0 출시에는 불필요.
+
+## E-4. 추가 정보 — 자주 묻는 후속 항목
+
+가격 저장 시 다음을 추가로 요구할 수 있습니다:
+
+| 항목 | 답변 |
+|---|---|
+| **세금 카테고리(Tax Category)** | 무료 앱은 보통 자동으로 "**App**" 또는 "**Default**"로 설정됨. 그대로 두기 |
+| **거래 동의(Paid Apps Agreement)** | 무료 앱은 별도 동의 불필요 (유료 전환 시에만 요구됨) |
+| **세금 양식(W-8/W-9)** | 무료 앱은 불필요 |
+
+## E-5. 페이지 상태 체크
+
+좌측 메뉴 **가격 및 사용 가능 여부** 옆에:
+- ⚠️ 노란/빨간 점 → 아직 미완료
+- ✅ 점 없음 → 완료, 심사 제출 가능
 
 ---
 
@@ -525,12 +595,12 @@ Gemini API (Firebase AI Logic 경유)로 전송합니다.
 순서대로 좌측 메뉴 항목이 모두 ✅ (빨간 경고 없음) 인지 확인:
 
 - [ ] **앱 정보** — 카테고리, 연령 등급 4+, 콘텐츠 권한 모두 채워짐
-- [ ] **가격 및 사용 가능 여부** — 무료 / 지역 선택됨
+- [ ] **가격 및 사용 가능 여부** — 가격 등급 "KRW 0 / Free" 선택됨 + 지역 선택됨
 - [ ] **앱 개인정보 보호** — "완료" 상태
 - [ ] **iOS 앱 1.0** —
   - [ ] iPhone 6.9" 스크린샷 3장 이상
   - [ ] 설명, 키워드, 지원 URL, 저작권 모두 작성
-  - [ ] 빌드 1.0.0(4) 추가됨, "수출 규정: 면제됨" 표시
+  - [ ] 빌드 1.0.0(5) 추가됨, "수출 규정: 면제됨" 표시
   - [ ] 로그인 정보: 체크 해제
   - [ ] 연락처 정보 입력
   - [ ] 출시 방식: "수동으로 버전 출시"

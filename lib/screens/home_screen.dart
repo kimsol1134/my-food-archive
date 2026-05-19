@@ -167,27 +167,93 @@ class _SearchBarState extends State<_SearchBar> {
   }
 }
 
-class _EmptyState extends StatelessWidget {
+class _EmptyState extends StatefulWidget {
   const _EmptyState();
+
+  @override
+  State<_EmptyState> createState() => _EmptyStateState();
+}
+
+class _EmptyStateState extends State<_EmptyState> {
+  final PhotoService _photoService = PhotoService();
+  bool _busy = false;
+
+  Future<void> _handleAddTap() async {
+    if (_busy) return;
+    setState(() => _busy = true);
+
+    final result = await _photoService.pickAndPersistImage();
+
+    if (!mounted) return;
+    setState(() => _busy = false);
+
+    switch (result.status) {
+      case PhotoPickStatus.success:
+        Navigator.of(context).push(
+          CupertinoPageRoute(
+            builder: (_) => AddEditRecordScreen(imagePath: result.imagePath!),
+          ),
+        );
+      case PhotoPickStatus.permissionDenied:
+        AppToast.show(context, '설정에서 사진 권한을 허용해 주세요');
+      case PhotoPickStatus.cancelled:
+      case PhotoPickStatus.error:
+        break;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Icon(
-            CupertinoIcons.photo_on_rectangle,
-            size: 64,
-            color: AppColors.textSub,
-          ),
-          const SizedBox(height: 16),
-          Text(
-            '아직 저장된 맛집이 없어요.',
-            style:
-                AppTextStyles.body.copyWith(color: AppColors.textSub),
-          ),
-        ],
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 32),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(
+              CupertinoIcons.photo_on_rectangle,
+              size: 72,
+              color: AppColors.textSub,
+            ),
+            const SizedBox(height: 20),
+            Text(
+              '아직 저장된 맛집이 없어요',
+              textAlign: TextAlign.center,
+              style: AppTextStyles.body.copyWith(
+                color: AppColors.textMain,
+                fontWeight: FontWeight.w600,
+                fontSize: 18,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              '사진 한 장을 골라\n첫 맛집 기록을 만들어보세요',
+              textAlign: TextAlign.center,
+              style: AppTextStyles.body.copyWith(color: AppColors.textSub),
+            ),
+            const SizedBox(height: 24),
+            SizedBox(
+              height: 48,
+              child: ElevatedButton.icon(
+                onPressed: _busy ? null : _handleAddTap,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.primary,
+                  foregroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(24),
+                  ),
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  elevation: 0,
+                ),
+                icon: const Icon(CupertinoIcons.add, size: 20),
+                label: const Text(
+                  '첫 기록 추가',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
