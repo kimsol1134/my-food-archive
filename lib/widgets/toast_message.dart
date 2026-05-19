@@ -97,7 +97,10 @@ class _ToastWidgetState extends State<_ToastWidget>
                 child: Text(
                   widget.message,
                   textAlign: TextAlign.center,
-                  style: AppTextStyles.label.copyWith(color: Colors.white),
+                  style: AppTextStyles.label.copyWith(
+                    color: Colors.white,
+                    decoration: TextDecoration.none,
+                  ),
                 ),
               ),
             ),

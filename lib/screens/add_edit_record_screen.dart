@@ -49,7 +49,9 @@ class _AddEditRecordScreenState extends State<AddEditRecordScreen> {
   void initState() {
     super.initState();
     final item = widget.existingItem;
-    _restaurantController = TextEditingController(text: item?.restaurantName ?? '');
+    _restaurantController = TextEditingController(
+      text: item?.restaurantName ?? '',
+    );
     _locationController = TextEditingController(text: item?.location ?? '');
     _menuController = TextEditingController(text: item?.menuName ?? '');
     _categoryController = TextEditingController(text: item?.category ?? '');
@@ -237,52 +239,63 @@ class _AddEditRecordScreenState extends State<AddEditRecordScreen> {
         ),
         body: Stack(
           children: [
-            SingleChildScrollView(
-              physics: const BouncingScrollPhysics(),
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  _ImagePreview(
-                    imagePath: _currentImagePath,
-                    onTap: widget.isEditMode ? null : _handleReplaceImage,
-                    showHint:
-                        !widget.isEditMode && _currentImagePath.isNotEmpty,
+            Column(
+              children: [
+                Expanded(
+                  child: SingleChildScrollView(
+                    physics: const BouncingScrollPhysics(),
+                    padding: const EdgeInsets.fromLTRB(20, 16, 20, 16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        _ImagePreview(
+                          imagePath: _currentImagePath,
+                          onTap:
+                              widget.isEditMode ? null : _handleReplaceImage,
+                          showHint: !widget.isEditMode &&
+                              _currentImagePath.isNotEmpty,
+                        ),
+                        const SizedBox(height: 24),
+                        _buildTextField(
+                          controller: _restaurantController,
+                          label: '식당명',
+                          placeholder: '식당 이름을 입력하세요 (필수)',
+                        ),
+                        const SizedBox(height: 12),
+                        _buildTextField(
+                          controller: _locationController,
+                          label: '지역',
+                          placeholder: '지역명',
+                        ),
+                        const SizedBox(height: 12),
+                        _buildTextField(
+                          controller: _menuController,
+                          label: '메뉴',
+                          placeholder: '메뉴명',
+                        ),
+                        const SizedBox(height: 12),
+                        _buildTextField(
+                          controller: _categoryController,
+                          label: '카테고리',
+                          placeholder: '예: 한식, 양식, 카페',
+                        ),
+                        const SizedBox(height: 12),
+                        _DateField(date: _currentDate),
+                      ],
+                    ),
                   ),
-                  const SizedBox(height: 24),
-                  _buildTextField(
-                    controller: _restaurantController,
-                    label: '식당명',
-                    placeholder: '식당 이름을 입력하세요 (필수)',
+                ),
+                SafeArea(
+                  top: false,
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(20, 12, 20, 12),
+                    child: _SaveButton(
+                      enabled: _isSaveEnabled && !_isAnalyzing,
+                      onPressed: _handleSave,
+                    ),
                   ),
-                  const SizedBox(height: 12),
-                  _buildTextField(
-                    controller: _locationController,
-                    label: '지역',
-                    placeholder: '지역명',
-                  ),
-                  const SizedBox(height: 12),
-                  _buildTextField(
-                    controller: _menuController,
-                    label: '메뉴',
-                    placeholder: '메뉴명',
-                  ),
-                  const SizedBox(height: 12),
-                  _buildTextField(
-                    controller: _categoryController,
-                    label: '카테고리',
-                    placeholder: '예: 한식, 양식, 카페',
-                  ),
-                  const SizedBox(height: 12),
-                  _DateField(date: _currentDate),
-                  const SizedBox(height: 32),
-                  _SaveButton(
-                    enabled: _isSaveEnabled && !_isAnalyzing,
-                    onPressed: _handleSave,
-                  ),
-                  const SizedBox(height: 24),
-                ],
-              ),
+                ),
+              ],
             ),
             if (_isAnalyzing) const _AnalyzingOverlay(),
           ],
@@ -406,8 +419,7 @@ class _ImagePreview extends StatelessWidget {
             bottom: 8,
             right: 8,
             child: Container(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
               decoration: BoxDecoration(
                 color: Colors.black.withValues(alpha: 0.55),
                 borderRadius: BorderRadius.circular(16),
@@ -415,11 +427,7 @@ class _ImagePreview extends StatelessWidget {
               child: const Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(
-                    CupertinoIcons.camera,
-                    size: 14,
-                    color: Colors.white,
-                  ),
+                  Icon(CupertinoIcons.camera, size: 14, color: Colors.white),
                   SizedBox(width: 6),
                   Text(
                     '사진 변경',
@@ -455,11 +463,7 @@ class _ImagePreview extends StatelessWidget {
       child: const Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(
-            CupertinoIcons.photo,
-            size: 48,
-            color: AppColors.textSub,
-          ),
+          Icon(CupertinoIcons.photo, size: 48, color: AppColors.textSub),
           SizedBox(height: 8),
           Text('사진이 여기에 표시됩니다', style: AppTextStyles.caption),
         ],

@@ -59,9 +59,15 @@ class MyApp extends StatelessWidget {
           ),
         ),
         builder: (context, child) {
-          return ScrollConfiguration(
-            behavior: const _BouncingScrollBehavior(),
-            child: child!,
+          final mediaQuery = MediaQuery.of(context);
+          return MediaQuery(
+            data: mediaQuery.copyWith(
+              textScaler: mediaQuery.textScaler.clamp(maxScaleFactor: 1.2),
+            ),
+            child: ScrollConfiguration(
+              behavior: const _BouncingScrollBehavior(),
+              child: child!,
+            ),
           );
         },
         home: const HomeScreen(),
