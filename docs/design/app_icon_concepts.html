@@ -1,0 +1,876 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<title>마이 맛집 아카이브 — iOS 26 Liquid Glass Icon Concepts</title>
+<style>
+  :root {
+    --bg: #f2f2f7;
+    --panel: #ffffff;
+    --text: #1c1c1e;
+    --sub: #8e8e93;
+    --line: rgba(0,0,0,0.08);
+    --ios-blue: #007aff;
+  }
+  * { box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+  html, body {
+    margin: 0;
+    padding: 0;
+    background:
+      radial-gradient(1200px 800px at 20% -10%, #e4ecf8 0%, transparent 60%),
+      radial-gradient(1000px 700px at 90% 10%, #fff0e0 0%, transparent 55%),
+      var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Apple SD Gothic Neo",
+                 "Helvetica Neue", Arial, sans-serif;
+    letter-spacing: -0.01em;
+    min-height: 100vh;
+  }
+
+  header {
+    padding: 64px 32px 28px;
+    text-align: center;
+  }
+  header .eyebrow {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--sub);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  header h1 {
+    margin: 0;
+    font-size: 38px;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    color: #1c1c1e;
+  }
+  header p {
+    margin: 14px auto 0;
+    max-width: 680px;
+    font-size: 15px;
+    color: var(--sub);
+    line-height: 1.55;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+    gap: 24px;
+    padding: 28px 32px 64px;
+    max-width: 1500px;
+    margin: 0 auto;
+  }
+
+  .card {
+    background: #ffffff;
+    border: 1px solid rgba(0,0,0,0.05);
+    border-radius: 24px;
+    padding: 26px 26px 22px;
+    box-shadow:
+      0 1px 0 rgba(0,0,0,0.03),
+      0 12px 36px rgba(0,0,0,0.06);
+  }
+
+  .card .num {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--sub);
+    letter-spacing: 0.14em;
+  }
+  .card h2 {
+    margin: 6px 0 4px;
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: #1c1c1e;
+  }
+  .card .sub {
+    font-size: 13px;
+    color: var(--sub);
+    margin-bottom: 22px;
+  }
+
+  /* Three variants strip: Light / Dark / Tinted */
+  .variants {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .variant {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+  .variant .icon {
+    width: 116px;
+    height: 116px;
+    border-radius: 26px; /* approx iOS squircle visual at this size */
+    overflow: hidden;
+    position: relative;
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,0.5),
+      0 8px 20px rgba(0,0,0,0.14);
+  }
+  .variant .label {
+    font-size: 10.5px;
+    color: var(--sub);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+
+  .desc {
+    font-size: 13.5px;
+    color: rgba(28,28,30,0.85);
+    line-height: 1.55;
+    border-top: 1px solid var(--line);
+    padding-top: 16px;
+  }
+  .desc .row { display: flex; gap: 10px; margin-bottom: 6px; }
+  .desc .row:last-child { margin-bottom: 0; }
+  .desc .k {
+    color: var(--sub);
+    flex: 0 0 70px;
+    font-size: 11.5px;
+    padding-top: 2px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .desc .v { flex: 1; font-size: 13.5px; }
+
+  /* Home screen comparison */
+  .home-strip {
+    margin: 8px auto 64px;
+    max-width: 1500px;
+    padding: 0 32px;
+  }
+  .home-title {
+    text-align: center;
+    font-size: 12px;
+    color: var(--sub);
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin-bottom: 18px;
+  }
+  .home {
+    /* iOS light wallpaper feel */
+    background:
+      radial-gradient(900px 700px at 20% 10%, #d2e3ff 0%, transparent 60%),
+      radial-gradient(800px 600px at 90% 90%, #ffe1c2 0%, transparent 60%),
+      linear-gradient(180deg, #f0f4fb 0%, #e6ecf6 100%);
+    border-radius: 40px;
+    padding: 44px 28px 32px;
+    display: flex;
+    justify-content: center;
+    gap: 22px;
+    flex-wrap: wrap;
+    box-shadow: 0 18px 50px rgba(20, 40, 80, 0.12);
+  }
+  .home .sm {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+  .home .icon-sm {
+    width: 62px;
+    height: 62px;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,0.6),
+      0 6px 14px rgba(0,0,0,0.15);
+  }
+  .home .cap {
+    font-size: 11px;
+    color: #1c1c1e;
+    text-shadow: 0 1px 2px rgba(255,255,255,0.6);
+    text-align: center;
+    line-height: 1.2;
+    font-weight: 500;
+    max-width: 70px;
+  }
+
+  footer {
+    text-align: center;
+    padding: 12px 32px 56px;
+    color: var(--sub);
+    font-size: 12px;
+  }
+  .pill {
+    display: inline-block;
+    background: rgba(0,122,255,0.12);
+    color: #007aff;
+    border-radius: 999px;
+    padding: 3px 10px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    margin-left: 6px;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="eyebrow">iOS 26 · Liquid Glass · App Icon Concepts</div>
+  <h1>마이 맛집 아카이브</h1>
+  <p>
+    Apple의 새로운 Liquid Glass 디자인 시스템에 맞춰 재설계.
+    각 컨셉은 <b>Light / Dark / Tinted</b> 3가지 변형을 모두 제공하며,
+    배경 레이어와 전경 오브젝트가 분리된 멀티-레이어 구조입니다.
+  </p>
+</header>
+
+<!-- ============ SVG SYMBOLS (Liquid Glass refactor) ============ -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+
+    <!-- Reusable: specular highlight (top-light) used across all glass shapes -->
+    <linearGradient id="spec-top" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="rgba(255,255,255,0.55)"/>
+      <stop offset="35%" stop-color="rgba(255,255,255,0.10)"/>
+      <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
+    </linearGradient>
+    <linearGradient id="spec-bottom" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0%" stop-color="rgba(255,255,255,0.22)"/>
+      <stop offset="60%" stop-color="rgba(255,255,255,0)"/>
+    </linearGradient>
+
+    <!-- Glass material — used inside symbols (referenced as gradient fill) -->
+    <!-- We define gradients per-symbol below for clarity -->
+
+
+    <!-- ============================================================
+         1) Glass Fork-Pin   (food + location, single sculptural form)
+         ============================================================ -->
+    <symbol id="ic1-light" viewBox="0 0 1024 1024">
+      <defs>
+        <linearGradient id="ic1l-bg" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#7eb6ff"/>
+          <stop offset="60%" stop-color="#0a84ff"/>
+          <stop offset="100%" stop-color="#0054c2"/>
+        </linearGradient>
+        <radialGradient id="ic1l-glow" cx="30%" cy="20%" r="80%">
+          <stop offset="0%" stop-color="rgba(255,255,255,0.55)"/>
+          <stop offset="60%" stop-color="rgba(255,255,255,0)"/>
+        </radialGradient>
+        <linearGradient id="ic1l-glass" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="rgba(255,255,255,0.95)"/>
+          <stop offset="50%" stop-color="rgba(255,255,255,0.55)"/>
+          <stop offset="100%" stop-color="rgba(255,255,255,0.35)"/>
+        </linearGradient>
+      </defs>
+      <rect width="1024" height="1024" fill="url(#ic1l-bg)"/>
+      <rect width="1024" height="1024" fill="url(#ic1l-glow)"/>
+      <!-- droplet/pin body -->
+      <g transform="translate(512 540)">
+        <path d="M0 -310
+                 C 180 -310, 280 -160, 280 -20
+                 C 280 180, 100 320, 0 320
+                 C -100 320, -280 180, -280 -20
+                 C -280 -160, -180 -310, 0 -310 Z"
+              fill="url(#ic1l-glass)"
+              opacity="0.92"/>
+        <!-- glass refraction edge -->
+        <path d="M0 -310
+                 C 180 -310, 280 -160, 280 -20
+                 C 280 180, 100 320, 0 320
+                 C -100 320, -280 180, -280 -20
+                 C -280 -160, -180 -310, 0 -310 Z"
+              fill="none" stroke="rgba(255,255,255,0.7)" stroke-width="4"/>
+        <!-- specular -->
+        <ellipse cx="-90" cy="-180" rx="120" ry="60" fill="rgba(255,255,255,0.6)" opacity="0.9"/>
+        <!-- fork etched inside (glass cutout style — slight shadow) -->
+        <g stroke="rgba(10,80,180,0.55)" stroke-width="22" stroke-linecap="round" fill="none">
+          <line x1="-90" y1="-120" x2="-90" y2="40"/>
+          <line x1="-30" y1="-120" x2="-30" y2="40"/>
+          <line x1="30"  y1="-120" x2="30"  y2="40"/>
+          <line x1="90"  y1="-120" x2="90"  y2="40"/>
+        </g>
+        <path d="M -110 40 H 110 V 70 a 28 28 0 0 1 -28 28 H 12
+                 L 12 220 a 12 12 0 0 1 -24 0 L -12 98
+                 H -82 a 28 28 0 0 1 -28 -28 Z"
+              fill="rgba(10,80,180,0.5)"/>
+      </g>
+    </symbol>
+
+    <symbol id="ic1-dark" viewBox="0 0 1024 1024">
+      <defs>
+        <linearGradient id="ic1d-bg" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#1a2238"/>
+          <stop offset="60%" stop-color="#0b1428"/>
+          <stop offset="100%" stop-color="#05080f"/>
+        </linearGradient>
+        <linearGradient id="ic1d-glass" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="rgba(120,180,255,0.7)"/>
+          <stop offset="60%" stop-color="rgba(10,132,255,0.35)"/>
+          <stop offset="100%" stop-color="rgba(10,132,255,0.15)"/>
+        </linearGradient>
+      </defs>
+      <rect width="1024" height="1024" fill="url(#ic1d-bg)"/>
+      <g transform="translate(512 540)">
+        <path d="M0 -310 C 180 -310, 280 -160, 280 -20 C 280 180, 100 320, 0 320
+                 C -100 320, -280 180, -280 -20 C -280 -160, -180 -310, 0 -310 Z"
+              fill="url(#ic1d-glass)"/>
+        <path d="M0 -310 C 180 -310, 280 -160, 280 -20 C 280 180, 100 320, 0 320
+                 C -100 320, -280 180, -280 -20 C -280 -160, -180 -310, 0 -310 Z"
+              fill="none" stroke="rgba(120,180,255,0.55)" stroke-width="4"/>
+        <ellipse cx="-90" cy="-180" rx="120" ry="60" fill="rgba(255,255,255,0.25)"/>
+        <g stroke="#7eb6ff" stroke-width="22" stroke-linecap="round" fill="none">
+          <line x1="-90" y1="-120" x2="-90" y2="40"/>
+          <line x1="-30" y1="-120" x2="-30" y2="40"/>
+          <line x1="30"  y1="-120" x2="30"  y2="40"/>
+          <line x1="90"  y1="-120" x2="90"  y2="40"/>
+        </g>
+        <path d="M -110 40 H 110 V 70 a 28 28 0 0 1 -28 28 H 12 L 12 220
+                 a 12 12 0 0 1 -24 0 L -12 98 H -82 a 28 28 0 0 1 -28 -28 Z"
+              fill="#7eb6ff"/>
+      </g>
+    </symbol>
+
+    <symbol id="ic1-tint" viewBox="0 0 1024 1024">
+      <rect width="1024" height="1024" fill="#1a1a1a"/>
+      <g transform="translate(512 540)" fill="#f5f5f7" opacity="0.95">
+        <path d="M0 -310 C 180 -310, 280 -160, 280 -20 C 280 180, 100 320, 0 320
+                 C -100 320, -280 180, -280 -20 C -280 -160, -180 -310, 0 -310 Z"
+              opacity="0.18"/>
+        <path d="M0 -310 C 180 -310, 280 -160, 280 -20 C 280 180, 100 320, 0 320
+                 C -100 320, -280 180, -280 -20 C -280 -160, -180 -310, 0 -310 Z"
+              fill="none" stroke="#f5f5f7" stroke-width="6" opacity="0.6"/>
+        <g stroke="#f5f5f7" stroke-width="22" stroke-linecap="round" fill="none">
+          <line x1="-90" y1="-120" x2="-90" y2="40"/>
+          <line x1="-30" y1="-120" x2="-30" y2="40"/>
+          <line x1="30"  y1="-120" x2="30"  y2="40"/>
+          <line x1="90"  y1="-120" x2="90"  y2="40"/>
+        </g>
+        <path d="M -110 40 H 110 V 70 a 28 28 0 0 1 -28 28 H 12 L 12 220
+                 a 12 12 0 0 1 -24 0 L -12 98 H -82 a 28 28 0 0 1 -28 -28 Z"/>
+      </g>
+    </symbol>
+
+
+    <!-- ============================================================
+         2) Glass Cloche   (식당 종 모양 돔 — '특별한 한 그릇')
+         ============================================================ -->
+    <symbol id="ic2-light" viewBox="0 0 1024 1024">
+      <defs>
+        <linearGradient id="ic2l-bg" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#fff3df"/>
+          <stop offset="100%" stop-color="#ffb775"/>
+        </linearGradient>
+        <linearGradient id="ic2l-dome" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="rgba(255,255,255,0.95)"/>
+          <stop offset="55%" stop-color="rgba(255,255,255,0.45)"/>
+          <stop offset="100%" stop-color="rgba(255,255,255,0.25)"/>
+        </linearGradient>
+        <linearGradient id="ic2l-plate" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#ffffff"/>
+          <stop offset="100%" stop-color="#f0e6d4"/>
+        </linearGradient>
+      </defs>
+      <rect width="1024" height="1024" fill="url(#ic2l-bg)"/>
+      <!-- Plate -->
+      <ellipse cx="512" cy="780" rx="340" ry="50" fill="url(#ic2l-plate)"/>
+      <ellipse cx="512" cy="780" rx="340" ry="50" fill="none" stroke="rgba(0,0,0,0.06)" stroke-width="4"/>
+      <!-- Dome (cloche) -->
+      <path d="M 192 780
+               C 192 460, 320 280, 512 280
+               C 704 280, 832 460, 832 780 Z"
+            fill="url(#ic2l-dome)"/>
+      <path d="M 192 780 C 192 460, 320 280, 512 280 C 704 280, 832 460, 832 780"
+            fill="none" stroke="rgba(255,255,255,0.85)" stroke-width="4"/>
+      <!-- Specular -->
+      <path d="M 280 720 C 260 520, 340 380, 480 340"
+            fill="none" stroke="rgba(255,255,255,0.7)" stroke-width="38" stroke-linecap="round"/>
+      <!-- Top knob (heart-shaped — '내가 좋아한 것') -->
+      <path d="M 512 240
+               C 512 200, 552 180, 572 210
+               C 596 245, 568 280, 512 320
+               C 456 280, 428 245, 452 210
+               C 472 180, 512 200, 512 240 Z"
+            fill="#ff3b30"/>
+    </symbol>
+
+    <symbol id="ic2-dark" viewBox="0 0 1024 1024">
+      <defs>
+        <linearGradient id="ic2d-bg" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#251a10"/>
+          <stop offset="100%" stop-color="#0f0a05"/>
+        </linearGradient>
+        <linearGradient id="ic2d-dome" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="rgba(255,200,140,0.55)"/>
+          <stop offset="100%" stop-color="rgba(255,160,80,0.18)"/>
+        </linearGradient>
+      </defs>
+      <rect width="1024" height="1024" fill="url(#ic2d-bg)"/>
+      <ellipse cx="512" cy="780" rx="340" ry="50" fill="rgba(255,200,140,0.35)"/>
+      <path d="M 192 780 C 192 460, 320 280, 512 280 C 704 280, 832 460, 832 780 Z"
+            fill="url(#ic2d-dome)"/>
+      <path d="M 192 780 C 192 460, 320 280, 512 280 C 704 280, 832 460, 832 780"
+            fill="none" stroke="rgba(255,200,140,0.7)" stroke-width="4"/>
+      <path d="M 280 720 C 260 520, 340 380, 480 340"
+            fill="none" stroke="rgba(255,225,180,0.5)" stroke-width="38" stroke-linecap="round"/>
+      <path d="M 512 240 C 512 200, 552 180, 572 210 C 596 245, 568 280, 512 320
+               C 456 280, 428 245, 452 210 C 472 180, 512 200, 512 240 Z"
+            fill="#ff453a"/>
+    </symbol>
+
+    <symbol id="ic2-tint" viewBox="0 0 1024 1024">
+      <rect width="1024" height="1024" fill="#1a1a1a"/>
+      <g fill="#f5f5f7">
+        <ellipse cx="512" cy="780" rx="340" ry="50" opacity="0.55"/>
+        <path d="M 192 780 C 192 460, 320 280, 512 280 C 704 280, 832 460, 832 780 Z" opacity="0.2"/>
+        <path d="M 192 780 C 192 460, 320 280, 512 280 C 704 280, 832 460, 832 780"
+              fill="none" stroke="#f5f5f7" stroke-width="8" opacity="0.85"/>
+        <path d="M 512 240 C 512 200, 552 180, 572 210 C 596 245, 568 280, 512 320
+                 C 456 280, 428 245, 452 210 C 472 180, 512 200, 512 240 Z"/>
+      </g>
+    </symbol>
+
+
+    <!-- ============================================================
+         3) Glass Plate Lens   (접시 = 사진 렌즈)
+         ============================================================ -->
+    <symbol id="ic3-light" viewBox="0 0 1024 1024">
+      <defs>
+        <linearGradient id="ic3l-bg" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#5fb0ff"/>
+          <stop offset="100%" stop-color="#0a84ff"/>
+        </linearGradient>
+        <radialGradient id="ic3l-ring" cx="50%" cy="50%" r="50%">
+          <stop offset="78%" stop-color="rgba(255,255,255,0.95)"/>
+          <stop offset="80%" stop-color="rgba(255,255,255,0.55)"/>
+          <stop offset="100%" stop-color="rgba(255,255,255,0.3)"/>
+        </radialGradient>
+        <radialGradient id="ic3l-core" cx="40%" cy="40%" r="70%">
+          <stop offset="0%" stop-color="#ffe4b8"/>
+          <stop offset="50%" stop-color="#ff9f43"/>
+          <stop offset="100%" stop-color="#d94a1c"/>
+        </radialGradient>
+      </defs>
+      <rect width="1024" height="1024" fill="url(#ic3l-bg)"/>
+      <!-- backdrop bokeh -->
+      <circle cx="220" cy="220" r="60" fill="rgba(255,255,255,0.18)"/>
+      <circle cx="820" cy="180" r="36" fill="rgba(255,255,255,0.22)"/>
+      <circle cx="860" cy="820" r="80" fill="rgba(255,255,255,0.12)"/>
+      <!-- outer ring (plate / lens rim, glass) -->
+      <circle cx="512" cy="512" r="380" fill="url(#ic3l-ring)"/>
+      <!-- inner aperture (food/photo core) -->
+      <circle cx="512" cy="512" r="278" fill="url(#ic3l-core)"/>
+      <!-- aperture blades hint -->
+      <g stroke="rgba(255,255,255,0.4)" stroke-width="3" fill="none">
+        <circle cx="512" cy="512" r="278"/>
+        <circle cx="512" cy="512" r="240"/>
+      </g>
+      <!-- specular crescent (glass highlight on rim) -->
+      <path d="M 220 380 A 380 380 0 0 1 470 154"
+            fill="none" stroke="rgba(255,255,255,0.85)" stroke-width="26" stroke-linecap="round"/>
+      <!-- shutter / capture dot -->
+      <circle cx="760" cy="264" r="40" fill="#ffffff"/>
+      <circle cx="760" cy="264" r="20" fill="#ff3b30"/>
+    </symbol>
+
+    <symbol id="ic3-dark" viewBox="0 0 1024 1024">
+      <defs>
+        <linearGradient id="ic3d-bg" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#0a1a2e"/>
+          <stop offset="100%" stop-color="#020812"/>
+        </linearGradient>
+      </defs>
+      <rect width="1024" height="1024" fill="url(#ic3d-bg)"/>
+      <circle cx="220" cy="220" r="60" fill="rgba(10,132,255,0.25)"/>
+      <circle cx="860" cy="820" r="80" fill="rgba(10,132,255,0.18)"/>
+      <circle cx="512" cy="512" r="380" fill="rgba(10,132,255,0.18)"
+              stroke="rgba(120,180,255,0.55)" stroke-width="3"/>
+      <circle cx="512" cy="512" r="278" fill="#ff9f43"/>
+      <path d="M 220 380 A 380 380 0 0 1 470 154"
+            fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="26" stroke-linecap="round"/>
+      <circle cx="760" cy="264" r="40" fill="#0a84ff"/>
+      <circle cx="760" cy="264" r="20" fill="#ffffff"/>
+    </symbol>
+
+    <symbol id="ic3-tint" viewBox="0 0 1024 1024">
+      <rect width="1024" height="1024" fill="#1a1a1a"/>
+      <g fill="#f5f5f7">
+        <circle cx="512" cy="512" r="380" opacity="0.2"/>
+        <circle cx="512" cy="512" r="380" fill="none" stroke="#f5f5f7" stroke-width="10" opacity="0.7"/>
+        <circle cx="512" cy="512" r="278"/>
+        <circle cx="760" cy="264" r="40" opacity="0.9"/>
+      </g>
+    </symbol>
+
+
+    <!-- ============================================================
+         4) Glass Bookmark   (북마크 리본, 단일 레이어)
+         ============================================================ -->
+    <symbol id="ic4-light" viewBox="0 0 1024 1024">
+      <defs>
+        <linearGradient id="ic4l-bg" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#ffe6c2"/>
+          <stop offset="100%" stop-color="#ff8a3d"/>
+        </linearGradient>
+        <linearGradient id="ic4l-rib" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="rgba(255,255,255,0.85)"/>
+          <stop offset="50%" stop-color="rgba(255,255,255,0.4)"/>
+          <stop offset="100%" stop-color="rgba(255,255,255,0.2)"/>
+        </linearGradient>
+      </defs>
+      <rect width="1024" height="1024" fill="url(#ic4l-bg)"/>
+      <!-- backdrop blur orbs -->
+      <circle cx="180" cy="200" r="140" fill="rgba(255,255,255,0.25)"/>
+      <circle cx="880" cy="860" r="180" fill="rgba(255,180,100,0.4)"/>
+      <!-- ribbon -->
+      <path d="M 312 132
+               H 712
+               a 36 36 0 0 1 36 36
+               V 892
+               L 512 740
+               L 276 892
+               V 168
+               a 36 36 0 0 1 36 -36 Z"
+            fill="url(#ic4l-rib)"/>
+      <path d="M 312 132 H 712 a 36 36 0 0 1 36 36 V 892 L 512 740 L 276 892 V 168 a 36 36 0 0 1 36 -36 Z"
+            fill="none" stroke="rgba(255,255,255,0.85)" stroke-width="4"/>
+      <!-- specular line on left edge -->
+      <path d="M 326 160 L 326 820"
+            stroke="rgba(255,255,255,0.95)" stroke-width="14" stroke-linecap="round"/>
+      <!-- fork (centered, etched, deep iOS Blue) -->
+      <g transform="translate(512 460)">
+        <g stroke="#0a84ff" stroke-width="22" stroke-linecap="round" fill="none">
+          <line x1="-72" y1="-150" x2="-72" y2="-30"/>
+          <line x1="-24" y1="-150" x2="-24" y2="-30"/>
+          <line x1="24"  y1="-150" x2="24"  y2="-30"/>
+          <line x1="72"  y1="-150" x2="72"  y2="-30"/>
+        </g>
+        <path d="M -90 -30 H 90 V 0 a 28 28 0 0 1 -28 28 H 14
+                 L 14 180 a 14 14 0 0 1 -28 0 L -14 28
+                 H -62 a 28 28 0 0 1 -28 -28 Z"
+              fill="#0a84ff"/>
+      </g>
+    </symbol>
+
+    <symbol id="ic4-dark" viewBox="0 0 1024 1024">
+      <defs>
+        <linearGradient id="ic4d-bg" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#2a1808"/>
+          <stop offset="100%" stop-color="#0d0703"/>
+        </linearGradient>
+        <linearGradient id="ic4d-rib" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="rgba(255,180,100,0.55)"/>
+          <stop offset="100%" stop-color="rgba(255,140,60,0.2)"/>
+        </linearGradient>
+      </defs>
+      <rect width="1024" height="1024" fill="url(#ic4d-bg)"/>
+      <circle cx="180" cy="200" r="140" fill="rgba(255,140,60,0.25)"/>
+      <path d="M 312 132 H 712 a 36 36 0 0 1 36 36 V 892 L 512 740 L 276 892 V 168 a 36 36 0 0 1 36 -36 Z"
+            fill="url(#ic4d-rib)"/>
+      <path d="M 312 132 H 712 a 36 36 0 0 1 36 36 V 892 L 512 740 L 276 892 V 168 a 36 36 0 0 1 36 -36 Z"
+            fill="none" stroke="rgba(255,180,100,0.65)" stroke-width="4"/>
+      <path d="M 326 160 L 326 820" stroke="rgba(255,220,170,0.6)" stroke-width="14" stroke-linecap="round"/>
+      <g transform="translate(512 460)">
+        <g stroke="#ffb775" stroke-width="22" stroke-linecap="round" fill="none">
+          <line x1="-72" y1="-150" x2="-72" y2="-30"/>
+          <line x1="-24" y1="-150" x2="-24" y2="-30"/>
+          <line x1="24"  y1="-150" x2="24"  y2="-30"/>
+          <line x1="72"  y1="-150" x2="72"  y2="-30"/>
+        </g>
+        <path d="M -90 -30 H 90 V 0 a 28 28 0 0 1 -28 28 H 14 L 14 180
+                 a 14 14 0 0 1 -28 0 L -14 28 H -62 a 28 28 0 0 1 -28 -28 Z"
+              fill="#ffb775"/>
+      </g>
+    </symbol>
+
+    <symbol id="ic4-tint" viewBox="0 0 1024 1024">
+      <rect width="1024" height="1024" fill="#1a1a1a"/>
+      <g fill="#f5f5f7">
+        <path d="M 312 132 H 712 a 36 36 0 0 1 36 36 V 892 L 512 740 L 276 892 V 168 a 36 36 0 0 1 36 -36 Z"
+              opacity="0.22"/>
+        <path d="M 312 132 H 712 a 36 36 0 0 1 36 36 V 892 L 512 740 L 276 892 V 168 a 36 36 0 0 1 36 -36 Z"
+              fill="none" stroke="#f5f5f7" stroke-width="8" opacity="0.6"/>
+        <g transform="translate(512 460)">
+          <g stroke="#f5f5f7" stroke-width="22" stroke-linecap="round" fill="none">
+            <line x1="-72" y1="-150" x2="-72" y2="-30"/>
+            <line x1="-24" y1="-150" x2="-24" y2="-30"/>
+            <line x1="24"  y1="-150" x2="24"  y2="-30"/>
+            <line x1="72"  y1="-150" x2="72"  y2="-30"/>
+          </g>
+          <path d="M -90 -30 H 90 V 0 a 28 28 0 0 1 -28 28 H 14 L 14 180
+                   a 14 14 0 0 1 -28 0 L -14 28 H -62 a 28 28 0 0 1 -28 -28 Z"/>
+        </g>
+      </g>
+    </symbol>
+
+
+    <!-- ============================================================
+         5) Polaroid Glass   (단일 카드, 음식 그라데이션 안)
+         ============================================================ -->
+    <symbol id="ic5-light" viewBox="0 0 1024 1024">
+      <defs>
+        <linearGradient id="ic5l-bg" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#a3c9ff"/>
+          <stop offset="100%" stop-color="#0a84ff"/>
+        </linearGradient>
+        <linearGradient id="ic5l-card" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="rgba(255,255,255,0.95)"/>
+          <stop offset="100%" stop-color="rgba(255,255,255,0.7)"/>
+        </linearGradient>
+        <radialGradient id="ic5l-food" cx="40%" cy="40%" r="70%">
+          <stop offset="0%" stop-color="#ffe4b8"/>
+          <stop offset="55%" stop-color="#ff9f43"/>
+          <stop offset="100%" stop-color="#d94a1c"/>
+        </radialGradient>
+      </defs>
+      <rect width="1024" height="1024" fill="url(#ic5l-bg)"/>
+      <!-- bokeh -->
+      <circle cx="170" cy="180" r="80" fill="rgba(255,255,255,0.22)"/>
+      <circle cx="870" cy="860" r="120" fill="rgba(255,255,255,0.15)"/>
+      <!-- ghost card behind -->
+      <g transform="translate(512 540) rotate(8) translate(-240 -290)">
+        <rect width="480" height="580" rx="32" fill="rgba(255,255,255,0.4)"/>
+      </g>
+      <!-- main polaroid (glass) -->
+      <g transform="translate(512 540) rotate(-4) translate(-240 -290)">
+        <rect width="480" height="580" rx="32" fill="url(#ic5l-card)"/>
+        <rect width="480" height="580" rx="32" fill="none"
+              stroke="rgba(255,255,255,0.95)" stroke-width="3"/>
+        <!-- photo window with food -->
+        <rect x="40" y="40" width="400" height="400" rx="14" fill="url(#ic5l-food)"/>
+        <!-- specular sweep on glass -->
+        <path d="M 40 60 L 240 40" stroke="rgba(255,255,255,0.6)"
+              stroke-width="6" stroke-linecap="round" fill="none"/>
+        <!-- fork silhouette inside photo -->
+        <g transform="translate(240 240)" fill="#ffffff" opacity="0.92">
+          <rect x="-7" y="-110" width="14" height="160" rx="5"/>
+          <rect x="-40" y="-110" width="14" height="90" rx="5"/>
+          <rect x="26"  y="-110" width="14" height="90" rx="5"/>
+          <path d="M -50 -22 H 50 V -10 a 22 22 0 0 1 -22 22 H -28 a 22 22 0 0 1 -22 -22 Z"/>
+        </g>
+        <!-- caption strip -->
+        <rect x="40" y="470" width="400" height="70" rx="10" fill="rgba(255,255,255,0.6)"/>
+        <circle cx="80" cy="505" r="8" fill="#ff3b30"/>
+        <rect x="100" y="497" width="240" height="16" rx="8" fill="rgba(0,0,0,0.18)"/>
+      </g>
+    </symbol>
+
+    <symbol id="ic5-dark" viewBox="0 0 1024 1024">
+      <defs>
+        <linearGradient id="ic5d-bg" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#0e1a2c"/>
+          <stop offset="100%" stop-color="#04060c"/>
+        </linearGradient>
+      </defs>
+      <rect width="1024" height="1024" fill="url(#ic5d-bg)"/>
+      <circle cx="170" cy="180" r="80" fill="rgba(10,132,255,0.3)"/>
+      <circle cx="870" cy="860" r="120" fill="rgba(10,132,255,0.18)"/>
+      <g transform="translate(512 540) rotate(8) translate(-240 -290)">
+        <rect width="480" height="580" rx="32" fill="rgba(120,180,255,0.18)"/>
+      </g>
+      <g transform="translate(512 540) rotate(-4) translate(-240 -290)">
+        <rect width="480" height="580" rx="32" fill="rgba(120,180,255,0.28)"/>
+        <rect width="480" height="580" rx="32" fill="none"
+              stroke="rgba(120,180,255,0.6)" stroke-width="3"/>
+        <rect x="40" y="40" width="400" height="400" rx="14" fill="#ff9f43"/>
+        <g transform="translate(240 240)" fill="#0e1a2c">
+          <rect x="-7" y="-110" width="14" height="160" rx="5"/>
+          <rect x="-40" y="-110" width="14" height="90" rx="5"/>
+          <rect x="26"  y="-110" width="14" height="90" rx="5"/>
+          <path d="M -50 -22 H 50 V -10 a 22 22 0 0 1 -22 22 H -28 a 22 22 0 0 1 -22 -22 Z"/>
+        </g>
+        <rect x="40" y="470" width="400" height="70" rx="10" fill="rgba(120,180,255,0.18)"/>
+        <circle cx="80" cy="505" r="8" fill="#ff453a"/>
+        <rect x="100" y="497" width="240" height="16" rx="8" fill="rgba(245,245,247,0.55)"/>
+      </g>
+    </symbol>
+
+    <symbol id="ic5-tint" viewBox="0 0 1024 1024">
+      <rect width="1024" height="1024" fill="#1a1a1a"/>
+      <g fill="#f5f5f7">
+        <g transform="translate(512 540) rotate(8) translate(-240 -290)" opacity="0.3">
+          <rect width="480" height="580" rx="32"/>
+        </g>
+        <g transform="translate(512 540) rotate(-4) translate(-240 -290)">
+          <rect width="480" height="580" rx="32" opacity="0.22"/>
+          <rect width="480" height="580" rx="32" fill="none" stroke="#f5f5f7" stroke-width="6" opacity="0.7"/>
+          <rect x="40" y="40" width="400" height="400" rx="14" opacity="0.85"/>
+        </g>
+      </g>
+    </symbol>
+
+  </defs>
+</svg>
+
+
+<div class="grid">
+
+  <!-- 1 -->
+  <div class="card">
+    <div class="num">01</div>
+    <h2>Glass Fork-Pin <span class="pill">Recommended</span></h2>
+    <div class="sub">유리 핀 안에 포크 — 위치 × 음식 한 컷</div>
+    <div class="variants">
+      <div class="variant">
+        <div class="icon"><svg viewBox="0 0 1024 1024" width="100%" height="100%"><use href="#ic1-light"/></svg></div>
+        <div class="label">Light</div>
+      </div>
+      <div class="variant">
+        <div class="icon"><svg viewBox="0 0 1024 1024" width="100%" height="100%"><use href="#ic1-dark"/></svg></div>
+        <div class="label">Dark</div>
+      </div>
+      <div class="variant">
+        <div class="icon"><svg viewBox="0 0 1024 1024" width="100%" height="100%"><use href="#ic1-tint"/></svg></div>
+        <div class="label">Tinted</div>
+      </div>
+    </div>
+    <div class="desc">
+      <div class="row"><div class="k">컨셉</div><div class="v">반투명 유리 핀 안에 음식의 상징인 포크가 굴절돼 비치는 단일 조각.</div></div>
+      <div class="row"><div class="k">Liquid Glass</div><div class="v">상단 specular highlight, 하단 굴절광, edge bright stroke — iOS 26 매핑 정석.</div></div>
+      <div class="row"><div class="k">Why</div><div class="v">'어디서 무엇을' 한 컷에 압축. Maps 아이콘과 톤은 공유하되 음식 정체성 명확.</div></div>
+    </div>
+  </div>
+
+  <!-- 2 -->
+  <div class="card">
+    <div class="num">02</div>
+    <h2>Glass Cloche</h2>
+    <div class="sub">유리 식기 돔 — '특별한 한 그릇' 의식</div>
+    <div class="variants">
+      <div class="variant">
+        <div class="icon"><svg viewBox="0 0 1024 1024" width="100%" height="100%"><use href="#ic2-light"/></svg></div>
+        <div class="label">Light</div>
+      </div>
+      <div class="variant">
+        <div class="icon"><svg viewBox="0 0 1024 1024" width="100%" height="100%"><use href="#ic2-dark"/></svg></div>
+        <div class="label">Dark</div>
+      </div>
+      <div class="variant">
+        <div class="icon"><svg viewBox="0 0 1024 1024" width="100%" height="100%"><use href="#ic2-tint"/></svg></div>
+        <div class="label">Tinted</div>
+      </div>
+    </div>
+    <div class="desc">
+      <div class="row"><div class="k">컨셉</div><div class="v">레스토랑 서빙 돔(클로슈)을 유리로 — 그 안의 음식은 '비밀의 보물'.</div></div>
+      <div class="row"><div class="k">Liquid Glass</div><div class="v">돔의 곡면 굴절 + 좌측 specular 스윕. 빨간 하트 손잡이가 액센트.</div></div>
+      <div class="row"><div class="k">Why</div><div class="v">가장 조각적이고 고급스러운 톤. 음식 앱이라는 정체성도 즉시 읽힘.</div></div>
+    </div>
+  </div>
+
+  <!-- 3 -->
+  <div class="card">
+    <div class="num">03</div>
+    <h2>Glass Plate Lens</h2>
+    <div class="sub">접시 × 렌즈 조리개 — '사진으로 남긴 한 끼'</div>
+    <div class="variants">
+      <div class="variant">
+        <div class="icon"><svg viewBox="0 0 1024 1024" width="100%" height="100%"><use href="#ic3-light"/></svg></div>
+        <div class="label">Light</div>
+      </div>
+      <div class="variant">
+        <div class="icon"><svg viewBox="0 0 1024 1024" width="100%" height="100%"><use href="#ic3-dark"/></svg></div>
+        <div class="label">Dark</div>
+      </div>
+      <div class="variant">
+        <div class="icon"><svg viewBox="0 0 1024 1024" width="100%" height="100%"><use href="#ic3-tint"/></svg></div>
+        <div class="label">Tinted</div>
+      </div>
+    </div>
+    <div class="desc">
+      <div class="row"><div class="k">컨셉</div><div class="v">접시의 둥근 림 = 카메라 렌즈. 한 가운데 음식 그라데이션. 우상단 셔터 닷.</div></div>
+      <div class="row"><div class="k">Liquid Glass</div><div class="v">유리 림 + 굴절 bokeh + crescent specular. 사진앱 톤 직접 인용.</div></div>
+      <div class="row"><div class="k">Why</div><div class="v">사진 + AI 기반 앱의 정체성을 가장 명료하게 전달.</div></div>
+    </div>
+  </div>
+
+  <!-- 4 -->
+  <div class="card">
+    <div class="num">04</div>
+    <h2>Glass Bookmark</h2>
+    <div class="sub">유리 책갈피 + 포크 — '저장해 둔 그 맛'</div>
+    <div class="variants">
+      <div class="variant">
+        <div class="icon"><svg viewBox="0 0 1024 1024" width="100%" height="100%"><use href="#ic4-light"/></svg></div>
+        <div class="label">Light</div>
+      </div>
+      <div class="variant">
+        <div class="icon"><svg viewBox="0 0 1024 1024" width="100%" height="100%"><use href="#ic4-dark"/></svg></div>
+        <div class="label">Dark</div>
+      </div>
+      <div class="variant">
+        <div class="icon"><svg viewBox="0 0 1024 1024" width="100%" height="100%"><use href="#ic4-tint"/></svg></div>
+        <div class="label">Tinted</div>
+      </div>
+    </div>
+    <div class="desc">
+      <div class="row"><div class="k">컨셉</div><div class="v">반투명 유리 책갈피 위에 iOS Blue 포크. '아카이브'를 가장 직설적으로.</div></div>
+      <div class="row"><div class="k">Liquid Glass</div><div class="v">좌측 specular 라인 + edge stroke. 따뜻한 오렌지 배경이 유리 너머 비침.</div></div>
+      <div class="row"><div class="k">Why</div><div class="v">홈 화면 작은 사이즈에서도 의미 즉시 인식. 가독성 최고.</div></div>
+    </div>
+  </div>
+
+  <!-- 5 -->
+  <div class="card">
+    <div class="num">05</div>
+    <h2>Polaroid Glass</h2>
+    <div class="sub">유리 폴라로이드 — '쌓이는 기록 한 장'</div>
+    <div class="variants">
+      <div class="variant">
+        <div class="icon"><svg viewBox="0 0 1024 1024" width="100%" height="100%"><use href="#ic5-light"/></svg></div>
+        <div class="label">Light</div>
+      </div>
+      <div class="variant">
+        <div class="icon"><svg viewBox="0 0 1024 1024" width="100%" height="100%"><use href="#ic5-dark"/></svg></div>
+        <div class="label">Dark</div>
+      </div>
+      <div class="variant">
+        <div class="icon"><svg viewBox="0 0 1024 1024" width="100%" height="100%"><use href="#ic5-tint"/></svg></div>
+        <div class="label">Tinted</div>
+      </div>
+    </div>
+    <div class="desc">
+      <div class="row"><div class="k">컨셉</div><div class="v">반투명 유리 폴라로이드 카드, 안에 음식 사진 + 캡션 strip.</div></div>
+      <div class="row"><div class="k">Liquid Glass</div><div class="v">카드 자체가 frosted glass. 뒤 카드는 더 옅게 — 깊이감 표현.</div></div>
+      <div class="row"><div class="k">Why</div><div class="v">메인 갤러리 그리드(2열)와 시각적 일관성 최고. 사진 중심 UX를 직접 표상.</div></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Home strip -->
+<div class="home-strip">
+  <div class="home-title">홈 화면 비교 · 라이트 모드 @60pt</div>
+  <div class="home">
+    <div class="sm">
+      <div class="icon-sm"><svg viewBox="0 0 1024 1024" width="100%" height="100%"><use href="#ic1-light"/></svg></div>
+      <div class="cap">맛집<br/>아카이브</div>
+    </div>
+    <div class="sm">
+      <div class="icon-sm"><svg viewBox="0 0 1024 1024" width="100%" height="100%"><use href="#ic2-light"/></svg></div>
+      <div class="cap">맛집<br/>아카이브</div>
+    </div>
+    <div class="sm">
+      <div class="icon-sm"><svg viewBox="0 0 1024 1024" width="100%" height="100%"><use href="#ic3-light"/></svg></div>
+      <div class="cap">맛집<br/>아카이브</div>
+    </div>
+    <div class="sm">
+      <div class="icon-sm"><svg viewBox="0 0 1024 1024" width="100%" height="100%"><use href="#ic4-light"/></svg></div>
+      <div class="cap">맛집<br/>아카이브</div>
+    </div>
+    <div class="sm">
+      <div class="icon-sm"><svg viewBox="0 0 1024 1024" width="100%" height="100%"><use href="#ic5-light"/></svg></div>
+      <div class="cap">맛집<br/>아카이브</div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  iOS 26 Liquid Glass · Multi-layer (BG + FG) · Light / Dark / Tinted variants · 1024×1024 grid
+</footer>
+
+</body>
+</html>
