@@ -28,7 +28,7 @@ source_chapter: "15~18장 Android 대응 (TestFlight/App Store → Google Play)"
 | 책 15장 | 0~10절 | 책 15.5절로 돌아가기 |
 | 책 16장 | 8절 설치 확인, 앱을 고친 뒤 8.1절 | 책 16.5절로 돌아가기 |
 | 책 17장 | [`release-roadmap.md`](release-roadmap.md)의 1~7단계 | 책 17.5절의 점검 프롬프트로 마무리 |
-| 책 18장 | [`release-roadmap.md`](release-roadmap.md)의 8~10단계 | 책 18.4절로 돌아가기 |
+| 책 18장 | [`release-roadmap.md`](release-roadmap.md)의 8~10단계 | 책 18.3절로 돌아가기 |
 
 15장을 읽는 중이라면 10절까지만 진행하고 책으로 돌아옵니다. 11절부터는 정식 공개를 준비하는 흐름이라, 16장에서 앱의 첫인상을 다듬은 뒤에 진행하는 편이 좋습니다.
 
@@ -937,9 +937,11 @@ https://play.google.com/store/apps/details?id=[내 패키지 이름]
 - 사용자 평점, 리뷰, 설치 수 정책: https://support.google.com/googleplay/android-developer/answer/9898684
 - 앱 서명과 Play App Signing: https://developer.android.com/studio/publish/app-signing
 - Flutter Android 배포: https://docs.flutter.dev/deployment/android
+- Google Play Target API 요구사항: https://support.google.com/googleplay/android-developer/answer/11926878
+- 사진 및 동영상 권한 정책: https://support.google.com/googleplay/android-developer/answer/15800983
 - 데이터 안전 양식: https://support.google.com/googleplay/android-developer/answer/10787469
+- Firebase AI Logic App Check: https://firebase.google.com/docs/ai-logic/app-check
 - 사용자 데이터와 개인정보처리방침: https://support.google.com/googleplay/android-developer/answer/10144311
-- Google Play target API level 요구사항: https://support.google.com/googleplay/android-developer/answer/11926878
 - 앱 콘텐츠와 앱 검토 준비: https://support.google.com/googleplay/android-developer/answer/9859455
 - Google Play 스토어 등록정보와 미리보기 애셋: https://support.google.com/googleplay/android-developer/answer/1078870
 
