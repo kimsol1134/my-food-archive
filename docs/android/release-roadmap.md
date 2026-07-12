@@ -149,3 +149,11 @@ https://play.google.com/store/apps/details?id=[내 패키지 이름]
 - [ ] 비공개 테스트 12명·14일 충족
 - [ ] 프로덕션 접근 승인
 - [ ] 프로덕션 심사 통과와 정식 링크 확인
+
+## 공식 문서
+
+- Google Play Target API 요구사항: https://support.google.com/googleplay/android-developer/answer/11926878
+- 신규 개인 개발자 계정 테스트 요구사항: https://support.google.com/googleplay/android-developer/answer/14151465
+- 사진 및 동영상 권한 정책: https://support.google.com/googleplay/android-developer/answer/15800983
+- 데이터 안전 양식: https://support.google.com/googleplay/android-developer/answer/10787469
+- Firebase AI Logic App Check: https://firebase.google.com/docs/ai-logic/app-check
