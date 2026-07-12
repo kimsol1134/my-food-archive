@@ -9,7 +9,9 @@
 - 런처 아이콘: iOS의 Liquid Glass Polaroid 1024px 원본을 `flutter_launcher_icons`로 Android 전 해상도에 생성.
 - 버전: `pubspec.yaml`의 `version: 1.0.0+5` (versionName 1.0.0 / versionCode 5).
 - 서명 배선: `android/app/build.gradle.kts`가 저장소 밖의 업로드 키와 `android/key.properties`를 읽어 release 서명. 파일이 없으면 로컬 빌드 편의를 위해 디버그 서명으로 폴백하지만, Play Console에는 업로드하지 않는다.
-- AI 자동 태깅: Firebase Android 앱, Google Services, Firebase AI Logic, App Check(릴리스는 Play Integrity) 연결 완료.
+- AI 자동 태깅: Firebase Android 앱, Google Services, Firebase AI Logic, App Check(릴리스는 Play Integrity) 연결 완료. 2026-07-12에 Firebase AI Logic 강제 적용(`ENFORCED`)과 에뮬레이터 호출을 다시 확인함.
+
+상세 검증 근거: [`docs/android/release-verification-2026-07-12.md`](android/release-verification-2026-07-12.md)
 
 ## 새 환경에서 다시 준비할 절차
 

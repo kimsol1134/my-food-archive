@@ -2,11 +2,19 @@
 
 책 본문은 Mac + iPhone 기준으로 진행합니다. Android 앱을 만들고 있다면 이 폴더의 자료로 같은 흐름을 진행한 뒤, 책의 안내에 따라 본문으로 돌아가면 됩니다.
 
-종이책에서 주소를 직접 입력했다면 이 페이지를 즐겨찾기해 두세요.
+**초판 1쇄 기준 · 최종 확인 2026-07-12**
 
-**고정 주소:** https://github.com/kimsol1134/my-food-archive/tree/main/docs/android
+종이책의 QR은 저장소 구조가 바뀌어도 유지할 수 있는 아래 고정 안내 페이지로 연결됩니다.
+
+**인쇄·QR용 고정 주소:** https://kimsol1134.github.io/my-food-archive/android/
+
+**자료 원본 주소:** https://github.com/kimsol1134/my-food-archive/tree/main/docs/android
 
 현재 배포 준비도와 남은 외부 확인 항목은 [정량 평가 보고서](appendix-audit.md)에서 확인할 수 있습니다.
+
+편집·교정 단계에서는 [인쇄 교정 체크리스트](print-proof-checklist.md)로 QR과 화면 해상도를 확인합니다.
+
+Firebase App Check 강제 적용과 AAB 재빌드 근거는 [2026-07-12 릴리스 검증 기록](release-verification-2026-07-12.md)에 있습니다.
 
 책의 흐름에 맞춰 두 자료만 사용합니다.
 

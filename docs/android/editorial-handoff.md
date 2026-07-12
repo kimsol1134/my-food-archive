@@ -4,9 +4,13 @@
 
 이 문서는 편집·교정용입니다. 독자에게 안내할 시작점은 아래 고정 주소 하나입니다.
 
-**QR 및 본문 표기용 주소**
+**QR 및 본문 표기용 고정 주소**
 
-https://github.com/kimsol1134/my-food-archive/tree/main/docs/android
+https://kimsol1134.github.io/my-food-archive/android/
+
+자료 원본: https://github.com/kimsol1134/my-food-archive/tree/main/docs/android
+
+판본 표기: **초판 1쇄 기준 · 최종 확인 2026-07-12**
 
 ## 책과 온라인 자료 연결
 
@@ -56,8 +60,11 @@ https://github.com/kimsol1134/my-food-archive/tree/main/docs/android
 ## 출판 전 최종 확인
 
 - [ ] 종이책의 URL과 QR이 위 고정 주소로 열림
+- [ ] 최종 PDF에 배치된 QR을 iPhone과 Android 기본 카메라에서 각각 스캔함
 - [ ] 15장 → 15.5절, 16장 → 16.2~16.5절, 17장 → 17.5절, 18장 → 18.3절 연결이 일치함
 - [ ] Android 앱 화면의 사진·식당명·검색어가 한 사례로 이어짐
 - [ ] Play Console 캡처에 이메일, 실명, 주소, 전화번호, 인증서 지문, 전체 참여 링크가 없음
 - [ ] 출간 직전 공식 문서에서 Target API와 신규 개인 계정 테스트 요구사항을 다시 확인함
 - [ ] README와 두 가이드의 Markdown 로컬 링크 검사를 통과함
+
+QR 규격과 인쇄 크기, 화면 해상도 판정은 [`print-proof-checklist.md`](print-proof-checklist.md)를 사용합니다.
