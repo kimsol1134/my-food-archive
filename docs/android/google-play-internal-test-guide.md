@@ -9,6 +9,8 @@ source_chapter: "15~18장 Android 대응 (TestFlight/App Store → Google Play)"
 
 # 15~18장 대응 온라인 자료: Android 앱을 Google Play 내부 테스트에 올리고 정식 공개까지 가기
 
+> 초판 1쇄 기준 · 최종 확인 2026-07-12 · [고정 안내 페이지](https://kimsol1134.github.io/my-food-archive/android/)
+
 이 자료는 책 15~18장의 Apple 배포 흐름을 Android 앱 기준으로 따라가기 위한 온라인 보충 자료입니다.
 
 책 본문 15장은 Mac, iPhone, TestFlight, App Store Connect 기준으로 진행합니다. Android 앱을 만들고 있다면 여기서부터는 Google Play Console 흐름으로 갈라집니다.

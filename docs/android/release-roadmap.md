@@ -1,5 +1,7 @@
 # 17~18장 Android 대응: 비공개 테스트에서 Google Play 공개까지
 
+> 초판 1쇄 기준 · 최종 확인 2026-07-12 · [고정 안내 페이지](https://kimsol1134.github.io/my-food-archive/android/)
+
 이 문서는 책 17~18장을 읽는 Android 독자가 실제 작업 순서대로 사용하는 짧은 경로입니다. 내부 테스트 설치까지 끝내지 않았다면 먼저 [15~16장 내부 테스트 가이드](google-play-internal-test-guide.md)의 0~10절을 진행하세요.
 
 ## 시작 전에 알아둘 시간
