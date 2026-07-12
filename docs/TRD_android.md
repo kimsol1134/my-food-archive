@@ -28,7 +28,7 @@
     * `searchKeyword`: 검색용 통합 문자열 (예: "연남동오스테리아크림파스타양식")
 
 ### B. 서비스 계층 (Service Layer)
-* **`PhotoService`:** Android 갤러리에 접근하여 선택된 사진을 앱 전용 디렉토리(`getApplicationDocumentsDirectory()` → `/data/data/<package>/app_flutter/images/`)로 복사합니다. Android 13(API 33)+에서는 `image_picker`가 **Android Photo Picker**(`PickVisualMedia`)를 사용하므로 별도의 저장소 권한 없이도 사진 EXIF가 보존된 채 접근됩니다. 구버전(API ≤ 32)에서는 `READ_EXTERNAL_STORAGE` 권한 다이얼로그가 표시됩니다.
+* **`PhotoService`:** Android 갤러리에 접근하여 선택된 사진을 앱 전용 디렉토리(`getApplicationDocumentsDirectory()` → `/data/data/<package>/app_flutter/images/`)로 복사합니다. `image_picker`의 **Android Photo Picker**(`PickVisualMedia`)를 사용하므로 별도의 저장소 권한 없이도 사용자가 고른 사진에 접근합니다. 지원 기기에서는 시스템 Photo Picker를, 호환 기기에서는 라이브러리의 선택 흐름을 사용합니다.
 * **`LocationService`:** 사진의 EXIF 데이터에서 추출한 좌표를 `geocoding` 패키지의 `placemarkFromCoordinates()`로 변환합니다. Android에서는 내부적으로 `android.location.Geocoder`가 호출되며 **별도 위치 권한이 필요 없습니다**(좌표 → 지명 변환이지 기기 GPS 조회가 아님). (실패 시 빈 문자열 반환)
 * **`VisionAIService`:** Firebase AI Logic의 `firebase_ai` SDK로 Gemini Vision 모델을 호출합니다. API 키는 Firebase가 보관하므로 앱 코드/번들에 키가 들어가지 않습니다.
     * **[중요 프롬프트 지시]:** "제공된 음식 사진을 분석하여 메뉴명과 카테고리(한식, 중식, 일식, 양식, 카페/디저트 등)를 파악해라. 응답은 반드시 `{"menu": "메뉴이름", "category": "카테고리명"}` 형태의 순수 JSON 포맷으로만 반환하라."
@@ -71,22 +71,12 @@
 ```xml
 <!-- 인터넷: Firebase AI Logic / Gemini 호출용 -->
 <uses-permission android:name="android.permission.INTERNET" />
-
-<!-- Android 13 (API 33) 이상: Photo Picker가 기본 — 정식 미디어 권한은 폴백용 -->
-<uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
-
-<!-- Android 14 (API 34) 이상: 사용자가 일부 사진만 선택 허용했을 때 -->
-<uses-permission android:name="android.permission.READ_MEDIA_VISUAL_USER_SELECTED" />
-
-<!-- Android 12 (API 32) 이하: 레거시 외부 저장소 권한 (Photo Picker 미지원 디바이스용) -->
-<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
-    android:maxSdkVersion="32" />
 ```
 
-> **위치 권한 미포함**: 사진의 EXIF GPS 좌표를 디코딩한 뒤 `Geocoder`로 지명으로 변환하는 흐름이므로 `ACCESS_FINE_LOCATION` / `ACCESS_COARSE_LOCATION`은 필요하지 않다. iOS 빌드에서 `NSLocationWhenInUseUsageDescription`을 추가하지 않은 것과 동일한 결정. (원본 코드 기준 `Info.plist`에 위치 권한 키가 실제로 존재하지 않음 — `mapping-report.md` 참조)
+> **사진·위치 권한 미포함**: 이 앱은 Android Photo Picker로 사용자가 고른 사진 한 장에만 접근한다. `READ_MEDIA_IMAGES`, `READ_MEDIA_VISUAL_USER_SELECTED`, `READ_EXTERNAL_STORAGE`를 선언하지 않는다. 광범위한 사진 권한을 넣으면 Google Play 사진 및 동영상 권한 정책의 별도 심사 대상이 될 수 있다. EXIF GPS를 읽어 지명으로 바꾸는 작업에도 `ACCESS_FINE_LOCATION` / `ACCESS_COARSE_LOCATION`은 필요하지 않다.
 
 ### 4.2 Photo Picker 동작 보장
-`image_picker_android` 2.7+는 기본적으로 Photo Picker(`ACTION_PICK_IMAGES`)를 사용한다. 명시적으로 강제하려면 앱 시작 시점에 다음을 호출한다(선택 사항).
+현재 프로젝트의 `image_picker_android` 구현은 Photo Picker(`ACTION_PICK_IMAGES`)를 지원한다. 동작을 명시적으로 고정하려면 앱 시작 시점에 다음을 호출한다(선택 사항).
 
 ```dart
 import 'package:image_picker_android/image_picker_android.dart';
@@ -106,13 +96,13 @@ void enforceAndroidPhotoPicker() {
 - **Android SDK**:
   - `compileSdk = 36` — **Firebase 호환성 강제**. `firebase_app_check`가 끌어오는 `androidx.core:core-ktx:1.18.0` / `androidx.core:core:1.18.0`이 compileSdk 36 이상을 요구하므로 35로 두면 빌드 실패. (AVD 검증 2026-05-21 확정)
   - `minSdk` = **Flutter 기본값 유지 (현재 `flutter.minSdkVersion` = 24)**. 명시 숫자로 덮어쓰지 않아도 Firebase·image_picker 모두 정상 작동.
-  - `targetSdk = 34` (Photo Picker 행동 확정)
+  - `targetSdk = flutter.targetSdkVersion` — 2026년 7월 기준 Play 제출 최소값(API 35 이상)을 만족하는 Flutter 기본값을 사용하고, 배포 직전에 공식 요구사항을 다시 확인한다.
 - **Gradle 파일 위치**: `android/app/build.gradle.kts` (Kotlin DSL — Flutter 3.41 신 템플릿 기본). 플러그인 버전 선언은 `android/settings.gradle.kts`의 `plugins {}` 블록에 모인다(§4.4 참조).
 - **Flutter SDK**: `^3.11.4` (iOS 빌드와 동일)
 - **Windows 환경 변수**:
   - `ANDROID_HOME = %LOCALAPPDATA%\Android\Sdk`
   - `Path`에 `%ANDROID_HOME%\platform-tools`, `%ANDROID_HOME%\emulator` 추가
-- **에뮬레이터 권장 디바이스**: Pixel 7 / API 34 (Android 14, Photo Picker 최신 동작 확인용) + Pixel 5 / API 30 (레거시 권한 다이얼로그 확인용) 2종.
+- **에뮬레이터 권장 디바이스**: Pixel 7 / API 34 이상(Google Play 이미지) 1종을 기본으로 사용한다. 구형 기기 호환성은 Photo Picker 백포트가 있는 Google Play 서비스 기기에서 추가 확인한다.
 
 ### 4.3.1 화면 방향 (Orientation)
 iOS 원본 `ios/Runner/Info.plist:58-63`의 `UISupportedInterfaceOrientations`는 **Portrait + LandscapeLeft + LandscapeRight** 3종을 허용한다(PortraitUpsideDown은 제외). Android에서는 매니페스트 단에서 동일한 정책을 강제하지 않고 **OS 기본 동작(센서 회전 허용)을 그대로 사용**한다.
@@ -180,12 +170,15 @@ firebase apps:android:sha:create <ANDROID_APP_ID> <SHA-256> --project=my-food-ar
 
 Firebase CLI에 `apps:android:sha:create` / `apps:android:sha:list` / `apps:android:sha:delete`가 모두 있어 자동화가 가능하다.
 
-#### 4.4.3 사람 직접 단계 (Firebase Console 1회 방문)
+#### 4.4.3 사람 직접 단계 (Firebase / Play Console)
 
-위 4.4.1 + 4.4.2가 끝난 뒤에도 사람이 브라우저로 Firebase Console을 열어야 하는 단계는 **최대 두 가지** — iOS 빌드 단계에서 AI Logic을 이미 활성화한 독자라면 사실상 **한 단계(App Check Debug 토큰 등록)뿐**이다:
+위 4.4.1 + 4.4.2가 끝나도 브라우저에서 다음을 확인해야 한다. 2026년 7월부터 Firebase AI Logic 안내 마법사는 App Check enforcement를 자동으로 켤 수 있으므로 어느 하나라도 빠지면 앱은 실행돼도 AI 분석만 실패할 수 있다.
 
 1. **Firebase AI Logic + Gemini API 활성화** — 단, iOS 빌드 단계에서 이미 활성화했다면 추가 작업 없음.
-2. **App Check Debug 토큰 등록** — §4.5 참조. Firebase CLI / flutterfire CLI 어디에도 App Check 토큰 등록 서브커맨드가 없으므로(2026-05 기준) 브라우저 콘솔 외 자동화 경로가 존재하지 않는다.
+2. **App Check Debug 토큰 등록** — §4.5 참조.
+3. **Play Integrity 연결** — Play Console의 앱 무결성 화면에서 Google Cloud/Firebase 프로젝트를 연결하고, Firebase App Check의 Android 앱에 Play Integrity provider를 등록한다.
+4. **릴리스 SHA-256 확인** — Play App Signing의 앱 서명 인증서 SHA-256을 Firebase Android 앱에 등록한다. 로컬 업로드 키나 디버그 키의 SHA와 혼동하지 않는다.
+5. **Firebase AI Logic enforcement 확인** — Firebase Console → App Check → API에서 Firebase AI Logic이 Enforced인지 확인하고, 실제 내부 테스트 설치본으로 AI 호출을 검증한다.
 
 > **요점**: 패키지명을 `com.solkim.my_food_archive`로 잡고(iOS의 `com.solkim.myFoodArchive`와 별개) `flutterfire configure` 한 줄을 실행하면 콘솔·파일·Gradle 4개 자리를 한꺼번에 메운다. 책 본문에서는 이 자동화 수준을 분명히 강조해 독자가 "Firebase 콘솔에서 앱 추가 → json 다운로드 → 폴더에 옮기기"를 수동으로 헛수고하지 않게 안내한다.
 
@@ -200,11 +193,12 @@ await FirebaseAppCheck.instance.activate(
 );
 ```
 - **Debug Provider 사용 절차**: 디버그 빌드 첫 실행 시 Logcat에 출력되는 토큰을 Firebase 콘솔 → App Check → Android 앱 → "관리"에서 등록.
-- **Play Integrity 사용 절차**: Firebase 콘솔 → App Check → Android 앱에서 Play Integrity 활성화. Google Play Console에서 앱을 내부 테스트 트랙에 업로드해 SHA가 매칭되는지 확인.
+- **Play Integrity 사용 절차**: Firebase 콘솔 → App Check → Android 앱에서 Play Integrity를 등록하고, Play Console → 앱 무결성에서 Cloud 프로젝트를 연결한다. Play App Signing의 **앱 서명 인증서 SHA-256**을 Firebase 앱에 등록한 뒤 내부 테스트로 설치한 릴리스 빌드에서 확인한다.
+- **배포 게이트**: 내부 테스트 설치본에서 음식 사진 1장을 골랐을 때 메뉴명/카테고리가 자동으로 채워지기 전에는 프로덕션 AAB를 제출하지 않는다.
 
 ### 4.6 예외 처리 강제 (Fail-Safe)
 iOS 원본과 동일. 추가로 Android 특수 케이스:
-- **Photo Picker 비지원 디바이스(API ≤ 32, GMS 미탑재 기기)**: `image_picker`가 자동 폴백 → `READ_EXTERNAL_STORAGE` 권한 다이얼로그가 뜬다. 사용자가 거부 시 `PhotoPickStatus.permissionDenied` 토스트.
+- **Photo Picker 비지원 디바이스**: `image_picker`가 시스템 선택기로 폴백한다. 광범위한 저장소 권한을 추가하는 방식으로 우회하지 않는다.
 - **Geocoder 서비스 미가용**: Google Play Services가 비활성화된 기기에서 `Geocoder.isPresent() == false`인 경우 빈 문자열 반환(기존 fail-safe로 이미 커버됨).
 - **EXIF GPS 없음**: 위치 필드를 비워둔 상태로 UI 렌더링.
 - **Firebase AI 실패 / App Check 거부 / 네트워크 끊김**: 타임아웃 15초 후 빈 폼 + "정보를 직접 입력해 주세요" 토스트.

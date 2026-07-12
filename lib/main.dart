@@ -11,22 +11,37 @@ import 'screens/home_screen.dart';
 import 'services/local_db_service.dart';
 import 'utils/app_paths.dart';
 
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await AppPaths.init();
 
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  await FirebaseAppCheck.instance.activate(
-    appleProvider: kDebugMode
-        ? AppleProvider.debug
-        : AppleProvider.appAttestWithDeviceCheckFallback,
-  );
+  await _initFirebase();
 
   final dbService = LocalDBService();
   await dbService.initDB();
 
   runApp(MyApp(dbService: dbService));
+}
+
+Future<void> _initFirebase() async {
+  try {
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+    await FirebaseAppCheck.instance.activate(
+      providerAndroid: kDebugMode
+          ? const AndroidDebugProvider()
+          : const AndroidPlayIntegrityProvider(),
+      providerApple: kDebugMode
+          ? const AppleDebugProvider()
+          : const AppleAppAttestWithDeviceCheckFallbackProvider(),
+    );
+  } catch (error) {
+    // Android Firebase 설정 파일이 아직 없더라도 로컬 아카이브 기능은
+    // 정상 실행한다. 이 경우 Firebase 기반 AI 분석만 비활성화된다.
+    debugPrint('[Firebase] 초기화를 건너뜁니다: $error');
+  }
 }
 
 class MyApp extends StatelessWidget {

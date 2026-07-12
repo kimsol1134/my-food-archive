@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "460952543906",
+    "project_id": "my-food-archive-dbc0c",
+    "storage_bucket": "my-food-archive-dbc0c.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:460952543906:android:14f0e6686ce3398a172dfb",
+        "android_client_info": {
+          "package_name": "com.solkim.my_food_archive"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBR1LoMPO4dmAyp9o9qHDlLygaSetyfcro"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
