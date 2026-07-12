@@ -2,6 +2,8 @@
 
 책 본문은 Mac + iPhone 기준으로 진행합니다. Android 앱을 만들고 있다면 이 폴더의 자료로 같은 흐름을 진행한 뒤, 책의 안내에 따라 본문으로 돌아가면 됩니다.
 
+현재 배포 준비도와 남은 외부 확인 항목은 [정량 평가 보고서](appendix-audit.md)에서 확인할 수 있습니다.
+
 책의 흐름에 맞춰 두 자료만 사용합니다.
 
 - 15~16장: **[Android 앱을 Google Play 내부 테스트에 올리기](google-play-internal-test-guide.md)**
