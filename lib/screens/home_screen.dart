@@ -10,6 +10,7 @@ import '../widgets/archive_grid_card.dart';
 import '../widgets/toast_message.dart';
 import 'detail_screen.dart';
 import 'add_edit_record_screen.dart';
+import 'privacy_policy_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -22,10 +23,19 @@ class HomeScreen extends StatelessWidget {
         toolbarHeight: 64,
         titleSpacing: 20,
         centerTitle: false,
-        title: const Text(
-          '마이 맛집 아카이브',
-          style: AppTextStyles.largeTitle,
-        ),
+        title: const Text('마이 맛집 아카이브', style: AppTextStyles.largeTitle),
+        actions: [
+          IconButton(
+            tooltip: '앱 정보 및 개인정보처리방침',
+            icon: const Icon(CupertinoIcons.info_circle),
+            onPressed: () {
+              Navigator.of(context).push(
+                CupertinoPageRoute(builder: (_) => const PrivacyPolicyScreen()),
+              );
+            },
+          ),
+          const SizedBox(width: 8),
+        ],
       ),
       body: SafeArea(
         top: false,
@@ -49,11 +59,11 @@ class HomeScreen extends StatelessWidget {
                       padding: const EdgeInsets.only(top: 4, bottom: 24),
                       gridDelegate:
                           const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        crossAxisSpacing: 12,
-                        mainAxisSpacing: 16,
-                        childAspectRatio: 0.72,
-                      ),
+                            crossAxisCount: 2,
+                            crossAxisSpacing: 12,
+                            mainAxisSpacing: 16,
+                            childAspectRatio: 0.72,
+                          ),
                       itemCount: items.length,
                       itemBuilder: (_, index) {
                         final item = items[index];
@@ -133,8 +143,7 @@ class _SearchBarState extends State<_SearchBar> {
           focusedBorder: InputBorder.none,
           isDense: true,
           hintText: '검색',
-          hintStyle:
-              AppTextStyles.body.copyWith(color: AppColors.textSub),
+          hintStyle: AppTextStyles.body.copyWith(color: AppColors.textSub),
           prefixIcon: const Icon(
             CupertinoIcons.search,
             color: AppColors.textSub,
@@ -159,8 +168,7 @@ class _SearchBarState extends State<_SearchBar> {
             minWidth: 36,
             minHeight: 36,
           ),
-          contentPadding:
-              const EdgeInsets.only(right: 12),
+          contentPadding: const EdgeInsets.only(right: 12),
         ),
       ),
     );
@@ -268,16 +276,11 @@ class _NoSearchResultState extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Icon(
-            CupertinoIcons.search,
-            size: 56,
-            color: AppColors.textSub,
-          ),
+          const Icon(CupertinoIcons.search, size: 56, color: AppColors.textSub),
           const SizedBox(height: 16),
           Text(
             '검색 결과가 없습니다',
-            style:
-                AppTextStyles.body.copyWith(color: AppColors.textSub),
+            style: AppTextStyles.body.copyWith(color: AppColors.textSub),
           ),
         ],
       ),
@@ -342,11 +345,7 @@ class _AddFabState extends State<_AddFab> {
           customBorder: const CircleBorder(),
           onTap: _handleTap,
           child: const Center(
-            child: Icon(
-              CupertinoIcons.add,
-              color: Colors.white,
-              size: 28,
-            ),
+            child: Icon(CupertinoIcons.add, color: Colors.white, size: 28),
           ),
         ),
       ),

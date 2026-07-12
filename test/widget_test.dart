@@ -43,4 +43,21 @@ void main() {
     await tester.pumpWidget(MyApp(dbService: dbService));
     expect(find.byType(Scaffold), findsOneWidget);
   });
+
+  testWidgets('Privacy policy is reachable from the home screen', (
+    WidgetTester tester,
+  ) async {
+    await tester.pumpWidget(MyApp(dbService: dbService));
+
+    await tester.tap(find.byTooltip('앱 정보 및 개인정보처리방침'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('앱 정보 및 개인정보처리방침'), findsOneWidget);
+    expect(find.text('AI 분석을 위한 전송'), findsOneWidget);
+
+    await tester.drag(find.byType(ListView), const Offset(0, -500));
+    await tester.pumpAndSettle();
+
+    expect(find.text('온라인 개인정보처리방침 열기'), findsOneWidget);
+  });
 }

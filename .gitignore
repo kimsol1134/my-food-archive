@@ -44,10 +44,11 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 
-# Firebase
+# Firebase secrets and machine-local metadata.
+# Firebase client configuration is intentionally committed for this runnable
+# sample. Protect backend access with App Check; never place server credentials
+# or service-account keys in these client files.
 ios/Runner/GoogleService-Info.plist
-android/app/google-services.json
-lib/firebase_options.dart
 firebase_app_id_file.json
 .firebaserc
 
