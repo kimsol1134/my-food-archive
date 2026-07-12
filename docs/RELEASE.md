@@ -1,6 +1,6 @@
 # 🚀 Google Play 스토어 배포 가이드 — 맛집 아카이브 (Android)
 
-이 문서는 **스토어 공개 배포**에 필요한 남은 절차를 정리한다. 앱 코드/아이콘/앱이름/버전/서명 배선은 이미 끝나 있고, **업로드 키스토어 생성과 Play Console 등록만 남았다.**
+이 문서는 **스토어 공개 배포**에 필요한 재현 절차를 정리한다. 내부 테스트 AAB 업로드까지 검증했으며, 비공개 테스트·앱 콘텐츠·프로덕션 접근 신청은 온라인 부록의 순서대로 진행한다.
 
 ## 현재 상태 (완료됨)
 
@@ -8,10 +8,10 @@
 - 앱 이름: **My Food Archive** (`android/app/src/main/res/values/strings.xml` → 매니페스트 `@string/app_name`, iOS와 동일).
 - 런처 아이콘: iOS의 Liquid Glass Polaroid 1024px 원본을 `flutter_launcher_icons`로 Android 전 해상도에 생성.
 - 버전: `pubspec.yaml`의 `version: 1.0.0+5` (versionName 1.0.0 / versionCode 5).
-- 서명 배선: `android/app/build.gradle.kts`가 `android/key.properties`를 읽어 release 서명. **파일이 없으면 디버그 서명으로 폴백**(그래서 지금 빌드되는 AAB/APK는 디버그 서명 상태).
-- AI 자동 태깅: **v1 미포함**(Firebase 미구성). `main.dart`가 try/catch로 방어하여 AI만 비활성, 나머지 정상. 이후 업데이트에서 추가 예정.
+- 서명 배선: `android/app/build.gradle.kts`가 저장소 밖의 업로드 키와 `android/key.properties`를 읽어 release 서명. 파일이 없으면 로컬 빌드 편의를 위해 디버그 서명으로 폴백하지만, Play Console에는 업로드하지 않는다.
+- AI 자동 태깅: Firebase Android 앱, Google Services, Firebase AI Logic, App Check(릴리스는 Play Integrity) 연결 완료.
 
-## ⚠️ 남은 필수 절차
+## 새 환경에서 다시 준비할 절차
 
 ### 1) 업로드 키스토어 생성 (한 번만, 분실 주의)
 
@@ -66,11 +66,12 @@ flutter build appbundle --release
 
 ## 스토어 심사용 비(非)코드 준비물
 
-- **개인정보처리방침 URL**: 앱이 사진(READ_MEDIA_IMAGES)에 접근하므로 필수. 데이터 세이프티 폼도 작성(로컬 저장, 서버 미전송임을 명시).
-- **그래픽 리소스**: 512×512 앱 아이콘(스토어용), 피처 그래픽 1024×500, 스크린샷 최소 2장(에뮬레이터 캡처 활용 가능 — `build/verify/`에 참고 이미지 있음).
+- **개인정보처리방침 URL**: `docs/privacy-policy.md`를 공개된 읽기 전용 URL로 제공하고 앱 내부의 개인정보처리방침 화면과 내용이 일치하게 유지한다.
+- **데이터 세이프티**: 기록과 사진은 로컬 저장되지만, 사용자가 고른 사진은 AI 분석을 위해 Firebase AI Logic/Gemini로 전송된다. "서버 미전송"으로 답하면 안 된다.
+- **그래픽 리소스**: 512×512 앱 아이콘, 피처 그래픽 1024×500, Android 스크린샷 2장 이상(`docs/book-screenshots/android-app/`).
 - **콘텐츠 등급 설문**, 대상 연령, 카테고리(음식/라이프스타일).
 
-## AI(Firebase)를 이후 버전에 추가할 때
+## Firebase/App Check를 새 프로젝트에서 재구성할 때
 
 `docs/Implement_plan_android.md` Task 11 참조. 요약:
 ```bash
@@ -79,5 +80,8 @@ dart pub global activate flutterfire_cli
 flutterfire configure --project=my-food-archive-dbc0c --platforms=android \
   --android-package-name=com.solkim.my_food_archive --yes
 ```
-- **릴리스 빌드는 App Check가 Play Integrity**를 쓴다 → Firebase Console에서 **앱 서명 키의 SHA-256**(Play App Signing 사용 시 Play Console에서 확인 가능) 등록 필요.
-- 추가 후 `versionCode`를 올려(예: `1.0.0+2`) 새 AAB 업로드.
+- Play Console → 앱 무결성에서 Firebase/Google Cloud 프로젝트를 연결한다.
+- Firebase App Check Android 앱에 Play Integrity provider를 등록한다.
+- Firebase에는 업로드 키가 아니라 **Play App Signing의 앱 서명 인증서 SHA-256**을 등록한다.
+- Firebase Console → App Check → API에서 Firebase AI Logic enforcement 상태를 확인한다.
+- 내부 테스트 설치본에서 음식 사진 1장을 분석해 메뉴명/카테고리가 자동 입력되는지 확인한 뒤 프로덕션으로 진행한다.

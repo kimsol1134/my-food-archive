@@ -3,6 +3,7 @@ type: online-material
 topic: [길벗, Windows, Android, Claude Code, Google Play, 통합 실습]
 tags: [길벗, Windows, Android, ClaudeCode, Flutter, GooglePlay, 배포]
 created: 2026-06-11
+updated: 2026-07-12
 source_chapter: "6~15장 Windows/Android 실습 통합"
 ---
 
@@ -22,8 +23,10 @@ source_chapter: "6~15장 Windows/Android 실습 통합"
 
 이 문서 하나만 보고 진행하되, 중간에 GitHub에서 기획 문서와 Android 기준 설계 문서를 내려받아 `docs` 폴더에 넣습니다. 사람이 여러 문서를 직접 읽으며 오갈 필요는 없습니다. Claude Code가 읽게 합니다.
 
-> 기준일: 2026-06-11  
+> 기준일: 2026-07-12
 > 공식 설치 명령, Google Play 요구사항, Play Console 화면 이름은 바뀔 수 있습니다. 실제 진행 중 화면이 다르면 화면 캡처를 Claude Code에 보여 주고 확인합니다.
+
+예상 시간은 도구 설치와 구현에 수 시간, 첫 Play 반영에 최대 48시간, 새 개인 개발자 계정의 비공개 테스트에 최소 14일입니다. 프로덕션 접근 심사까지 있으므로 책을 읽은 당일 정식 공개를 완료하는 일정으로 잡지 않습니다.
 
 공식 확인 링크:
 
@@ -535,9 +538,10 @@ flutter devices
 조건:
 1. Android Photo Picker 기준으로 진행한다.
 2. Android 13 이상에서는 사진 권한 팝업이 안 뜰 수 있음을 반영한다.
-3. EXIF에서 날짜와 GPS를 추출한다.
-4. GPS가 없는 사진도 앱이 멈추지 않게 처리한다.
-5. 에뮬레이터와 실제 Android폰에서 각각 확인할 체크리스트를 알려줘.
+3. READ_MEDIA_IMAGES, READ_MEDIA_VISUAL_USER_SELECTED, READ_EXTERNAL_STORAGE 같은 광범위한 사진 권한은 선언하지 않는다.
+4. EXIF에서 날짜와 GPS를 추출한다.
+5. GPS가 없는 사진도 앱이 멈추지 않게 처리한다.
+6. 에뮬레이터와 실제 Android폰에서 각각 확인할 체크리스트를 알려줘.
 ```
 
 확인:
@@ -572,15 +576,19 @@ flutter devices
 2. API 키나 secret을 앱 코드에 직접 넣지 않는다.
 3. Firebase 콘솔에서 사람이 직접 해야 하는 작업은 단계별로 안내한다.
 4. Android App Check는 debug에서는 debug provider, release에서는 Play Integrity 기준으로 설명한다.
-5. 내가 직접 입력해야 하는 값은 placeholder로 두고 멈춰서 알려준다.
-6. 구현 후 실제 사진 한 장으로 메뉴명/카테고리 자동 채움까지 확인한다.
+5. flutterfire configure로 Android 앱 등록, google-services.json, firebase_options.dart, Gradle 플러그인을 함께 확인한다.
+6. Play Console의 Cloud 프로젝트 연결과 Play App Signing 앱 서명 SHA-256 등록을 안내한다.
+7. Firebase AI Logic의 App Check 적용 상태를 확인한다.
+8. 내가 직접 입력해야 하는 값은 placeholder로 두고 멈춰서 알려준다.
+9. 구현 후 디버그뿐 아니라 내부 테스트 설치본에서 실제 사진 한 장으로 메뉴명/카테고리 자동 채움까지 확인한다.
 ```
 
 주의:
 
 - `google_generative_ai`를 새로 넣으려 하면 이유를 묻습니다.
 - `.env`에 API 키를 넣자고 하면 중단합니다.
-- `google-services.json`은 필요한 설정 파일이지만 공개 repo에 올릴지 여부는 프로젝트 정책을 확인해야 합니다. 공개 저장소라면 Firebase 프로젝트 식별 정보 노출 범위를 따로 검토합니다.
+- `google-services.json`과 `firebase_options.dart`의 Firebase 클라이언트 설정은 서버 비밀키가 아닙니다. 재현 가능한 예제 저장소에서는 함께 커밋할 수 있지만, 백엔드 접근은 Security Rules와 App Check로 보호하고 서비스 계정 키·키스토어·비밀번호는 절대 커밋하지 않습니다.
+- 2026년 7월 이후 AI Logic 설정 마법사는 App Check 적용을 자동으로 켤 수 있습니다. 내부 테스트에서 Google Play로 설치한 출시본의 AI 자동 채움이 성공하기 전에는 다음 트랙으로 올리지 않습니다.
 
 ---
 
@@ -646,7 +654,7 @@ Google Play 내부 테스트에 올릴 준비를 해줘.
 3. versionCode와 versionName을 확인한다.
 4. keystore와 key.properties가 Git에 올라가지 않게 확인한다.
 5. Google Play의 최신 target API 요구사항을 공식 문서 기준으로 확인한다.
-6. 내가 직접 입력해야 하는 keystore 비밀번호는 placeholder로 두고 멈춰서 알려준다.
+6. keystore 비밀번호는 채팅에 붙여넣지 않고 터미널의 숨김 입력란에 내가 직접 입력하도록 멈춰서 알려준다.
 7. 마지막에는 Play Console에 업로드할 .aab 파일 경로를 알려준다.
 ```
 
@@ -665,6 +673,8 @@ build\app\outputs\bundle\release\app-release.aab
 ```
 
 현재 공식 기준으로 Google Play 새 앱/업데이트는 Android 15, API 35 이상 target이 필요합니다. 빌드 전 Claude Code가 공식 문서 기준으로 다시 확인하게 합니다.
+
+AAB 업로드 전에는 Firebase Android 등록, `google-services.json`, Gradle 플러그인, App Check Play Integrity, Play App Signing의 앱 서명 SHA-256, 내부 테스트 설치본의 AI 자동 채움까지 확인합니다. 상세 순서는 [17~18장 Android 공개 로드맵](android/release-roadmap.md)의 5단계를 따릅니다.
 
 ---
 
@@ -710,6 +720,8 @@ Google Play Console 내부 테스트 설정 중이야.
 ---
 
 ## 18. 비공개 테스트와 외부 테스터 모집
+
+17~18장의 실제 작업은 [Android 공개 로드맵](android/release-roadmap.md)을 먼저 따라갑니다. 아래 내용은 테스터 모집을 위한 상세 참고입니다.
 
 새 개인 개발자 계정은 정식 공개 전에 비공개 테스트 요구사항이 있을 수 있습니다. 현재 공식 기준은 **최소 12명, 14일 연속 opt-in**입니다.
 

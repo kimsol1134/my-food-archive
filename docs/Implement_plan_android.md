@@ -125,7 +125,7 @@ android/
   - `compileSdk = 36`
     > **사유**: `firebase_app_check`가 끌어오는 `androidx.core:core-ktx:1.18.0` / `androidx.core:core:1.18.0`가 **compileSdk 36 이상을 강제**한다. 35로 두면 `Dependency 'androidx.core:core-ktx:1.18.0' requires libraries and applications that depend on it to compile against version 36 or later of the Android APIs.` 에러로 두 번째 빌드에서 실패. (AVD 검증 2026-05-21 확정)
   - `minSdk` = **Flutter 기본값 유지 (현재 `flutter.minSdkVersion` = 24)** — `flutter create` 템플릿이 자동으로 채우므로 명시 숫자로 덮어쓰지 않아도 됨. Firebase·image_picker 모두 24에서 정상 동작.
-  - `targetSdk = 34`
+  - `targetSdk = flutter.targetSdkVersion` — 2026년 7월 기준 Google Play 제출 최소값(API 35 이상)을 만족하는지 배포 직전에 확인
   - `applicationId = "com.solkim.my_food_archive"` (Firebase Android 등록과 일치)
   - Java 17 source/target compatibility (Flutter 3.41 템플릿이 기본 설정)
 - **`android/settings.gradle.kts`의 `plugins {}` 블록에 Google Services classpath 선언만 추가** (Firebase 적용은 Task 11에서):
@@ -153,25 +153,14 @@ android/
 
 ## Task 2: Android 권한 설정
 
-**목표:** Android에서 사진 갤러리 접근에 필요한 권한을 매니페스트에 선언하고, Android 13+ Photo Picker가 우선 동작하도록 보장한다.
+**목표:** 광범위한 사진 권한 없이 Android Photo Picker로 사용자가 고른 사진 한 장에만 접근하도록 보장한다.
 
 **구현할 기능:**
 - `android/app/src/main/AndroidManifest.xml`의 `<manifest>` 루트 아래(`<application>` 태그 바깥)에 권한 선언:
   ```xml
   <uses-permission android:name="android.permission.INTERNET" />
-
-  <!-- Android 13 (API 33)+: Photo Picker 사용 시에는 권한 다이얼로그 없이도 동작.
-       명시 선언은 갤러리 미디어 메타데이터 접근 폴백용 -->
-  <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
-
-  <!-- Android 14 (API 34)+: 부분 선택(Selected Photos) 허용 시 필요 -->
-  <uses-permission android:name="android.permission.READ_MEDIA_VISUAL_USER_SELECTED" />
-
-  <!-- Android 12 (API 32) 이하: 레거시 외부 저장소 -->
-  <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
-      android:maxSdkVersion="32" />
   ```
-- **위치 권한 미선언**: iOS 원본과 마찬가지로 EXIF GPS만 사용하므로 `ACCESS_FINE_LOCATION` 등은 포함하지 않는다.
+- **사진·위치 권한 미선언**: `READ_MEDIA_IMAGES`, `READ_MEDIA_VISUAL_USER_SELECTED`, `READ_EXTERNAL_STORAGE`, `ACCESS_FINE_LOCATION`을 포함하지 않는다. Photo Picker가 선택된 파일의 임시 접근 권한을 전달한다.
 - (선택) `main()`에서 `ImagePickerPlatform.instance`가 `ImagePickerAndroid`인 경우 `useAndroidPhotoPicker = true`를 강제. 기본값이 true지만 명시적으로 두면 향후 패키지 업데이트에도 안전.
 - **권한 거부 시 안내**: `PhotoService`에서 `PlatformException`의 `code`에 `denied`/`access`가 포함되면 `PhotoPickStatus.permissionDenied`로 매핑(iOS 원본 코드와 동일 분기).
 
@@ -181,7 +170,7 @@ android/
 
 **완료 확인 방법:**
 - **Pixel 7 / API 34 에뮬레이터**: FAB 탭 시 권한 다이얼로그 없이 Photo Picker 시트가 바로 올라옴(상단에 "사진 및 동영상" 헤더).
-- **Pixel 5 / API 30 에뮬레이터**: FAB 탭 시 "사진과 미디어에 액세스하도록 허용" 권한 다이얼로그가 한국어로 표시됨. 거부 시 토스트 노출 + 홈 유지.
+- **구형 기기 확인**: Google Play 서비스가 제공하는 Photo Picker 백포트 또는 `image_picker`의 시스템 선택기 폴백이 열리는지 확인한다. 앱 자체의 광범위한 저장소 권한 팝업은 요구하지 않는다.
 - Logcat에 위치 권한 관련 오류 메시지가 출력되지 않음.
 
 ---
@@ -417,9 +406,9 @@ android/
 - `lib/services/photo_service.dart` 생성:
   - `pickImage()`: `ImagePicker().pickImage(source: ImageSource.gallery, imageQuality: 90)` 호출
   - Android 13+에서는 자동으로 Photo Picker 사용 → 권한 다이얼로그 미발생
-  - Android 12 이하에서는 `READ_EXTERNAL_STORAGE` 다이얼로그 발생 가능
+  - 호환 기기에서는 시스템 또는 라이브러리의 선택 UI를 사용하며 광범위한 저장소 권한은 요청하지 않음
   - 선택된 이미지를 `getApplicationDocumentsDirectory()` 하위 `images/`로 복사 (UUID 파일명 + 확장자 보존)
-  - `PlatformException`의 `code`에 `denied`/`access` 포함 시 → `PhotoPickStatus.permissionDenied`
+  - `PlatformException` 발생 시 취소/일시 오류/접근 실패를 구분해 사용자에게 재시도 안내
   - 취소 → `PhotoPickStatus.cancelled`, 기타 예외 → `PhotoPickStatus.error`
   - 허용 확장자: `.jpg, .jpeg, .png, .webp`를 우선 처리. HEIC/HEIF 원본은 `image_picker`가 갤러리에서 가져올 때 Android의 미디어 디코더가 알아서 JPEG로 변환해주므로 별도 처리 불필요 (iOS 원본 `lib/services/photo_service.dart:18-25`의 확장자 화이트리스트는 그대로 유지 — 변환 실패 시 폴백용)
 - `lib/services/exif_service.dart` 생성:
@@ -451,9 +440,9 @@ android/
   - GPS 정보가 있는 샘플 사진 선택 → AddEditRecord 진입 시 날짜/지역 필드 자동 채움
   - 스크린샷(EXIF 없음) 선택 → 날짜/지역 필드 비어있되 앱 크래시 없음
 - **Pixel 5 / API 30 에뮬레이터**:
-  - FAB 탭 시 `READ_EXTERNAL_STORAGE` 권한 다이얼로그 한국어로 표시
-  - "거부" → 토스트 표시 + 홈 유지
-  - "허용" → 갤러리 진입, 동일 동작
+  - FAB 탭 시 광범위한 저장소 권한 없이 시스템 또는 호환 사진 선택 UI 표시
+  - 사진 선택 취소 → 홈 유지
+  - 사진 선택 → 동일한 저장·EXIF 처리 흐름 확인
 - 사진 선택 취소(뒤로가기) 시 홈 화면 유지
 - `adb shell run-as com.solkim.my_food_archive ls app_flutter/images/`로 복사된 파일 확인 가능
 
@@ -474,10 +463,13 @@ android/
 | ⑤ SHA-1 / SHA-256 디버그 키 등록 | 🤖 자동 | `keytool` 추출 + `firebase apps:android:sha:create <appId> <hash>` (CLI 2회) | 3초 |
 | ⑥ Firebase AI Logic + Gemini API 활성화 | ✋ 사람 수동 🌐 콘솔 | Firebase Console → AI Logic 활성화 (iOS 빌드 단계에서 이미 했다면 추가 작업 없음) | (이전에 활성화돼 있으면 0초) |
 | ⑦ App Check Debug 토큰 등록 | ✋ **사람 수동 🌐 콘솔** | `adb logcat`으로 토큰 추출은 자동 가능, **등록은 반드시 Firebase Console → App Check → Android 앱 → "Manage debug tokens"** | 1~2분 (브라우저 작업) |
+| ⑧ Play Integrity 연결 | ✋ **사람 수동 🌐 콘솔** | Play Console 앱 무결성에서 Cloud 프로젝트 연결 → Firebase App Check Android 앱에 Play Integrity 등록 | 2~5분 |
+| ⑨ 앱 서명 SHA-256 등록 | 🤖+✋ | Play App Signing의 앱 서명 인증서 SHA-256을 Firebase Android 앱에 등록 | 1~2분 |
+| ⑩ AI Logic enforcement 실기기 확인 | ✋ | 내부 테스트 설치본에서 음식 사진 1장 분석 성공 확인. 2026년 7월 이후 안내 마법사는 enforcement를 자동 적용할 수 있음 | 2분 |
 
 > **핵심 메시지**: `flutterfire configure --project=my-food-archive-dbc0c --platforms=android --android-package-name=com.solkim.my_food_archive --yes` **한 줄이 ①~④ 네 단계를 한꺼번에 처리**한다. 사람이 브라우저로 Firebase 콘솔에서 "Android 앱 추가" 버튼을 누르거나 `google-services.json`을 수동으로 다운로드해 폴더에 옮길 필요가 없다.
 >
-> 사람 손이 들어가는 단계는 ⑥(iOS에서 이미 했다면 생략)과 **⑦(App Check Debug 토큰 콘솔 등록)뿐**이다. 현재 Firebase CLI / flutterfire CLI 모두 App Check 토큰 등록 서브커맨드가 **없으므로**(2026-05 기준) 브라우저 콘솔 외 자동화 경로가 존재하지 않는다.
+> 사람 손이 들어가는 단계는 AI Logic 활성화, Debug 토큰 등록, Play Integrity/Cloud 프로젝트 연결, 내부 테스트 설치본 검증이다. 파일 생성은 자동화할 수 있지만 콘솔 보안 연결과 실제 기기 검증은 생략할 수 없다.
 
 ### 사전 준비 (한 번만)
 
@@ -510,7 +502,7 @@ firebase apps:android:sha:create <ANDROID_APP_ID> <SHA-1> --project=my-food-arch
 firebase apps:android:sha:create <ANDROID_APP_ID> <SHA-256> --project=my-food-archive-dbc0c
 ```
 
-### 사람 직접 단계 (브라우저 콘솔 작업, 1단계뿐)
+### 사람 직접 단계 (브라우저 콘솔 + 실제 기기)
 
 1. AVD에서 디버그 빌드 첫 실행 후 Logcat에서 토큰 추출:
    ```bash
@@ -519,6 +511,10 @@ firebase apps:android:sha:create <ANDROID_APP_ID> <SHA-256> --project=my-food-ar
    ```
 2. **브라우저에서 Firebase Console 접속** → 프로젝트 `my-food-archive-dbc0c` → **App Check** → Android 앱 → 더보기(⋮) → **"Manage debug tokens"** → 추출한 UUID + 이름(예: `pixel7_api34`) 입력 → 저장.
 3. 앱 재실행 → AI 호출이 정상 응답을 받음.
+4. **Play Console → 앱 무결성 → Play Integrity API**에서 Firebase/Google Cloud 프로젝트를 연결한다.
+5. **Play App Signing의 앱 서명 인증서 SHA-256**을 Firebase Android 앱에 등록한다.
+6. Firebase Console → App Check → API에서 **Firebase AI Logic enforcement** 상태를 확인한다.
+7. 내부 테스트 링크로 설치한 릴리스 앱에서 음식 사진 1장을 분석해 메뉴명/카테고리 자동 채움이 성공하는지 확인한다.
 
 ### 구현할 기능 (앱 코드)
 
