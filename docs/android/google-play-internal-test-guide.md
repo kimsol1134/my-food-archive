@@ -225,29 +225,6 @@ Google 계정 비밀번호를 쓰면 안 됩니다. 이 열쇠 전용의 새 비
 
 비밀번호를 채팅에 붙여 넣지 마세요. 코딩 에이전트는 `keytool`을 실행하고 입력 직전에 멈출 수 있습니다. 그때 사용자가 터미널에 직접 입력하거나 비밀번호 관리자를 사용합니다. `key.properties`, 키스토어, 비밀번호는 GitHub에 올리지 않습니다.
 
-#### 업로드 전 점검
-
-사용 중인 운영체제와 관계없이 빌드 전에 아래를 한 번 확인합니다.
-
-```
-flutter doctor
-flutter doctor --android-licenses
-```
-
-`flutter doctor`에서 Android toolchain, Android Studio, connected device 쪽에 큰 오류가 없어야 합니다. 라이선스 동의가 남아 있으면 `flutter doctor --android-licenses`로 안내되는 항목에 동의합니다.
-
-Android toolchain에 오류가 나오면 "flutter doctor의 Android toolchain 오류를 해결해줘. 필요한 것은 네가 설치해줘."라고 클로드 코드에게 맡깁니다. Android SDK 설치와 라이선스 동의까지 터미널에서 처리할 수 있습니다. 라이선스가 동의되어 있으면 빌드 과정에서 필요한 구성요소를 자동으로 내려받습니다.
-
-API level은 Android 버전마다 붙는 기술 번호입니다. 예를 들어 Android 15의 API level은 35입니다. target은 이 앱이 어느 Android 버전 기준으로 만들어졌는지 표시하는 값입니다.
-
-2026년 7월 12일 기준으로 Google Play에 새 앱이나 업데이트를 제출하려면 API level 35 이상을 target해야 합니다. 이 기준은 매년 올라갑니다. 그래서 빌드 전에 클로드 코드에게 최신 요구사항과 프로젝트의 `compileSdk`, `targetSdk` 값을 함께 확인하게 합니다. 기준에 못 미치면 직접 고치게 하면 됩니다. 사람이 설정 파일을 열 필요는 없습니다.
-
-```text
-현재 Google Play의 최신 Target SDK 요구사항을 공식 문서 기준으로 확인하고,
-내 Android 프로젝트의 compileSdk와 targetSdk가 그 기준을 만족하는지 봐줘.
-부족하면 어떤 파일을 어떻게 고쳐야 하는지 알려줘.
-```
-
 **팁 — Windows에서 keytool 오류가 날 때**
 
 Windows에서 업로드 키를 만들 때 `keytool` 명령어가 없다는 오류가 나올 수 있습니다.
