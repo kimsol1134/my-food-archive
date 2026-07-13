@@ -5,6 +5,9 @@ on:
     branches: [main]
     paths:
       - "site/**"
+      - "docs/android/**"
+      - "docs/book-screenshots/**"
+      - "scripts/build_android_reader_pages.rb"
       - ".github/workflows/pages.yml"
   workflow_dispatch:
 
@@ -25,6 +28,14 @@ jobs:
         uses: actions/checkout@v7
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.3"
+      - name: Build reader guide pages
+        run: |
+          gem install kramdown:2.5.1 kramdown-parser-gfm:1.1.0 --no-document
+          ruby scripts/build_android_reader_pages.rb
       - name: Upload reader site
         uses: actions/upload-pages-artifact@v4
         with:
