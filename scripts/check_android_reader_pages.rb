@@ -34,7 +34,7 @@ pages.each do |page|
   html = page.read
   ids = html.scan(/\bid="([^"]+)"/).flatten.map { |id| CGI.unescapeHTML(id) }
 
-  if html.match?(%r{https://github\.com/kimsol1134/my-food-archive/(?:blob|tree)/})
+  if html.match?(%r{https://github\.com/kimsol1134/my-food-archive})
     errors << "#{page.relative_path_from(ROOT)} links to the GitHub repository UI"
   end
 
