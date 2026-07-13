@@ -131,8 +131,6 @@ Mac에서도 이 자료를 따라갈 수 있습니다.
 
 ## 4. Google Play Console 개발자 계정 만들기
 
-계정 만들기는 앱 만들기보다 지루합니다. 묻는 것도 많고, 기다리는 시간도 있습니다. 대신 한 번만 하면 됩니다.
-
 먼저 Google Play Console에 들어갑니다.
 
 [https://play.google.com/console](https://play.google.com/console)
