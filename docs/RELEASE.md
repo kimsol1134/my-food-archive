@@ -81,6 +81,6 @@ flutterfire configure --project=my-food-archive-dbc0c --platforms=android \
 ```
 - Play Console → 앱 무결성에서 Firebase/Google Cloud 프로젝트를 연결한다.
 - Firebase App Check Android 앱에 Play Integrity provider를 등록한다.
-- Firebase에는 업로드 키가 아니라 **Play App Signing의 앱 서명 인증서 SHA-256**을 등록한다.
+- Firebase에는 **Play App Signing의 앱 서명 인증서 SHA-256**을 반드시 등록한다. 업로드 키 SHA-256이 함께 등록되어 있어도 앱 서명 인증서 값을 대신할 수 없다.
 - Firebase Console → App Check → API에서 Firebase AI Logic enforcement 상태를 확인한다.
 - 내부 테스트 설치본에서 음식 사진 1장을 분석해 메뉴명/카테고리가 자동 입력되는지 확인한 뒤 프로덕션으로 진행한다.

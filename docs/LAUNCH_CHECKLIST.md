@@ -1,6 +1,6 @@
-# ✅ 출시 전 체크리스트 — 맛집 아카이브 (Google Play)
+# Google Play 출시 상태 체크리스트 — 맛집 아카이브
 
-> 상세 절차/명령은 [`RELEASE.md`](./RELEASE.md) 참조. 이 문서는 "빠짐없이 했는지" 확인용 체크리스트다.
+> 이 문서는 저장소 관리자가 현재 출시 상태를 기록하는 체크리스트다. 독자용 화면 절차는 [Android 온라인 실습 자료](android/README.md), 서명과 빌드 재현 메모는 [`RELEASE.md`](./RELEASE.md)를 사용한다.
 > 상태 표기: `[x]` 완료 · `[ ]` 남음 · `[~]` 부분/조건부.
 
 ## 1. 코드 & 기능 품질
@@ -36,18 +36,23 @@
 ## 5. 스토어 등록정보 자산
 - [ ] 앱 아이콘 512×512 (스토어용)
 - [ ] 피처 그래픽 1024×500
-- [x] Android 앱 스크린샷 5장 준비 (`docs/book-screenshots/android-app/`)
+- [x] Android 앱 스크린샷 6장 준비 (`docs/book-screenshots/android-app/`)
 - [ ] 앱 짧은 설명 / 자세한 설명 (한국어)
 - [ ] 카테고리(음식/라이프스타일) · 콘텐츠 등급 설문 · 대상 연령
 
 ## 6. Play Console
-- [ ] 개발자 계정 등록 (최초 1회, $25)
-- [ ] 앱 생성 + 기본 정보 입력
+- [x] 개발자 계정 등록
+- [x] 앱 생성 + 기본 정보 입력
 - [x] **Play App Signing** 활성화
 - [x] 내부 테스트 트랙에 AAB 업로드
 - [x] Firebase Android 앱·Google Services·App Check Play Integrity 연결
 - [ ] 내부 테스트 설치본에서 Gemini 자동 분석 최종 확인
-- [ ] 프로덕션 심사 제출
+- [ ] 앱 콘텐츠와 기본 스토어 등록정보 완료
+- [ ] 비공개 테스트 시작 및 12명 이상 참여 상태 확인
+- [ ] Play Console에 신청 가능 상태가 표시될 때까지 테스트 유지
+- [ ] 프로덕션 접근 신청 및 승인 확인
+- [ ] 프로덕션 출시 제출
+- [ ] 앱 심사 승인 뒤 Google Play 공개 링크 확인
 
 ## 7. v1 범위 확인
 - [x] **Firebase AI Logic 기반 Gemini 자동 태깅 포함**

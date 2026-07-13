@@ -48,6 +48,7 @@ flutter build appbundle --release
 - [Android 온라인 실습 자료 출판 인계표](docs/android/editorial-handoff.md)
 - [Android 부록 인쇄 교정 체크리스트](docs/android/print-proof-checklist.md)
 - [Android 온라인 실습 자료 정량 평가](docs/android/appendix-audit.md)
+- [Google Play 출시 상태 체크리스트](docs/LAUNCH_CHECKLIST.md)
 
 ## 개인정보처리방침
 
