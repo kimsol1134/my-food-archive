@@ -2,8 +2,18 @@ name: Android validation
 
 on:
   pull_request:
+    paths-ignore:
+      - "docs/**"
+      - "site/**"
+      - "**/*.md"
+      - ".github/workflows/pages.yml"
   push:
     branches: [main]
+    paths-ignore:
+      - "docs/**"
+      - "site/**"
+      - "**/*.md"
+      - ".github/workflows/pages.yml"
 
 permissions:
   contents: read
