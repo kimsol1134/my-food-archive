@@ -21,9 +21,9 @@
 
 ## 1. 앱 콘텐츠부터 완료하기
 
-Play Console에서 **모니터링 및 개선 → 정책 및 프로그램 → 앱 콘텐츠**로 이동합니다.
+Play Console 앱 대시보드에서 **앱 설정 완료 → 앱 정보를 제공하고 스토어 등록정보를 만드세요 → 할 일 보기**를 엽니다.
 
-![앱 콘텐츠 대시보드](../book-screenshots/google-play/g-14-app-content.png)
+![앱 콘텐츠 대시보드](../book-screenshots/google-play/g-14-app-content.jpg)
 
 화면에 표시되는 모든 선언을 완료합니다. 2026년 7월 기준으로 다음 항목이 나타날 수 있습니다.
 
@@ -72,7 +72,7 @@ Google Play의 정의에서 `수집`은 앱 밖으로 전송되는 데이터를 
 
 **사용자 늘리기 → 앱 정보 → 스토어 등록정보 → 기본 스토어 등록정보 만들기**로 이동합니다.
 
-![기본 스토어 등록정보 편집 화면](../book-screenshots/google-play/g-15-store-listing.png)
+![기본 스토어 등록정보 편집 화면](../book-screenshots/google-play/g-15-store-listing.jpg)
 
 준비할 항목:
 

@@ -36,24 +36,24 @@ https://kimsol1134.github.io/my-food-archive/android/
 
 ## Google Play Console 화면
 
-책과 온라인 자료에는 자르기·리샘플링·가림·합성·주석을 하지 않은 원본 캡처만 사용합니다. 기존 타이트 크롭은 출판용으로 사용할 수 없으며, 민감정보가 보이지 않는 화면 상태에서 전체 창을 다시 캡처해야 합니다. 편집면에서는 원본 파일을 직접 배치하고 비율만 유지합니다. 편집용 번호는 파일명의 빈 번호와 무관하게 P-1부터 연속으로 사용합니다.
+책과 온라인 자료에는 자르기·리샘플링·가림·합성·주석을 하지 않은 원본 캡처만 사용합니다. Play Console 14장은 2026년 7월 13일 전체 브라우저 화면으로 다시 캡처했습니다. 계정 이메일과 다른 앱 이름도 원본 그대로 유지합니다. 편집면에서는 원본 파일을 직접 배치하고 비율만 유지합니다. 편집용 번호는 파일명의 빈 번호와 무관하게 P-1부터 연속으로 사용합니다.
 
 | 번호 | 파일 | 캡션 | 원본 촬영 조건 |
 |---:|---|---|---|
-| P-1 | `g-01-play-console-signup.png` | Google Play Console 개발자 계정 시작 | 계정 메뉴를 닫아 이메일·프로필 사진이 보이지 않는 상태 |
-| P-2 | `g-02-account-verification.png` | 개발자 계정 확인 항목 | 실명·주소·전화번호 입력값이 보이지 않는 안내 화면 |
-| P-3 | `g-03-create-app-button.png` | 앱 만들기 버튼 | 다른 앱 정보가 보이지 않는 상태 |
-| P-4 | `g-04-new-app-dashboard.png` | 새 앱 대시보드 | 계정 메뉴가 닫힌 상태 |
-| P-5 | `g-05-aab-build-result.png` | release AAB 빌드 완료 | 로컬 사용자 경로가 출력되지 않은 터미널 상태 |
-| P-6 | `g-06-internal-testing.png` | 내부 테스트 메뉴 | 대상 앱의 내부 테스트 화면 |
-| P-7 | `g-07-play-app-signing.png` | Play App Signing 설정 | 인증서 지문이 펼쳐지지 않은 상태 |
-| P-8 | `g-08-upload-aab.png` | Android App Bundle 업로드 | 파일 경로와 계정 메뉴가 보이지 않는 상태 |
-| P-9 | `g-09-review-release.png` | 내부 테스트 출시 검토 | 계정 메뉴가 닫힌 상태 |
-| P-10 | `g-10-tester-list.png` | 테스터 이메일 목록 | 이메일 주소가 표시되지 않는 목록 개요 화면 |
-| P-11 | `g-11-opt-in-link.png` | 내부 테스트 참여 링크 | 공개 가능한 만료 링크를 사용하거나, 링크가 보이지 않는 안내 화면 |
-| P-12 | `g-12-opt-in-page.png` | 테스터 초대 수락 페이지 | 계정 이메일이 보이지 않는 상태 |
-| P-13 | `g-14-app-content.png` | 앱 콘텐츠 대시보드 | 정책 경고가 있다면 실제 상태 재확인 |
-| P-14 | `g-15-store-listing.png` | 기본 스토어 등록정보 | 연락처·지원 이메일 확인 |
+| P-1 | `g-01-play-console-signup.jpg` | Google Play Console 개발자 계정 선택 | 계정 이메일이 보이는 원본 화면 |
+| P-2 | `g-02-account-verification.jpg` | Android 개발자 인증 | 등록된 다른 앱 이름이 보이는 원본 화면 |
+| P-3 | `g-03-create-app-button.jpg` | 앱 만들기 버튼 | 앱 목록과 계정 ID가 보이는 원본 화면 |
+| P-4 | `g-04-new-app-dashboard.jpg` | 새 앱 대시보드 | 계정 메뉴가 닫힌 상태 |
+| P-5 | `g-05-aab-build-result.jpg` | 등록된 App Bundle 세부정보 | 버전 5의 실제 App Bundle 화면 |
+| P-6 | `g-06-internal-testing.jpg` | 내부 테스트 메뉴 | 대상 앱의 내부 테스트 화면 |
+| P-7 | `g-07-play-app-signing.jpg` | 서명된 범용 APK | App Bundle 탐색기 다운로드 탭 |
+| P-8 | `g-08-upload-aab.jpg` | 최신 버전 및 번들 | 업로드가 완료된 실제 버전 목록 |
+| P-9 | `g-09-review-release.jpg` | 내부 테스트 출시 버전 요약 | 버전 5의 실제 출시 정보 |
+| P-10 | `g-10-tester-list.jpg` | 테스터 목록 | 실제 목록 인원수가 보이는 원본 화면 |
+| P-11 | `g-11-opt-in-link.jpg` | 내부 테스트 참여 링크 | 링크 복사 버튼이 보이는 원본 화면 |
+| P-12 | `g-12-opt-in-page.jpg` | 테스터 초대 수락 페이지 | 계정 상태를 유지한 원본 화면 |
+| P-13 | `g-14-app-content.jpg` | 앱 콘텐츠 할 일 목록 | 대시보드에서 펼친 원본 화면 |
+| P-14 | `g-15-store-listing.jpg` | 기본 스토어 등록정보 | 실제 앱 이름이 입력된 원본 화면 |
 
 원본과 배치본 모두 빨간 박스, 화살표, 번호를 추가하지 않습니다. 설명이 필요하면 캡션이나 본문으로 처리합니다.
 
@@ -63,7 +63,7 @@ https://kimsol1134.github.io/my-food-archive/android/
 - [ ] 최종 PDF에 배치된 QR을 iPhone과 Android 기본 카메라에서 각각 스캔함
 - [ ] 15장 → 15.5절, 16장 → 16.5절, 17장 → 17.5절, 18장 → 18.3절 연결이 일치함
 - [ ] Android 앱 화면의 사진·식당명·검색어가 한 사례로 이어짐
-- [ ] Play Console 캡처에 이메일, 실명, 주소, 전화번호, 인증서 지문, 전체 참여 링크가 없음
+- [ ] Play Console 캡처에 주소, 전화번호, 결제 정보, 비밀번호, 인증서 지문, 전체 참여 링크가 없음
 - [ ] 출간 직전 공식 문서에서 Target API와 신규 개인 계정 테스트 요구사항을 다시 확인함
 - [ ] README와 두 가이드의 Markdown 로컬 링크 검사를 통과함
 
