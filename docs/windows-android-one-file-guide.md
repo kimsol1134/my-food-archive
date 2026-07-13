@@ -3,7 +3,7 @@ type: online-material
 topic: [길벗, Windows, Android, Claude Code, Google Play, 통합 실습]
 tags: [길벗, Windows, Android, ClaudeCode, Flutter, GooglePlay, 배포]
 created: 2026-06-11
-updated: 2026-07-12
+updated: 2026-07-13
 source_chapter: "6~18장 Windows/Android 실습 QA"
 ---
 
@@ -23,10 +23,10 @@ source_chapter: "6~18장 Windows/Android 실습 QA"
 
 이 문서 하나만 보고 진행하되, 중간에 GitHub에서 기획 문서와 Android 기준 설계 문서를 내려받아 `docs` 폴더에 넣습니다. 사람이 여러 문서를 직접 읽으며 오갈 필요는 없습니다. Claude Code가 읽게 합니다.
 
-> 기준일: 2026-07-12
+> 기준일: 2026-07-13
 > 공식 설치 명령, Google Play 요구사항, Play Console 화면 이름은 바뀔 수 있습니다. 실제 진행 중 화면이 다르면 화면 캡처를 Claude Code에 보여 주고 확인합니다.
 
-예상 시간은 도구 설치와 구현에 수 시간, 첫 Play 반영에 최대 48시간, 새 개인 개발자 계정의 비공개 테스트에 최소 14일입니다. 프로덕션 접근 심사까지 있으므로 책을 읽은 당일 정식 공개를 완료하는 일정으로 잡지 않습니다.
+예상 시간은 도구 설치와 구현에 수 시간, 첫 Play 반영에 수분에서 수 시간입니다. 첫 릴리스 검토는 며칠 이상 걸릴 수 있고, Play Console에 요구사항이 표시되는 새 개인 개발자 계정은 비공개 테스트에 최소 14일이 필요합니다. 프로덕션 접근 심사까지 있으므로 책을 읽은 당일 정식 공개를 완료하는 일정으로 잡지 않습니다.
 
 공식 확인 링크:
 
@@ -70,8 +70,8 @@ Windows PC는 가능한 한 깨끗한 상태가 좋습니다.
 | 8장 | 권한, 디자인 상수, DB, 상태관리 | 화면 확인 전 단계 |
 | 9장 | Android Studio, Android 에뮬레이터 준비 | 여기서 처음 설치 |
 | 10~14장 | 사진 선택, AI 분석, 저장, 검색, 삭제, 통합 확인 | 에뮬레이터+실기기 |
-| 15장 | Google Play 내부 테스트 | Play Console |
-| 15장 이후 | 비공개 테스트 12명/14일, 외부 테스터 모집 운영 | 정식 공개 준비 |
+| 15장 | Firebase Android 앱 연결, AAB와 Play App Signing, App Check·Play Integrity, Google Play 내부 테스트 | Firebase Console·Play Console |
+| 15장 이후 | Play Console에 요구사항이 표시되면 비공개 테스트 12명/14일과 외부 테스터 모집 운영 | 정식 공개 준비 |
 
 ---
 

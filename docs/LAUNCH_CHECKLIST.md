@@ -35,8 +35,9 @@
 
 ## 5. 스토어 등록정보 자산
 - [ ] 앱 아이콘 512×512 (스토어용)
-- [ ] 피처 그래픽 1024×500
-- [x] Android 앱 스크린샷 6장 준비 (`docs/book-screenshots/android-app/`)
+- [ ] 기능 그래픽 1024×500
+- [x] 출판 참고용 Android 앱 화면 6장 (`docs/book-screenshots/android-app/`)
+- [ ] Google Play 제출용 Android 휴대전화 스크린샷 2장 이상(실제 배포 설치본에서 별도 촬영)
 - [ ] 앱 짧은 설명 / 자세한 설명 (한국어)
 - [ ] 카테고리(음식/라이프스타일) · 콘텐츠 등급 설문 · 대상 연령
 
