@@ -54,7 +54,7 @@ source_chapter: "15~18장 Android 온라인 보충 자료"
 | 비공개 테스트 | 정식 공개 전에 더 많은 지정 테스터가 참여하는 단계 |
 | 프로덕션 | 심사를 거쳐 모든 사용자가 설치할 수 있게 공개하는 단계 |
 
-Play Console 메뉴는 **테스트 및 출시**, **앱 콘텐츠**, **스토어 등록정보**처럼 역할별로 나뉩니다. 메뉴 이름을 모두 외울 필요는 없습니다. 각 절에서 현재 찾아야 할 메뉴와 버튼을 다시 안내합니다.
+Play Console 메뉴는 **테스트 및 출시**, **앱 콘텐츠**, **스토어 등록정보**처럼 역할별로 나뉩니다. 각 절에서는 현재 찾아야 할 메뉴와 버튼을 순서대로 안내합니다.
 
 ---
 
@@ -245,7 +245,7 @@ flutter doctor --android-licenses
 
 `flutter doctor`에서 Android toolchain, Android Studio, connected device 쪽에 큰 오류가 없어야 합니다. 라이선스 동의가 남아 있으면 `flutter doctor --android-licenses`로 안내되는 항목에 동의합니다.
 
-Android toolchain에 오류가 나와도 직접 해결하려고 하지 않아도 됩니다. "flutter doctor의 Android toolchain 오류를 해결해줘. 필요한 것은 네가 설치해줘."라고 클로드 코드에게 맡깁니다. Android SDK 설치와 라이선스 동의까지 터미널에서 처리할 수 있습니다. 빌드 중에 부족한 구성요소가 나와도 걱정하지 않아도 됩니다. 라이선스만 동의되어 있으면 자동으로 내려받아 채웁니다.
+Android toolchain에 오류가 나오면 "flutter doctor의 Android toolchain 오류를 해결해줘. 필요한 것은 네가 설치해줘."라고 클로드 코드에게 맡깁니다. Android SDK 설치와 라이선스 동의까지 터미널에서 처리할 수 있습니다. 라이선스가 동의되어 있으면 빌드 과정에서 필요한 구성요소를 자동으로 내려받습니다.
 
 API level은 Android 버전마다 붙는 기술 번호입니다. 예를 들어 Android 15의 API level은 35입니다. target은 이 앱이 어느 Android 버전 기준으로 만들어졌는지 표시하는 값입니다.
 
