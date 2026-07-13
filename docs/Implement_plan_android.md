@@ -1,8 +1,8 @@
 # 📱 [마이 맛집 아카이브] MVP 구현 계획서 — Android 앱 버전
 
-> **이 문서의 위치**: iOS 완성본의 `docs/Implement_plan.md`를 ground truth로 삼아, **Task 1·2·10만 Android 기준으로 변환**하고 나머지(Task 3~9, 11~17)는 Flutter 공통이므로 원본을 그대로 유지합니다.
+> **이 문서의 역할**: Android 앱을 처음 구현하는 사람과 코딩 에이전트가 Task 1부터 17까지 순서대로 사용하는 실행 계획입니다. 모든 플랫폼 설정과 완료 확인은 Android를 기준으로 합니다.
 > **완료 확인 환경**: 모든 "완료 확인 방법"은 **Android Studio 에뮬레이터(Pixel 7 / API 34, Pixel 5 / API 30 2종)** 기준으로 재서술했습니다.
-> **호스트 예시**: Windows 11 + Android Studio Hedgehog+ + JDK 17 + Flutter SDK ^3.11.4. Mac에서도 Android Studio와 Android 에뮬레이터를 쓰면 같은 Android 앱 흐름으로 진행할 수 있습니다.
+> **호스트 예시**: Windows 11 + Android Studio Hedgehog+ + JDK 17 + Flutter SDK ^3.11.4. 다른 운영체제에서도 Android Studio와 Android 에뮬레이터를 사용하면 같은 순서로 진행할 수 있습니다.
 
 ## 진행 체크리스트
 
@@ -27,7 +27,7 @@
 ## 프로젝트 개요
 
 백엔드 없이 기기 로컬에 모든 데이터를 저장하는 개인용 맛집 아카이브 Android 앱.
-사진 업로드 시 EXIF에서 날짜/위치를 자동 추출하고, Firebase AI Logic을 통해 Gemini Vision API로 메뉴/카테고리를 자동 태깅하며, 사용자는 식당명만 입력하면 된다. API 키는 Firebase가 자체 보관하여 앱에 노출되지 않는다. UI는 iOS 빌드와 동일하게 "Pure Native(애플 순정)" 스타일을 강제한다.
+사진 업로드 시 EXIF에서 날짜/위치를 자동 추출하고, Firebase AI Logic을 통해 Gemini Vision API로 메뉴/카테고리를 자동 태깅하며, 사용자는 식당명만 입력하면 된다. API 키는 Firebase가 자체 보관하여 앱에 노출되지 않는다. UI는 `Design_guide.md`에 정의된 밝고 단정한 공통 디자인을 사용한다.
 
 ## PRD 핵심 기능 5가지 (구현 범위)
 
@@ -109,8 +109,8 @@ android/
 **구현할 기능:**
 - Windows 명령 프롬프트(또는 PowerShell)에서:
   - `flutter create --platforms android my_food_archive`
-  - 또는 기존 iOS 프로젝트에 Android 플랫폼 추가: `flutter create --platforms android .`
-- `pubspec.yaml`에 필수 패키지 추가 (iOS 버전과 거의 동일, **단 1종 제외**):
+  - 또는 기존 Flutter 프로젝트에 Android 플랫폼 추가: `flutter create --platforms android .`
+- `pubspec.yaml`에 Android 앱 구현에 필요한 패키지 추가:
   - `provider` (상태 관리)
   - `hive`, `hive_flutter` (로컬 DB)
   - `image_picker` (Android 13+ Photo Picker 자동 사용)
@@ -119,7 +119,7 @@ android/
   - `firebase_core`, `firebase_ai`, `firebase_app_check`
   - `uuid` (고유 ID 생성)
   - `path_provider` (앱 전용 저장 경로)
-- **명시적 제외**: `google_generative_ai`는 iOS 원본 `pubspec.yaml:41`에 잔재로 남아있으나 실제 코드(`lib/services/vision_ai_service.dart`)는 `firebase_ai` SDK만 사용한다. Android 빌드에는 추가하지 말 것 — APK 크기 + 빌드 시간만 늘어남.
+- **명시적 제외**: 실제 코드(`lib/services/vision_ai_service.dart`)는 `firebase_ai` SDK만 사용하므로 `google_generative_ai`는 추가하지 않는다. 사용하지 않는 패키지는 앱 크기와 빌드 시간만 늘린다.
 - `dev_dependencies`에 추가: `hive_generator`, `build_runner`
 - **`android/app/build.gradle.kts` 핵심 설정**:
   - `compileSdk = 36`
@@ -136,7 +136,7 @@ android/
   }
   ```
   > **⚠️ Flutter 3.41 신 템플릿 변경 — 위치 주의**: 과거에는 `android/build.gradle.kts`(프로젝트 레벨)에 classpath를 적었으나, Flutter 3.41 이후 신 템플릿은 **`android/settings.gradle.kts`의 `plugins {}` 블록**으로 모인다. 옛 경로에 넣으면 Gradle Sync 실패. (AVD 검증 2026-05-21 확정)
-- **iOS 전용 오버라이드**: `pubspec.yaml`의 `dependency_overrides`에 있던 `path_provider_foundation: 2.5.1`은 iOS 전용 픽스. Android 단독 빌드에서는 처음부터 넣지 않아도 무방.
+- **불필요한 오버라이드 제외**: Android 빌드에는 `path_provider_foundation` 오버라이드를 추가하지 않는다.
 
 **예상 수정 파일:**
 - `pubspec.yaml`
@@ -162,7 +162,7 @@ android/
   ```
 - **사진·위치 권한 미선언**: `READ_MEDIA_IMAGES`, `READ_MEDIA_VISUAL_USER_SELECTED`, `READ_EXTERNAL_STORAGE`, `ACCESS_FINE_LOCATION`을 포함하지 않는다. Photo Picker가 선택된 파일의 임시 접근 권한을 전달한다.
 - (선택) `main()`에서 `ImagePickerPlatform.instance`가 `ImagePickerAndroid`인 경우 `useAndroidPhotoPicker = true`를 강제. 기본값이 true지만 명시적으로 두면 향후 패키지 업데이트에도 안전.
-- **권한 거부 시 안내**: `PhotoService`에서 `PlatformException`의 `code`에 `denied`/`access`가 포함되면 `PhotoPickStatus.permissionDenied`로 매핑(iOS 원본 코드와 동일 분기).
+- **권한 거부 시 안내**: `PhotoService`에서 `PlatformException`의 `code`에 `denied`/`access`가 포함되면 `PhotoPickStatus.permissionDenied`로 매핑한다.
 
 **예상 수정 파일:**
 - `android/app/src/main/AndroidManifest.xml`
@@ -177,7 +177,7 @@ android/
 
 ## Task 3: 컬러/타이포그래피 상수 및 앱 테마 설정
 
-**목표:** 디자인 가이드에 정의된 컬러 시스템과 타이포그래피를 상수로 정의하고, 라이트 모드를 강제 적용한다. (Android에서도 iOS 원본과 동일하게 Pure Native 룩 유지)
+**목표:** 디자인 가이드에 정의된 컬러 시스템과 타이포그래피를 상수로 정의하고, 현재 앱의 라이트 모드 디자인을 적용한다.
 
 **구현할 기능:**
 - `lib/constants/app_colors.dart` 생성:
@@ -192,8 +192,8 @@ android/
 - `lib/main.dart` 설정:
   - `ThemeData.light()` 기반 테마, `themeMode: ThemeMode.light` 강제
   - `ScrollConfiguration` 래핑으로 전역 `BouncingScrollPhysics` 적용 (Android 기본 ClampingScrollPhysics를 덮어씀)
-  - **글자 크기 확대 상한 적용**: `MaterialApp.builder`에서 `MediaQuery`로 감싸 `textScaler: mediaQuery.textScaler.clamp(maxScaleFactor: 1.2)` 설정. Android는 시스템 설정 → 디스플레이 → 글꼴 크기를 최대 200%까지 키울 수 있어 레이아웃이 깨지므로 iOS 원본(`lib/main.dart:62-71`)과 동일하게 1.2배 상한 강제.
-  - 커스텀 폰트 없음 (시스템 기본 폰트 — Android는 Roboto, iOS는 SF Pro)
+  - **글자 크기 확대 상한 적용**: `MaterialApp.builder`에서 `MediaQuery`로 감싸 `textScaler: mediaQuery.textScaler.clamp(maxScaleFactor: 1.2)` 설정. Android 시스템 글꼴 크기가 매우 커져도 현재 레이아웃이 깨지지 않도록 기존 앱 설정을 유지한다.
+  - 커스텀 폰트 없이 Android 시스템 기본 폰트 사용
 
 **예상 수정 파일:**
 - `lib/constants/app_colors.dart` (신규)
@@ -203,7 +203,7 @@ android/
 **완료 확인 방법:**
 - Android 에뮬레이터에서 흰색 배경의 빈 화면 표시
 - 에뮬레이터를 다크모드로 전환해도 앱은 라이트 모드 유지
-- 스크롤 시 iOS식 바운스 효과 확인(Android 기본 글로우 이펙트 X)
+- 스크롤 시 디자인 가이드의 바운스 효과 확인(Android 기본 글로우 이펙트 X)
 - 에뮬레이터 설정 → 디스플레이 → 글꼴 크기를 "가장 크게(200%)"로 변경 후 앱 재진입 → 글자가 약 1.2배까지만 커지고 레이아웃이 깨지지 않음
 
 ---
@@ -219,7 +219,7 @@ android/
   - `generateSearchKeyword()` 메서드: 모든 텍스트 필드를 공백 없이 병합
 - `build_runner`로 `archive_item.g.dart` 자동 생성
 - `lib/services/local_db_service.dart` 생성:
-  - Box 이름 상수: `static const String _boxName = 'archiveItems';` (iOS 원본 `lib/services/local_db_service.dart:6`과 동일 — camelCase 유지, snake_case로 바꾸면 기존 데이터 호환 깨짐)
+  - Box 이름 상수: `static const String _boxName = 'archiveItems';` (기존 데이터 호환을 위해 camelCase 유지. snake_case로 변경하지 않음)
   - `initDB()`: Hive 초기화 및 `Hive.openBox<ArchiveItem>('archiveItems')`
   - `addItem(ArchiveItem)`: Insert
   - `updateItem(ArchiveItem)`: Update
@@ -254,14 +254,14 @@ android/
   - `search(String query)`: 검색어로 `_filteredItems` 필터링 → `notifyListeners()`
   - getter `items`: 검색어 있으면 `_filteredItems`, 없으면 `_items` 반환
 - `main.dart`에 `ChangeNotifierProvider<ArchiveProvider>` 등록
-- `main()` 함수에서 **다음 순서로 초기화** (iOS 원본 `lib/main.dart:14-29`과 동일):
+- `main()` 함수에서 **다음 순서로 초기화**:
   1. `WidgetsFlutterBinding.ensureInitialized()`
   2. `await AppPaths.init()` — `lib/utils/app_paths.dart`의 정적 헬퍼. `getApplicationDocumentsDirectory()` 결과를 한 번만 캐싱하여 `imagePath`(상대 경로) → 절대 경로 변환에 사용. **이 호출이 빠지면 `Image.file`이 LateInitializationError로 크래시**.
   3. `await Firebase.initializeApp(...)` (Task 11에서 추가)
   4. `await FirebaseAppCheck.instance.activate(...)` (Task 11에서 추가)
   5. `LocalDBService().initDB()` — Hive 초기화 + TypeAdapter 등록 + Box 열기
   6. `runApp(MyApp(dbService: dbService))`
-- `lib/utils/app_paths.dart` 신규 생성 (iOS 원본과 100% 동일 — 플랫폼 무관):
+- `lib/utils/app_paths.dart` 신규 생성(Flutter 공통 경로 헬퍼):
   ```dart
   class AppPaths {
     static late final String documentsDir;
@@ -310,7 +310,7 @@ android/
 
 **완료 확인 방법:**
 - Android 에뮬레이터에서 Empty State 화면 정상 표시
-- 검색창이 iOS 스타일로 렌더링 (Surface 배경, Material 언더라인 없음)
+- 검색창이 Surface 배경과 둥근 모서리로 렌더링되고 Material 언더라인이 없음
 - FAB 버튼이 우측 하단에 파란색으로 표시
 
 ---
@@ -410,7 +410,7 @@ android/
   - 선택된 이미지를 `getApplicationDocumentsDirectory()` 하위 `images/`로 복사 (UUID 파일명 + 확장자 보존)
   - `PlatformException` 발생 시 취소/일시 오류/접근 실패를 구분해 사용자에게 재시도 안내
   - 취소 → `PhotoPickStatus.cancelled`, 기타 예외 → `PhotoPickStatus.error`
-  - 허용 확장자: `.jpg, .jpeg, .png, .webp`를 우선 처리. HEIC/HEIF 원본은 `image_picker`가 갤러리에서 가져올 때 Android의 미디어 디코더가 알아서 JPEG로 변환해주므로 별도 처리 불필요 (iOS 원본 `lib/services/photo_service.dart:18-25`의 확장자 화이트리스트는 그대로 유지 — 변환 실패 시 폴백용)
+  - 허용 확장자: `.jpg, .jpeg, .png, .webp`를 우선 처리. HEIC/HEIF는 Android의 미디어 디코더와 `image_picker` 변환 결과를 사용하며, 변환에 실패하면 사용자에게 다른 사진을 선택하도록 안내한다.
 - `lib/services/exif_service.dart` 생성:
   - `extractMetadata(String filePath)`: `package:exif`의 `readExifFromBytes()` 사용
   - 촬영 날짜(`DateTime`) 추출: `EXIF DateTimeOriginal` 또는 `Image DateTime`
@@ -461,7 +461,7 @@ android/
 | ③ `lib/firebase_options.dart` Android case 채움 | 🤖 자동 | 위 명령 산출물 | (위에 포함) |
 | ④ `android/app/build.gradle.kts` plugins에 `com.google.gms.google-services` 적용 | 🤖 자동 | 위 명령이 `// START: FlutterFire Configuration` 주석 동봉해서 자동 주입 | (위에 포함) |
 | ⑤ SHA-1 / SHA-256 디버그 키 등록 | 🤖 자동 | `keytool` 추출 + `firebase apps:android:sha:create <appId> <hash>` (CLI 2회) | 3초 |
-| ⑥ Firebase AI Logic + Gemini API 활성화 | ✋ 사람 수동 🌐 콘솔 | Firebase Console → AI Logic 활성화 (iOS 빌드 단계에서 이미 했다면 추가 작업 없음) | (이전에 활성화돼 있으면 0초) |
+| ⑥ Firebase AI Logic + Gemini API 활성화 | ✋ 사람 수동 🌐 콘솔 | Firebase Console에서 AI Logic 활성 상태 확인. 이미 활성화돼 있으면 변경하지 않음 | (활성 상태면 0초) |
 | ⑦ App Check Debug 토큰 등록 | ✋ **사람 수동 🌐 콘솔** | `adb logcat`으로 토큰 추출은 자동 가능, **등록은 반드시 Firebase Console → App Check → Android 앱 → "Manage debug tokens"** | 1~2분 (브라우저 작업) |
 | ⑧ Play Integrity 연결 | ✋ **사람 수동 🌐 콘솔** | Play Console 앱 무결성에서 Cloud 프로젝트 연결 → Firebase App Check Android 앱에 Play Integrity 등록 | 2~5분 |
 | ⑨ 앱 서명 SHA-256 등록 | 🤖+✋ | Play App Signing의 앱 서명 인증서 SHA-256을 Firebase Android 앱에 등록 | 1~2분 |
@@ -663,7 +663,7 @@ firebase apps:android:sha:create <ANDROID_APP_ID> <SHA-256> --project=my-food-ar
 **목표:** 모든 Fail-Safe 요구사항을 최종 점검하고, 토스트 메시지와 엣지 케이스를 보강한다.
 
 **구현할 기능:**
-- `lib/widgets/toast_message.dart` 생성: iOS 스타일 둥근 플로팅 토스트
+- `lib/widgets/toast_message.dart` 생성: 디자인 가이드의 둥근 플로팅 토스트
   - "정보를 직접 입력해 주세요" (AI 실패)
   - "설정에서 사진 권한을 허용해 주세요" (Android 권한 거부)
   - "저장되었습니다" (저장 완료)

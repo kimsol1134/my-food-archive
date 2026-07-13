@@ -1,6 +1,4 @@
-# 17~18장 Android 대응: 비공개 테스트에서 Google Play 공개까지
-
-> 초판 1쇄 기준 · 최종 확인 2026-07-12 · [고정 안내 페이지](https://kimsol1134.github.io/my-food-archive/android/)
+# Android 공개 가이드: 비공개 테스트에서 Google Play 공개까지
 
 이 문서는 책 17~18장을 읽는 Android 독자가 실제 작업 순서대로 사용하는 짧은 경로입니다. 내부 테스트 설치까지 끝내지 않았다면 먼저 [15~16장 내부 테스트 가이드](google-play-internal-test-guide.md)의 0~10절을 진행하세요.
 
@@ -9,6 +7,8 @@
 - 앱 콘텐츠와 스토어 등록정보 작성: 보통 1~2시간
 - 비공개 테스트: 최소 12명이 14일 동안 연속 opt-in
 - 프로덕션 접근 신청과 앱 심사: 계정과 앱 상태에 따라 추가 시간이 필요
+
+`opt-in`은 참여 링크에서 테스트 참여를 선택해 테스터로 등록된 상태를 뜻합니다. 요구 기간 동안 참여를 취소하지 않아야 합니다.
 
 따라서 17장에서 설정을 마쳐도 18장을 읽는 날 바로 정식 링크가 생긴다고 보장할 수 없습니다. 승인 전에는 비공개 테스트 링크로 책 18.4절의 첫 사용자 확인을 진행하고, 정식 링크가 생기면 교체합니다.
 
@@ -76,7 +76,7 @@ Google Play의 정의에서 `수집`은 앱 밖으로 전송되는 데이터를 
 - 1024×500 기능 그래픽
 - Android 휴대전화 스크린샷 2장 이상
 
-사용할 수 있는 실제 Android 화면은 [`docs/book-screenshots/android-app/`](../book-screenshots/android-app/)에 있습니다. 없는 기능이나 iPhone 전용 표현을 스토어 설명에 넣지 않습니다.
+사용할 수 있는 실제 Android 화면은 [`docs/book-screenshots/android-app/`](../book-screenshots/android-app/)에 있습니다. 실제 앱에 없는 기능이나 화면을 스토어 설명에 넣지 않습니다.
 
 ## 5. Firebase AI와 Play Integrity를 릴리스 설치본으로 확인하기
 
