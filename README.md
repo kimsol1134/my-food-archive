@@ -5,9 +5,6 @@
 ## 책 독자용 경로
 
 - [Android 온라인 실습 자료](docs/android/README.md): 책 15~18장의 Google Play 대응 흐름
-- [Windows에서 Android 앱 만들기](docs/windows-android-one-file-guide.md): 6장부터 이어지는 Windows 통합 흐름
-- [Android 기술 설계서](docs/TRD_android.md)
-- [Android 구현계획서 참고본](docs/Implement_plan_android.md)
 
 책을 따라 직접 앱을 만들고 있다면 완성 코드를 복사하기보다 `docs/android/README.md`의 장별 안내를 먼저 사용하세요. 이 저장소의 코드는 막힌 설정을 비교하거나 최종 결과를 검증하는 참고본입니다.
 
@@ -28,7 +25,7 @@ Google Play용 AAB:
 flutter build appbundle --release
 ```
 
-업로드 가능한 릴리스 서명에는 저장소에 포함되지 않은 `android/key.properties`와 업로드 키스토어가 필요합니다. 키 생성과 Play Console 절차는 [Google Play 배포 가이드](docs/RELEASE.md)를 참고하세요.
+업로드 가능한 릴리스 서명에는 저장소에 포함되지 않은 `android/key.properties`와 업로드 키스토어가 필요합니다. 책 실습과 Play Console 절차는 [Android 온라인 실습 자료](docs/android/README.md)를 참고하세요.
 
 ## Firebase 공개 설정과 비밀값
 
@@ -41,6 +38,16 @@ flutter build appbundle --release
 - Gemini 호출: Firebase AI Logic enforcement
 
 업로드 키스토어, `android/key.properties`, 서비스 계정 키, 비밀번호는 커밋하지 않습니다.
+
+## 저장소 관리와 출판 검수
+
+아래 문서는 독자 실습이 아니라 저장소 관리와 출판 검수에 사용합니다.
+
+- [Google Play 배포용 프로젝트 메모](docs/RELEASE.md)
+- [Windows/Android 통합 QA 가이드](docs/windows-android-one-file-guide.md)
+- [Android 온라인 실습 자료 출판 인계표](docs/android/editorial-handoff.md)
+- [Android 부록 인쇄 교정 체크리스트](docs/android/print-proof-checklist.md)
+- [Android 온라인 실습 자료 정량 평가](docs/android/appendix-audit.md)
 
 ## 개인정보처리방침
 

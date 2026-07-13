@@ -1,6 +1,6 @@
-# 🚀 Google Play 스토어 배포 가이드 — 맛집 아카이브 (Android)
+# Google Play 배포용 프로젝트 메모 — 맛집 아카이브 (Android)
 
-이 문서는 **스토어 공개 배포**에 필요한 재현 절차를 정리한다. 내부 테스트 AAB 업로드까지 검증했으며, 비공개 테스트·앱 콘텐츠·프로덕션 접근 신청은 온라인 부록의 순서대로 진행한다.
+이 문서는 저장소 관리자가 서명과 빌드 설정을 재현할 때 사용하는 프로젝트 메모다. 책 독자가 따라갈 Play Console 절차의 정본은 [Android 온라인 실습 자료](android/README.md)다.
 
 ## 현재 상태 (완료됨)
 
@@ -59,18 +59,15 @@ flutter build appbundle --release
 ```
 → 출력의 소유자/발급자가 debug(`CN=Android Debug`)가 **아니어야** 한다.
 
-### 4) Play Console 등록
+### 4) Play Console로 이동
 
-1. [Play Console](https://play.google.com/console)에서 개발자 계정 생성(최초 1회, 등록비 $25).
-2. 앱 만들기 → 앱 이름 "My Food Archive", 언어/무료 여부 설정.
-3. **Play App Signing** 사용(기본 권장): 위 AAB를 업로드하면 Google이 앱 서명 키를 관리하고, 우리가 만든 건 "업로드 키"로 쓰인다.
-4. 내부 테스트(Internal testing) 트랙에 AAB 업로드 → 테스터 등록 → 동작 확인 후 프로덕션 승격.
+개발자 계정 생성부터 내부 테스트, 비공개 테스트, 프로덕션 접근 신청과 공개까지의 화면 작업은 [Android 온라인 실습 자료](android/README.md)에서 현재 책 장과 계정 상태에 맞는 경로를 따른다. 내부 테스트 뒤 바로 프로덕션으로 승격하지 않는다.
 
 ## 스토어 심사용 비(非)코드 준비물
 
 - **개인정보처리방침 URL**: `docs/privacy-policy.md`를 공개된 읽기 전용 URL로 제공하고 앱 내부의 개인정보처리방침 화면과 내용이 일치하게 유지한다.
-- **데이터 세이프티**: 기록과 사진은 로컬 저장되지만, 사용자가 고른 사진은 AI 분석을 위해 Firebase AI Logic/Gemini로 전송된다. "서버 미전송"으로 답하면 안 된다.
-- **그래픽 리소스**: 512×512 앱 아이콘, 피처 그래픽 1024×500, Android 스크린샷 2장 이상(`docs/book-screenshots/android-app/`).
+- **데이터 보안**: 기록과 사진은 로컬 저장되지만, 사용자가 고른 사진은 AI 분석을 위해 Firebase AI Logic/Gemini로 전송된다. "서버 미전송"으로 답하면 안 된다.
+- **그래픽 리소스**: 512×512 앱 아이콘, 기능 그래픽 1024×500, 독자의 실제 Android 설치본에서 촬영한 원본 스크린샷 2장 이상. `docs/book-screenshots/android-app/`은 저자 앱의 출판 참고본이며 독자의 제출 이미지가 아니다.
 - **콘텐츠 등급 설문**, 대상 연령, 카테고리(음식/라이프스타일).
 
 ## Firebase/App Check를 새 프로젝트에서 재구성할 때
