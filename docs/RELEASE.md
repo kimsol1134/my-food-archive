@@ -2,7 +2,7 @@
 
 이 문서는 저장소 관리자가 서명과 빌드 설정을 재현할 때 사용하는 프로젝트 메모다. 책 독자가 따라갈 Play Console 절차의 정본은 [Android 온라인 실습 자료](android/README.md)다.
 
-## 현재 상태 (완료됨)
+## 구현·로컬 릴리스 설정 상태
 
 - 기능: Task 1~17 구현 완료, `flutter analyze` 0건, UC-01~06 에뮬레이터 검증 완료.
 - 앱 이름: **My Food Archive** (`android/app/src/main/res/values/strings.xml` → 매니페스트 `@string/app_name`, iOS와 동일).
@@ -45,7 +45,7 @@ storeFile=C:\\Users\\sol\\keys\\upload-keystore.jks
 
 ### 3) 서명된 AAB 빌드
 
-`key.properties`가 있으면 자동으로 업로드 키로 서명된다:
+빌드 전에 `android/key.properties`와 그 안의 `storeFile`이 가리키는 키스토어 파일이 실제로 있는지 확인한다. 둘 중 하나라도 없으면 빌드하지 않고 업로드 키 설정부터 복구한다. `key.properties`가 있으면 자동으로 업로드 키로 서명된다:
 
 ```bash
 # PATH에 flutter 없으면: export PATH="/e/dev/flutter/bin:$PATH"
@@ -53,7 +53,7 @@ flutter build appbundle --release
 # 산출물: build/app/outputs/bundle/release/app-release.aab
 ```
 
-서명 확인(선택):
+서명 확인(필수):
 ```bash
 & "E:\Java\jdk-21.0.11.10-hotspot\bin\keytool.exe" -printcert -jarfile build/app/outputs/bundle/release/app-release.aab
 ```
@@ -79,8 +79,8 @@ dart pub global activate flutterfire_cli
 flutterfire configure --project=my-food-archive-dbc0c --platforms=android \
   --android-package-name=com.solkim.my_food_archive --yes
 ```
-- Play Console → 앱 무결성에서 Firebase/Google Cloud 프로젝트를 연결한다.
+- Play Console → Google Play로 보호됨 → Play 스토어 보호 → Play 앱 서명 관리에서 확인한 **앱 서명 키 인증서 SHA-256**을 Firebase에 반드시 등록한다. 업로드 키 SHA-256이 함께 등록되어 있어도 앱 서명 인증서 값을 대신할 수 없다.
+- Play Console → Google Play로 보호됨 → Play Integrity API → 관리에서 Firebase/Google Cloud 프로젝트를 연결한다.
 - Firebase App Check Android 앱에 Play Integrity provider를 등록한다.
-- Firebase에는 **Play App Signing의 앱 서명 인증서 SHA-256**을 반드시 등록한다. 업로드 키 SHA-256이 함께 등록되어 있어도 앱 서명 인증서 값을 대신할 수 없다.
 - Firebase Console → App Check → API에서 Firebase AI Logic enforcement 상태를 확인한다.
 - 내부 테스트 설치본에서 음식 사진 1장을 분석해 메뉴명/카테고리가 자동 입력되는지 확인한 뒤 프로덕션으로 진행한다.

@@ -463,7 +463,7 @@ android/
 | ⑤ SHA-1 / SHA-256 디버그 키 등록 | 🤖 자동 | `keytool` 추출 + `firebase apps:android:sha:create <appId> <hash>` (CLI 2회) | 3초 |
 | ⑥ Firebase AI Logic + Gemini API 활성화 | ✋ 사람 수동 🌐 콘솔 | Firebase Console에서 AI Logic 활성 상태 확인. 이미 활성화돼 있으면 변경하지 않음 | (활성 상태면 0초) |
 | ⑦ App Check Debug 토큰 등록 | ✋ **사람 수동 🌐 콘솔** | `adb logcat`으로 토큰 추출은 자동 가능, **등록은 반드시 Firebase Console → App Check → Android 앱 → "Manage debug tokens"** | 1~2분 (브라우저 작업) |
-| ⑧ Play Integrity 연결 | ✋ **사람 수동 🌐 콘솔** | Play Console 앱 무결성에서 Cloud 프로젝트 연결 → Firebase App Check Android 앱에 Play Integrity 등록 | 2~5분 |
+| ⑧ Play Integrity 연결 | ✋ **사람 수동 🌐 콘솔** | Play Console의 Google Play로 보호됨 → Play Integrity API에서 Cloud 프로젝트 연결 → Firebase App Check Android 앱에 Play Integrity 등록 | 2~5분 |
 | ⑨ 앱 서명 SHA-256 등록 | 🤖+✋ | Play App Signing의 앱 서명 인증서 SHA-256을 Firebase Android 앱에 등록 | 1~2분 |
 | ⑩ AI Logic enforcement 실기기 확인 | ✋ | 내부 테스트 설치본에서 음식 사진 1장 분석 성공 확인. 2026년 7월 이후 안내 마법사는 enforcement를 자동 적용할 수 있음 | 2분 |
 
@@ -511,7 +511,7 @@ firebase apps:android:sha:create <ANDROID_APP_ID> <SHA-256> --project=my-food-ar
    ```
 2. **브라우저에서 Firebase Console 접속** → 프로젝트 `my-food-archive-dbc0c` → **App Check** → Android 앱 → 더보기(⋮) → **"Manage debug tokens"** → 추출한 UUID + 이름(예: `pixel7_api34`) 입력 → 저장.
 3. 앱 재실행 → AI 호출이 정상 응답을 받음.
-4. **Play Console → 앱 무결성 → Play Integrity API**에서 Firebase/Google Cloud 프로젝트를 연결한다.
+4. **Play Console → Google Play로 보호됨 → Play Integrity API → 관리**에서 Firebase/Google Cloud 프로젝트를 연결한다.
 5. **Play App Signing의 앱 서명 인증서 SHA-256**을 Firebase Android 앱에 등록한다.
 6. Firebase Console → App Check → API에서 **Firebase AI Logic enforcement** 상태를 확인한다.
 7. 내부 테스트 링크로 설치한 릴리스 앱에서 음식 사진 1장을 분석해 메뉴명/카테고리 자동 채움이 성공하는지 확인한다.

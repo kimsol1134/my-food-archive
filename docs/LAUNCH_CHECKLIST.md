@@ -24,7 +24,8 @@
 - [x] **업로드 키스토어 생성** (`upload-keystore.jks`) — 저장소에는 미포함
 - [x] **`android/key.properties` 작성** — 저장소에는 미포함
 - [ ] 키스토어 + 비밀번호 **별도 안전한 곳에 2차 백업**
-- [x] **서명된 AAB 빌드 및 내부 테스트 업로드**
+- [x] **서명된 AAB 생성 및 업로드 키 서명 확인**
+- [x] AAB 인증서가 `CN=Android Debug`가 아님을 확인
 
 ## 4. 권한 & 개인정보 (Play 정책)
 - [x] 권한 최소화 확인 (`INTERNET`만 선언, Photo Picker 사용, 사진·위치 권한 없음)
@@ -45,7 +46,7 @@
 - [x] 개발자 계정 등록
 - [x] 앱 생성 + 기본 정보 입력
 - [x] **Play App Signing** 활성화
-- [x] 내부 테스트 트랙에 AAB 업로드
+- [x] 내부 테스트 트랙에서 AAB가 테스터에게 제공되는 상태 확인
 - [x] Firebase Android 앱·Google Services·App Check Play Integrity 연결
 - [ ] 내부 테스트 설치본에서 Gemini 자동 분석 최종 확인
 - [ ] 앱 콘텐츠와 기본 스토어 등록정보 완료

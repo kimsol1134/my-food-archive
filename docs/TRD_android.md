@@ -176,7 +176,7 @@ Firebase CLI에 `apps:android:sha:create` / `apps:android:sha:list` / `apps:andr
 
 1. **Firebase AI Logic + Gemini API 활성화** — Firebase Console에서 현재 프로젝트의 활성 상태를 확인합니다.
 2. **App Check Debug 토큰 등록** — §4.5 참조.
-3. **Play Integrity 연결** — Play Console의 앱 무결성 화면에서 Google Cloud/Firebase 프로젝트를 연결하고, Firebase App Check의 Android 앱에 Play Integrity provider를 등록한다.
+3. **Play Integrity 연결** — Play Console의 Google Play로 보호됨 → Play Integrity API에서 Google Cloud/Firebase 프로젝트를 연결하고, Firebase App Check의 Android 앱에 Play Integrity provider를 등록한다.
 4. **릴리스 SHA-256 확인** — Play App Signing의 앱 서명 인증서 SHA-256을 Firebase Android 앱에 등록한다. 로컬 업로드 키나 디버그 키의 SHA와 혼동하지 않는다.
 5. **Firebase AI Logic enforcement 확인** — Firebase Console → App Check → API에서 Firebase AI Logic이 Enforced인지 확인하고, 실제 내부 테스트 설치본으로 AI 호출을 검증한다.
 
@@ -192,7 +192,7 @@ await FirebaseAppCheck.instance.activate(
 );
 ```
 - **Debug Provider 사용 절차**: 디버그 빌드 첫 실행 시 Logcat에 출력되는 토큰을 Firebase 콘솔 → App Check → Android 앱 → "관리"에서 등록.
-- **Play Integrity 사용 절차**: Firebase 콘솔 → App Check → Android 앱에서 Play Integrity를 등록하고, Play Console → 앱 무결성에서 Cloud 프로젝트를 연결한다. Play App Signing의 **앱 서명 인증서 SHA-256**을 Firebase 앱에 등록한 뒤 내부 테스트로 설치한 릴리스 빌드에서 확인한다.
+- **Play Integrity 사용 절차**: Firebase 콘솔 → App Check → Android 앱에서 Play Integrity를 등록하고, Play Console → Google Play로 보호됨 → Play Integrity API에서 Cloud 프로젝트를 연결한다. Google Play로 보호됨 → Play 스토어 보호 → Play 앱 서명 관리에서 확인한 **앱 서명 키 인증서 SHA-256**을 Firebase 앱에 등록한 뒤 내부 테스트로 설치한 릴리스 빌드에서 확인한다.
 - **배포 게이트**: 내부 테스트 설치본에서 음식 사진 1장을 골랐을 때 메뉴명/카테고리가 자동으로 채워지기 전에는 프로덕션 AAB를 제출하지 않는다.
 
 ### 4.6 예외 처리 강제 (Fail-Safe)
