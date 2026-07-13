@@ -36,26 +36,26 @@ https://kimsol1134.github.io/my-food-archive/android/
 
 ## Google Play Console 화면
 
-아래 캡처는 온라인 실습 자료용 타이트 크롭입니다. 인쇄 본문에 크게 넣을 때는 브라우저 원본을 다시 캡처합니다. 편집용 번호는 파일명의 빈 번호와 무관하게 P-1부터 연속으로 사용합니다.
+책과 온라인 자료에는 자르기·리샘플링·가림·합성·주석을 하지 않은 원본 캡처만 사용합니다. 기존 타이트 크롭은 출판용으로 사용할 수 없으며, 민감정보가 보이지 않는 화면 상태에서 전체 창을 다시 캡처해야 합니다. 편집면에서는 원본 파일을 직접 배치하고 비율만 유지합니다. 편집용 번호는 파일명의 빈 번호와 무관하게 P-1부터 연속으로 사용합니다.
 
-| 번호 | 파일 | 캡션 | 개인정보 처리 |
+| 번호 | 파일 | 캡션 | 원본 촬영 조건 |
 |---:|---|---|---|
-| P-1 | `g-01-play-console-signup.png` | Google Play Console 개발자 계정 시작 | 계정 이메일·프로필 사진 제외 |
-| P-2 | `g-02-account-verification.png` | 개발자 계정 확인 항목 | 실명·주소·전화번호 제외 |
-| P-3 | `g-03-create-app-button.png` | 앱 만들기 버튼 | 다른 앱 이름이 보이면 가림 |
-| P-4 | `g-04-new-app-dashboard.png` | 새 앱 대시보드 | 계정 메뉴 제외 |
-| P-5 | `g-05-aab-build-result.png` | release AAB 빌드 완료 | 로컬 사용자 경로 제외 |
-| P-6 | `g-06-internal-testing.png` | 내부 테스트 메뉴 | 다른 트랙·앱 정보 최소화 |
-| P-7 | `g-07-play-app-signing.png` | Play App Signing 설정 | 인증서 지문 제외 |
-| P-8 | `g-08-upload-aab.png` | Android App Bundle 업로드 | 파일 경로·계정 정보 제외 |
-| P-9 | `g-09-review-release.png` | 내부 테스트 출시 검토 | 계정 메뉴 제외 |
-| P-10 | `g-10-tester-list.png` | 테스터 이메일 목록 | 이메일 주소 가림 |
-| P-11 | `g-11-opt-in-link.png` | 내부 테스트 참여 링크 | 참여 링크 전체 주소 가림 |
-| P-12 | `g-12-opt-in-page.png` | 테스터 초대 수락 페이지 | 계정 이메일 제외 |
+| P-1 | `g-01-play-console-signup.png` | Google Play Console 개발자 계정 시작 | 계정 메뉴를 닫아 이메일·프로필 사진이 보이지 않는 상태 |
+| P-2 | `g-02-account-verification.png` | 개발자 계정 확인 항목 | 실명·주소·전화번호 입력값이 보이지 않는 안내 화면 |
+| P-3 | `g-03-create-app-button.png` | 앱 만들기 버튼 | 다른 앱 정보가 보이지 않는 상태 |
+| P-4 | `g-04-new-app-dashboard.png` | 새 앱 대시보드 | 계정 메뉴가 닫힌 상태 |
+| P-5 | `g-05-aab-build-result.png` | release AAB 빌드 완료 | 로컬 사용자 경로가 출력되지 않은 터미널 상태 |
+| P-6 | `g-06-internal-testing.png` | 내부 테스트 메뉴 | 대상 앱의 내부 테스트 화면 |
+| P-7 | `g-07-play-app-signing.png` | Play App Signing 설정 | 인증서 지문이 펼쳐지지 않은 상태 |
+| P-8 | `g-08-upload-aab.png` | Android App Bundle 업로드 | 파일 경로와 계정 메뉴가 보이지 않는 상태 |
+| P-9 | `g-09-review-release.png` | 내부 테스트 출시 검토 | 계정 메뉴가 닫힌 상태 |
+| P-10 | `g-10-tester-list.png` | 테스터 이메일 목록 | 이메일 주소가 표시되지 않는 목록 개요 화면 |
+| P-11 | `g-11-opt-in-link.png` | 내부 테스트 참여 링크 | 공개 가능한 만료 링크를 사용하거나, 링크가 보이지 않는 안내 화면 |
+| P-12 | `g-12-opt-in-page.png` | 테스터 초대 수락 페이지 | 계정 이메일이 보이지 않는 상태 |
 | P-13 | `g-14-app-content.png` | 앱 콘텐츠 대시보드 | 정책 경고가 있다면 실제 상태 재확인 |
 | P-14 | `g-15-store-listing.png` | 기본 스토어 등록정보 | 연락처·지원 이메일 확인 |
 
-원본에는 빨간 박스, 화살표, 번호를 직접 그리지 않습니다. 강조 표시는 편집 단계에서 추가합니다.
+원본과 배치본 모두 빨간 박스, 화살표, 번호를 추가하지 않습니다. 설명이 필요하면 캡션이나 본문으로 처리합니다.
 
 ## 출판 전 최종 확인
 
