@@ -136,7 +136,7 @@ Google Play 기본 스토어 등록정보를 준비해줘.
 
 스크린샷은 독자의 내부 테스트 설치본에서 직접 촬영한 원본을 사용합니다. 홈, 사진을 고른 뒤 자동 입력된 화면, 저장 결과, 검색 결과 중 앱의 핵심이 잘 이어지는 화면을 고릅니다. 자르기·가림·합성·주석을 하지 않습니다.
 
-[저자 앱의 Android 화면](../book-screenshots/android-app/)은 어떤 장면을 고를지 보는 참고 예시입니다. 독자의 앱 화면이나 데이터가 다르면 제출 이미지로 사용하지 않습니다.
+[저자 앱의 Android 화면](app-screenshot-reference.md)은 어떤 장면을 고를지 보는 참고 예시입니다. 독자의 앱 화면이나 데이터가 다르면 제출 이미지로 사용하지 않습니다.
 
 Play Console에서 필수로 표시된 칸을 모두 입력하고 저장한 뒤, 기본 스토어 등록정보가 완료 상태인지 확인합니다. 완료되지 않은 항목이 남으면 화면의 항목 이름을 클로드 코드에게 보내 다음 입력값을 확인합니다.
 
@@ -349,11 +349,11 @@ My Food Archive Android 테스트 버전을 확인해 줘.
 
 ## 공식 문서
 
-- 신규 개인 개발자 계정 테스트 요구사항: https://support.google.com/googleplay/android-developer/answer/14151465
-- 내부·비공개·공개 테스트 설정: https://support.google.com/googleplay/android-developer/answer/9845334
-- 데이터 보안 양식: https://support.google.com/googleplay/android-developer/answer/10787469
-- Google Play 스토어 등록정보와 미리보기 애셋: https://support.google.com/googleplay/android-developer/answer/1078870
-- Firebase AI Logic App Check: https://firebase.google.com/docs/ai-logic/app-check
-- App Check Play Integrity 제공자 설정: https://firebase.google.com/docs/app-check/android/play-integrity-provider
-- Google Play 버전 준비와 출시: https://support.google.com/googleplay/android-developer/answer/9859348
-- Google Play 검토와 게시 상태: https://support.google.com/googleplay/android-developer/answer/9859654
+- [신규 개인 개발자 계정 테스트 요구사항](https://support.google.com/googleplay/android-developer/answer/14151465)
+- [내부·비공개·공개 테스트 설정](https://support.google.com/googleplay/android-developer/answer/9845334)
+- [데이터 보안 양식](https://support.google.com/googleplay/android-developer/answer/10787469)
+- [Google Play 스토어 등록정보와 미리보기 애셋](https://support.google.com/googleplay/android-developer/answer/1078870)
+- [Firebase AI Logic App Check](https://firebase.google.com/docs/ai-logic/app-check)
+- [App Check Play Integrity 제공자 설정](https://firebase.google.com/docs/app-check/android/play-integrity-provider)
+- [Google Play 버전 준비와 출시](https://support.google.com/googleplay/android-developer/answer/9859348)
+- [Google Play 검토와 게시 상태](https://support.google.com/googleplay/android-developer/answer/9859654)

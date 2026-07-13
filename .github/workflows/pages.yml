@@ -7,6 +7,7 @@ on:
       - "site/**"
       - "docs/android/**"
       - "docs/book-screenshots/**"
+      - "docs/privacy-policy.md"
       - "scripts/build_android_reader_pages.rb"
       - ".github/workflows/pages.yml"
   workflow_dispatch:
@@ -36,6 +37,7 @@ jobs:
         run: |
           gem install kramdown:2.5.1 kramdown-parser-gfm:1.1.0 --no-document
           ruby scripts/build_android_reader_pages.rb
+          ruby scripts/check_android_reader_pages.rb
       - name: Upload reader site
         uses: actions/upload-pages-artifact@v4
         with:

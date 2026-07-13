@@ -13,9 +13,11 @@ RAW_ROOT = "https://raw.githubusercontent.com/kimsol1134/my-food-archive/main"
 GITHUB_ROOT = "https://github.com/kimsol1134/my-food-archive"
 
 PAGES = {
+  ROOT.join("docs/privacy-policy.md") => ["privacy-policy", "개인정보처리방침 참고본"],
   ROOT.join("docs/android/README.md") => ["overview", "책과 온라인 자료를 함께 읽는 순서"],
   ROOT.join("docs/android/google-play-internal-test-guide.md") => ["internal-test", "15~16장 · Google Play 내부 테스트"],
   ROOT.join("docs/android/release-roadmap.md") => ["release", "17~18장 · 비공개 테스트와 공개"],
+  ROOT.join("docs/android/app-screenshot-reference.md") => ["app-screenshots", "Android 앱 화면 참고본"],
   ROOT.join("docs/android/tester-recruitment.md") => ["tester-recruitment", "Google Play 비공개 테스터 모집"]
 }.freeze
 
