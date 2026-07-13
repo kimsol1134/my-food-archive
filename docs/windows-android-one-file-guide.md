@@ -727,7 +727,7 @@ Google Play Console 내부 테스트 설정 중이야.
 
 12명 딱 맞추면 위험합니다. 외부에서 테스터를 모집한다면 15명 이상으로 모집하는 편이 안전합니다.
 
-외부 모집 서비스를 고를 때의 확인 기준과 정책 리스크는 [android/google-play-internal-test-guide.md](android/google-play-internal-test-guide.md)의 11절에 정리되어 있습니다. 결제 전에 그 기준부터 확인하세요.
+외부 모집 서비스를 고를 때의 확인 기준과 정책 리스크는 [android/google-play-internal-test-guide.md](android/google-play-internal-test-guide.md)의 12절에 정리되어 있습니다. 결제 전에 그 기준부터 확인하세요.
 
 외부 모집 요청 문구 예시:
 
