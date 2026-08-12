@@ -126,11 +126,22 @@ secret_output, secret_status = Open3.capture2e(
 errors << "Possible private credential found:\n#{secret_output}" if secret_status.success? && !secret_output.empty?
 
 public_text_paths = %w[README.md START_HERE.md docs site .github/ISSUE_TEMPLATE]
-path_output, path_status = Open3.capture2e(
-  "rg", "-n", "/Users/solkim|/private/tmp|/tmp/mfa-publication", *public_text_paths,
-  chdir: ROOT.to_s
-)
-errors << "Local machine path found in public material:\n#{path_output}" if path_status.success? && !path_output.empty?
+public_text_files = public_text_paths.flat_map do |relative|
+  path = ROOT.join(relative)
+  path.directory? ? path.glob("**/*") : [path]
+end.select do |path|
+  path.file? && %w[.md .html .rb .yml .yaml .txt].include?(path.extname.downcase)
+end
+
+local_path_pattern = %r{/Users/solkim|/private/tmp|/tmp/mfa-publication}
+public_text_files.each do |path|
+  path.each_line.with_index(1) do |line, line_number|
+    next unless line.match?(local_path_pattern)
+
+    relative = path.relative_path_from(ROOT)
+    errors << "Local machine path found in public material: #{relative}:#{line_number}"
+  end
+end
 
 markdown_files = if git_error.success?
                    tracked.lines.map(&:strip).select { |path| path.end_with?(".md") }
