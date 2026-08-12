@@ -4,24 +4,35 @@
 
 > 책을 따라 앱을 직접 만들고 있다면 완성 코드를 처음부터 복사하지 마세요. 먼저 책에서 자신의 문서를 만들고, 막힌 부분을 비교하거나 최종 결과를 확인할 때 이 저장소를 사용하면 됩니다.
 
+**GitHub가 처음이라면 [책 독자를 위한 시작 안내](START_HERE.md)부터 여세요.** 내려받을 파일과 현재 장에서 볼 자료만 짧게 안내합니다.
+
+<p align="center">
+  <img src="docs/book-screenshots/android-app/a-01-home.png" width="30%" alt="첫 기록을 추가하기 전의 홈 화면" />
+  <img src="docs/book-screenshots/android-app/a-03-gemini-result.png" width="30%" alt="AI가 메뉴와 카테고리를 채운 화면" />
+  <img src="docs/book-screenshots/android-app/a-04-saved.png" width="30%" alt="첫 맛집 기록이 저장된 홈 화면" />
+</p>
+
 ## 처음 오셨다면
 
 현재 읽는 장에 맞는 한 곳만 열면 됩니다.
 
 | 지금 필요한 자료 | 열기 |
 |---|---|
+| GitHub와 저장소가 처음임 | [책 독자를 위한 시작 안내](START_HERE.md) |
 | 3~7장 · 저자가 만든 기획 문서와 구현계획서 예시 | [책 실습 문서 보기](#책-실습-문서) |
 | 8~14장 · 완성 앱 코드와 내 프로젝트 비교 | [완성 앱 참고본 보기](#완성-앱-참고본) |
-| 15~18장 · iPhone 앱의 App Store 제출 항목 확인 | [App Store 제출 체크리스트](docs/AppStore_Submission_Checklist.md) |
+| 15~18장 · iPhone 앱의 App Store 제출 항목 확인 | [App Store 제출 체크리스트](https://kimsol1134.github.io/my-food-archive/app-store/) |
 | 15~18장 · Android 앱을 Google Play에 배포 | [Android 온라인 실습 자료](https://kimsol1134.github.io/my-food-archive/android/) |
 
-GitHub가 익숙하지 않고 완성 참고본을 한 번에 받고 싶다면 [출판 기준 자료 ZIP 내려받기](https://github.com/kimsol1134/my-food-archive/archive/refs/tags/book-v1.0.0.zip)를 누르세요. 내려받은 파일의 압축을 풀면 됩니다. 이 링크는 책과 맞춘 `book-v1.0.0` 버전에 고정되어 있어 이후 코드가 바뀌어도 내용이 달라지지 않습니다.
+완성 참고본을 한 번에 받고 싶다면 [출판 기준 자료 ZIP 내려받기](https://github.com/kimsol1134/my-food-archive/archive/refs/tags/book-v1.0.1.zip)를 누르세요. 내려받은 파일의 압축을 풀면 됩니다. 이 링크는 책과 맞춘 `book-v1.0.1` 버전에 고정되어 있어 이후 코드가 바뀌어도 내용이 달라지지 않습니다.
 
 ## 책 실습 문서
 
 아래 파일은 저자가 마이 맛집 아카이브를 만들 때 사용한 **완성 예시본**입니다. 책에서 여러분이 만드는 문서의 정답지가 아니라, 결과의 구체성과 구성을 비교하는 참고 자료입니다.
 
-### Mac + iPhone 독자
+사용 중인 컴퓨터와 만들 앱은 서로 다른 선택입니다. iPhone 앱은 Mac에서, Android 앱은 Mac 또는 Windows에서 만들 수 있습니다.
+
+### iPhone 앱을 만드는 독자 · Mac 필요
 
 | 책에서 만드는 문서 | 저자 예시본 |
 |---|---|
@@ -31,9 +42,9 @@ GitHub가 익숙하지 않고 완성 참고본을 한 번에 받고 싶다면 [�
 | 사용 흐름 | [Usecase.md](docs/Usecase.md) |
 | 색상과 화면 디자인 | [Design_guide.md](docs/Design_guide.md) |
 | Claude Code가 따르는 구현 순서 | [Implement_plan.md](docs/Implement_plan.md) |
-| App Store Connect 입력 항목 | [AppStore_Submission_Checklist.md](docs/AppStore_Submission_Checklist.md) |
+| App Store Connect 입력 항목 | [App Store 제출 체크리스트](https://kimsol1134.github.io/my-food-archive/app-store/) |
 
-### Windows 또는 Android 독자
+### Android 앱을 만드는 독자 · Mac 또는 Windows
 
 `PRD.md`, `IA.md`, `Usecase.md`, `Design_guide.md`는 위의 공통 문서를 사용합니다. 플랫폼에 따라 달라지는 두 문서만 Android 버전을 선택하세요.
 

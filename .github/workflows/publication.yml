@@ -1,0 +1,34 @@
+name: Publication readiness
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  validate-reader-materials:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.3"
+
+      - name: Install reader-site dependencies
+        run: gem install kramdown:2.5.1 kramdown-parser-gfm:1.1.0 --no-document
+
+      - name: Check publication invariants
+        run: ruby scripts/check_publication_readiness.rb
+
+      - name: Build and check reader site
+        run: |
+          ruby scripts/build_android_reader_pages.rb
+          ruby scripts/check_android_reader_pages.rb

@@ -1,0 +1,61 @@
+name: iOS validation
+
+on:
+  pull_request:
+    paths:
+      - "lib/**"
+      - "ios/**"
+      - "test/**"
+      - "pubspec.yaml"
+      - "pubspec.lock"
+      - "analysis_options.yaml"
+      - ".github/workflows/ios.yml"
+  push:
+    branches: [main]
+    paths:
+      - "lib/**"
+      - "ios/**"
+      - "test/**"
+      - "pubspec.yaml"
+      - "pubspec.lock"
+      - "analysis_options.yaml"
+      - ".github/workflows/ios.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ios-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    # 책의 고정 참고본은 가변적인 macos-latest 대신 안정판 세대에 고정한다.
+    runs-on: macos-15
+    timeout-minutes: 40
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Install Flutter dependencies
+        run: flutter pub get
+
+      - name: Analyze
+        run: flutter analyze
+
+      - name: Test
+        run: flutter test
+
+      - name: Verify locked CocoaPods dependencies
+        working-directory: ios
+        run: pod install --deployment
+
+      - name: Compile iOS Simulator app
+        run: flutter build ios --simulator --debug

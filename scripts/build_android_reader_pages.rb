@@ -14,6 +14,22 @@ RAW_ROOT = "https://raw.githubusercontent.com/kimsol1134/my-food-archive/main"
 GITHUB_ROOT = "https://github.com/kimsol1134/my-food-archive"
 
 PAGES = {
+  ROOT.join("START_HERE.md") => {
+    output: "start",
+    public_path: "#{SITE_PUBLIC_ROOT}/start",
+    title: "책 독자라면 여기부터",
+    description: "《클로드 코드로 앱스토어까지》 독자를 위한 My Food Archive 실습 자료 시작 안내",
+    nav_path: "#{SITE_PUBLIC_ROOT}/",
+    nav_label: "← 공식 실습 자료 첫 화면"
+  },
+  ROOT.join("docs/AppStore_Submission_Checklist.md") => {
+    output: "app-store",
+    public_path: "#{SITE_PUBLIC_ROOT}/app-store",
+    title: "iPhone · App Store 제출 체크리스트",
+    description: "《클로드 코드로 앱스토어까지》 독자를 위한 App Store Connect 입력과 제출 확인 자료",
+    nav_path: "#{SITE_PUBLIC_ROOT}/",
+    nav_label: "← 공식 실습 자료 첫 화면"
+  },
   ROOT.join("docs/privacy-policy.md") => {
     output: "privacy-policy",
     public_path: "#{SITE_PUBLIC_ROOT}/privacy-policy",
@@ -122,6 +138,7 @@ def page_template(config, body)
           li + li { margin-top: .32rem; }
           a { color: #135f9b; text-underline-offset: 3px; }
           img { display: block; max-width: 100%; height: auto; margin: 24px auto; border: 1px solid #e3ded8; border-radius: 10px; background: #fff; }
+          p[align="center"] > img[width="30%"] { display: inline-block; width: 30%; margin: 24px .7%; vertical-align: top; }
           table { display: block; width: 100%; overflow-x: auto; border-collapse: collapse; margin: 20px 0 28px; background: #fff; }
           th, td { min-width: 130px; padding: 12px 14px; border: 1px solid #ded7cf; text-align: left; vertical-align: top; line-height: 1.6; }
           th { background: #efe8e0; }
@@ -134,6 +151,7 @@ def page_template(config, body)
             nav span { display: none; }
             main { width: min(100% - 24px, 860px); padding-top: 26px; }
             th, td { min-width: 165px; }
+            p[align="center"] > img[width="30%"] { display: block; width: min(100%, 320px); margin: 18px auto; }
           }
         </style>
       </head>
