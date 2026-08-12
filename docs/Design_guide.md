@@ -1,5 +1,7 @@
 # 📱 [마이 맛집 아카이브] MVP 디자인 및 UI/UX 구현 가이드 (최종본)
 
+> **문서 상태:** 책에 실린 최종 앱 화면과 동기화한 저자 예시본입니다.
+
 ## 1. Design Concept Overview
 - **방향성:** iOS 기본 앱(사진, 메모 등)과 시각적으로 완벽히 동화되는 'Pure Native(순정 애플 스타일)'.
 - **테마 고정 [AI 필수 지시]:** 본 앱은 **라이트 모드(Light Mode) 전용**으로 개발한다. 사용자의 기기가 다크모드여도 앱은 무조건 라이트 모드로 강제 고정(`ThemeData.light()`)하여 렌더링할 것.
@@ -34,9 +36,11 @@
   - 텍스트 입력창(TextField) 및 버튼: `10px`
 
 ### 4.2. HomeScreen (홈 화면)
+- **정보 아이콘:** AppBar 우측에 `CupertinoIcons.info_circle` 배치. 탭하면 앱 정보 및 개인정보처리방침 화면으로 이동.
 - **검색창 (Search Bar):** 높이 `36px`, 배경 `Surface` 컬러. 좌측에 돋보기 아이콘. 안드로이드식 밑줄(Underline) 절대 금지.
 - **갤러리 그리드 (GridView):** `crossAxisCount: 2`, `crossAxisSpacing: 12`, `mainAxisSpacing: 16`. 썸네일 이미지는 `BoxFit.cover`로 꽉 차게 렌더링.
-- **Empty State (데이터가 0개일 때):** 화면 중앙 배치. `CupertinoIcons.photo_on_rectangle` 아이콘(사이즈 64, Text Sub 컬러) + "아직 저장된 맛집이 없어요." 텍스트 (Body 사이즈, Text Sub 컬러).
+- **Empty State (데이터가 0개일 때):** 화면 중앙 배치. `CupertinoIcons.photo_on_rectangle` 아이콘(사이즈 72, Text Sub 컬러) + "아직 저장된 맛집이 없어요" 제목 + "사진 한 장을 골라 첫 맛집 기록을 만들어보세요" 설명 + 파란색 `첫 기록 추가` 버튼.
+- **검색 결과 없음:** 검색 아이콘(사이즈 56, Text Sub 컬러) + "검색 결과가 없습니다" 안내 문구.
 - **FAB (+ 버튼):** 우측 하단 고정. 크기 `56x56`, 배경 `Primary` 컬러. 은은한 그림자(`blurRadius: 10`, `color: black.withOpacity(0.15)`).
 
 ### 4.3. AddEditRecordScreen (기록 추가/수정 화면)
@@ -47,6 +51,11 @@
 ### 4.4. DetailScreen (상세 보기 화면)
 - **원본 이미지 뷰:** 화면 최상단에 원본 비율을 유지하되(`BoxFit.contain` 또는 화면 가로 너비에 맞춘 `BoxFit.cover`), 최대 높이를 화면의 40%로 제한.
 - **메타 데이터 레이아웃:** 사진 하단에 식당명(Title)을 크게 배치하고, 그 아래 지역/메뉴/카테고리/날짜를 수직(Column)으로 여백 `8px`을 주어 깔끔하게 나열할 것.
+
+### 4.5. PrivacyPolicyScreen (앱 정보 및 개인정보처리방침)
+- **역할:** 기기 저장, AI 전송, App Check와 지원 경로를 앱 안에서 읽을 수 있게 제공.
+- **구성:** 짧은 제목과 본문을 세로로 나열하고, 온라인 개인정보처리방침과 지원 문의는 아이콘이 있는 버튼으로 제공.
+- **문장 가독성:** 본문은 `15px`, 줄 높이 `1.55`를 사용하고 화면 좌우 여백 `20px`을 유지.
 
 ## 5. Interaction & UX 지시사항 (Fail-Safe)
 - **스크롤 물리 엔진:** iOS 특유의 화면 끝 바운스 효과(`BouncingScrollPhysics`)를 전역 스크롤에 적용할 것.
