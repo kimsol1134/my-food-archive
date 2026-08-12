@@ -113,11 +113,16 @@ lib/
   - `uuid` (고유 ID 생성)
   - `path_provider` (로컬 파일 경로)
   - `url_launcher` (온라인 개인정보처리방침과 지원 문의 열기)
+- `firebase_ai 3.13.1` 요구사항에 맞춰 iOS Deployment Target을 15.0으로 설정:
+  - `ios/Podfile`: `platform :ios, '15.0'`
+  - Xcode Runner 프로젝트: iOS Deployment Target 15.0
 - `dev_dependencies`에 추가:
   - `hive_generator`, `build_runner` (Hive TypeAdapter 코드 생성)
 
 **예상 수정 파일:**
 - `pubspec.yaml`
+- `ios/Podfile`
+- `ios/Runner.xcodeproj/project.pbxproj`
 
 **완료 확인 방법:**
 - `flutter pub get` 에러 없이 완료
@@ -398,8 +403,8 @@ lib/
 
 **전제 조건 (10.1 절에서 완료):**
 - Firebase 프로젝트 생성 + iOS 앱 등록
-- `GoogleService-Info.plist`를 `ios/Runner/`에 추가
 - `flutterfire configure` 실행 → `lib/firebase_options.dart` 자동 생성
+- 현재 완성 코드는 `Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform)`으로 명시 초기화하므로 저장소에 없는 `GoogleService-Info.plist`를 Xcode 빌드 리소스로 참조하지 않음
 - App Check 활성화 (iOS = App Attest 우선 / DeviceCheck fallback)
 - Firebase 콘솔에서 Firebase AI Logic + Gemini API 활성화
 

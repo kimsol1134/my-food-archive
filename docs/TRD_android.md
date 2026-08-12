@@ -101,7 +101,7 @@ void enforceAndroidPhotoPicker() {
 - **Android SDK**:
   - `compileSdk = 36` — **Firebase 호환성 강제**. `firebase_app_check`가 끌어오는 `androidx.core:core-ktx:1.18.0` / `androidx.core:core:1.18.0`이 compileSdk 36 이상을 요구하므로 35로 두면 빌드 실패. (AVD 검증 2026-05-21 확정)
   - `minSdk` = **Flutter 기본값 유지 (현재 `flutter.minSdkVersion` = 24)**. 명시 숫자로 덮어쓰지 않아도 Firebase·image_picker 모두 정상 작동.
-  - `targetSdk = flutter.targetSdkVersion` — 2026년 7월 기준 Play 제출 최소값(API 35 이상)을 만족하는 Flutter 기본값을 사용하고, 배포 직전에 공식 요구사항을 다시 확인한다.
+  - `targetSdk = flutter.targetSdkVersion` — 현재 Flutter 3.41 환경의 빌드 결과는 API 36을 대상으로 합니다. 2026년 8월 31일부터 Google Play의 새 앱과 업데이트는 API 36 이상이 필요하므로, 업로드 직전에 생성된 AAB와 [Google Play의 대상 API 요구사항](https://developer.android.com/google/play/requirements/target-sdk)을 다시 확인합니다.
 - **Gradle 파일 위치**: `android/app/build.gradle.kts` (Kotlin DSL — Flutter 3.41 신 템플릿 기본). 플러그인 버전 선언은 `android/settings.gradle.kts`의 `plugins {}` 블록에 모인다(§4.4 참조).
 - **Flutter SDK**: `^3.11.4`
 - **Windows 환경 변수**:

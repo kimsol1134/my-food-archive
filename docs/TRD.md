@@ -57,7 +57,7 @@
 | **프레임워크** | `Flutter` | 단일 코드베이스로 iOS 앱을 가장 빠르게 구축. |
 | **상태 관리** | `Provider` | MVP의 복잡도에 가장 적합하고 에이전트가 보일러플레이트 없이 깔끔하게 짤 수 있는 표준 상태 관리. |
 | **로컬 DB** | `Hive` | NoSQL 방식으로 SQL 테이블 생성(Schema) 없이 객체를 바로 저장하여 개발 속도를 2배 이상 단축. 검색(`contains`) 처리에도 매우 빠름. |
-| **사진 및 메타데이터** | `photo_manager` (또는 `image_picker` + `exif` 조합) | iOS의 강력한 개인정보 보호 정책 속에서도 사진의 GPS 메타데이터(위치)를 훼손 없이 가져오기 위함. |
+| **사진 및 메타데이터** | `image_picker` + `exif` | 사용자가 고른 사진을 가져오고, 사진 파일의 EXIF에서 촬영 날짜와 GPS 메타데이터를 읽기 위함. |
 | **위치 변환** | `geocoding` | OS에 내장된 무료 역지오코딩 기능을 사용하여 Google Maps API 등의 추가 비용을 방지. |
 | **AI 비전** | `firebase_core` + `firebase_ai` + `firebase_app_check` | Firebase AI Logic 공식 SDK. API 키를 클라이언트에 노출하지 않고 Gemini Vision을 호출. App Check로 정상 앱(iOS App Attest / DeviceCheck) 요청만 허용. |
 
@@ -74,5 +74,6 @@
 
 ## 5. 보안 (Security)
 * **API 키 노출 방지:** Gemini API 키는 Firebase AI Logic이 Google 서버에 보관함. 앱 번들·소스코드·`.env` 어디에도 키가 들어가지 않으므로 디컴파일로도 추출 불가.
-* **App Check:** iOS = App Attest(iOS 14+) 우선, DeviceCheck fallback. 정상 앱 요청만 Firebase AI Logic 백엔드로 통과시킴. 복제·디컴파일 앱의 무단 호출 차단. 2026-05부터 single-use replay 방지 토큰 적용.
+* **App Check:** iOS에서는 App Attest를 우선 사용하고 DeviceCheck로 대체합니다. Firebase 콘솔에서 Firebase AI Logic의 기본 보호가 `Enforced`인지 배포 전에 확인합니다. 2026년 7월 초 이후 안내 마법사에서는 기본 보호가 자동 적용될 수 있지만, 기존 프로젝트는 직접 켜야 할 수 있습니다. 재전송 공격을 막는 replay protection은 별도 기능이며, 현재 앱에 적용됐다고 가정하지 않습니다. 현재 절차는 [Firebase AI Logic App Check 공식 문서](https://firebase.google.com/docs/ai-logic/app-check)를 기준으로 확인합니다.
+* **최소 지원 버전:** `firebase_ai 3.13.1`의 요구사항에 맞춰 iOS 15.0 이상을 지원합니다. `ios/Podfile`과 Xcode 프로젝트의 Deployment Target을 모두 15.0으로 유지합니다.
 * **클라이언트 코드 원칙:** Gemini 서버 자격 증명, 서비스 계정 키, 비밀번호와 토큰을 코드/`.env`/주석에 두지 않음. `firebase_options.dart`에 보이는 Firebase 클라이언트 `apiKey`는 프로젝트 식별 설정이며 Gemini 서버 키와는 다름. 실제 호출은 App Check와 Firebase AI Logic 적용으로 보호함.

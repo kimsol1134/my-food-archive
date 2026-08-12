@@ -8,17 +8,45 @@ require "pathname"
 
 ROOT = Pathname.new(__dir__).join("..").expand_path
 OUTPUT_ROOT = Pathname.new(ENV.fetch("OUTPUT_ROOT", ROOT.join("site").to_s)).expand_path
-PUBLIC_ROOT = "/my-food-archive/android"
+SITE_PUBLIC_ROOT = "/my-food-archive"
+ANDROID_PUBLIC_ROOT = "#{SITE_PUBLIC_ROOT}/android"
 RAW_ROOT = "https://raw.githubusercontent.com/kimsol1134/my-food-archive/main"
 GITHUB_ROOT = "https://github.com/kimsol1134/my-food-archive"
 
 PAGES = {
-  ROOT.join("docs/privacy-policy.md") => ["privacy-policy", "개인정보처리방침 참고본"],
-  ROOT.join("docs/android/README.md") => ["overview", "책과 온라인 자료를 함께 읽는 순서"],
-  ROOT.join("docs/android/google-play-internal-test-guide.md") => ["internal-test", "15~16장 · Google Play 내부 테스트"],
-  ROOT.join("docs/android/release-roadmap.md") => ["release", "17~18장 · 비공개 테스트와 공개"],
-  ROOT.join("docs/android/app-screenshot-reference.md") => ["app-screenshots", "Android 앱 화면 참고본"],
-  ROOT.join("docs/android/tester-recruitment.md") => ["tester-recruitment", "Google Play 비공개 테스터 모집"]
+  ROOT.join("docs/privacy-policy.md") => {
+    output: "privacy-policy",
+    public_path: "#{SITE_PUBLIC_ROOT}/privacy-policy",
+    title: "개인정보처리방침",
+    description: "My Food Archive 개인정보처리방침",
+    nav_path: "#{SITE_PUBLIC_ROOT}/",
+    nav_label: "← 공식 실습 자료 첫 화면"
+  },
+  ROOT.join("docs/android/README.md") => {
+    output: "android/overview",
+    public_path: "#{ANDROID_PUBLIC_ROOT}/overview",
+    title: "책과 온라인 자료를 함께 읽는 순서"
+  },
+  ROOT.join("docs/android/google-play-internal-test-guide.md") => {
+    output: "android/internal-test",
+    public_path: "#{ANDROID_PUBLIC_ROOT}/internal-test",
+    title: "15~16장 · Google Play 내부 테스트"
+  },
+  ROOT.join("docs/android/release-roadmap.md") => {
+    output: "android/release",
+    public_path: "#{ANDROID_PUBLIC_ROOT}/release",
+    title: "17~18장 · 비공개 테스트와 공개"
+  },
+  ROOT.join("docs/android/app-screenshot-reference.md") => {
+    output: "android/app-screenshots",
+    public_path: "#{ANDROID_PUBLIC_ROOT}/app-screenshots",
+    title: "Android 앱 화면 참고본"
+  },
+  ROOT.join("docs/android/tester-recruitment.md") => {
+    output: "android/tester-recruitment",
+    public_path: "#{ANDROID_PUBLIC_ROOT}/tester-recruitment",
+    title: "Google Play 비공개 테스터 모집"
+  }
 }.freeze
 
 def strip_front_matter(markdown)
@@ -35,8 +63,8 @@ def rewrite_target(target, source)
   suffix = fragment ? "##{fragment}" : ""
 
   if PAGES.key?(absolute)
-    slug = PAGES.fetch(absolute).first
-    return "#{PUBLIC_ROOT}/#{slug}/#{suffix}"
+    public_path = PAGES.fetch(absolute).fetch(:public_path)
+    return "#{public_path}/#{suffix}"
   end
 
   relative = absolute.relative_path_from(ROOT).to_s
@@ -57,15 +85,21 @@ def rewrite_relative_urls(html, source)
   end
 end
 
-def page_template(title, body)
+def page_template(config, body)
+  title = config.fetch(:title)
   escaped_title = CGI.escapeHTML(title)
+  escaped_description = CGI.escapeHTML(
+    config.fetch(:description, "Android 앱 개발과 Google Play 배포가 처음인 독자를 위한 실습 자료")
+  )
+  nav_path = config.fetch(:nav_path, "#{ANDROID_PUBLIC_ROOT}/")
+  nav_label = config.fetch(:nav_label, "← Android 자료 첫 화면")
   <<~HTML
     <!doctype html>
     <html lang="ko">
       <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta name="description" content="Android 앱 개발과 Google Play 배포가 처음인 독자를 위한 실습 자료" />
+        <meta name="description" content="#{escaped_description}" />
         <title>#{escaped_title} | My Food Archive</title>
         <style>
           :root {
@@ -104,20 +138,20 @@ def page_template(title, body)
         </style>
       </head>
       <body>
-        <nav><div><a href="#{PUBLIC_ROOT}/">← Android 자료 첫 화면</a><span>#{escaped_title}</span></div></nav>
+        <nav><div><a href="#{nav_path}">#{nav_label}</a><span>#{escaped_title}</span></div></nav>
         <main>#{body}</main>
       </body>
     </html>
   HTML
 end
 
-PAGES.each do |source, (slug, title)|
+PAGES.each do |source, config|
   markdown = strip_front_matter(source.read)
   body = Kramdown::Document.new(markdown, input: "GFM", hard_wrap: false).to_html
   body = rewrite_relative_urls(body, source)
-  output_directory = OUTPUT_ROOT.join("android", slug)
+  output_directory = OUTPUT_ROOT.join(config.fetch(:output))
   FileUtils.mkdir_p(output_directory)
-  output_directory.join("index.html").write(page_template(title, body))
+  output_directory.join("index.html").write(page_template(config, body))
 end
 
-puts "Built #{PAGES.length} Android reader pages in #{OUTPUT_ROOT}"
+puts "Built #{PAGES.length} reader pages in #{OUTPUT_ROOT}"

@@ -15,7 +15,7 @@
 | 15~18장 · iPhone 앱의 App Store 제출 항목 확인 | [App Store 제출 체크리스트](docs/AppStore_Submission_Checklist.md) |
 | 15~18장 · Android 앱을 Google Play에 배포 | [Android 온라인 실습 자료](https://kimsol1134.github.io/my-food-archive/android/) |
 
-GitHub가 익숙하지 않고 완성 참고본을 한 번에 받고 싶다면 [전체 자료 ZIP 내려받기](https://github.com/kimsol1134/my-food-archive/archive/refs/heads/main.zip)를 누르세요. 내려받은 파일의 압축을 풀면 됩니다.
+GitHub가 익숙하지 않고 완성 참고본을 한 번에 받고 싶다면 [출판 기준 자료 ZIP 내려받기](https://github.com/kimsol1134/my-food-archive/archive/refs/tags/book-v1.0.0.zip)를 누르세요. 내려받은 파일의 압축을 풀면 됩니다. 이 링크는 책과 맞춘 `book-v1.0.0` 버전에 고정되어 있어 이후 코드가 바뀌어도 내용이 달라지지 않습니다.
 
 ## 책 실습 문서
 
@@ -97,14 +97,18 @@ flutter build appbundle --release
 
 ## 문제가 생겼을 때
 
-[GitHub Issues에서 질문하기](https://github.com/kimsol1134/my-food-archive/issues/new)를 이용할 수 있습니다. 질문에는 읽고 있는 책의 장, 사용 중인 운영체제, 화면에 표시된 오류 문장을 함께 적어 주세요.
+[공개 지원 페이지](https://kimsol1134.github.io/my-food-archive/support/)에서 이메일과 GitHub Issues 문의 경로를 확인할 수 있습니다. 질문에는 읽고 있는 책의 장, 사용 중인 운영체제, 화면에 표시된 오류 문장을 함께 적어 주세요.
 
 스크린샷을 첨부할 때는 비밀번호, 인증번호, 결제 정보와 비공개 테스트 참여 링크를 제외하세요.
 
 ## 개인정보처리방침
 
-- [My Food Archive 개인정보처리방침](docs/privacy-policy.md)
-- [지원 및 개인정보 문의](https://github.com/kimsol1134/my-food-archive/issues/new)
+- [My Food Archive 개인정보처리방침](https://kimsol1134.github.io/my-food-archive/privacy-policy/)
+- [지원 및 개인정보 문의](https://kimsol1134.github.io/my-food-archive/support/)
+
+## 이용 조건
+
+앱 소스 코드는 [MIT License](LICENSE)의 적용을 받아 학습·수정·재사용할 수 있습니다. 문서와 사진·스크린샷은 책과 함께 개인 학습에 사용할 수 있으며, 복제·재배포 등 그 밖의 이용 조건은 [LICENSE](LICENSE)의 문서 및 미디어 항목을 확인하세요.
 
 <details>
 <summary>저장소 관리와 출판 검수 문서</summary>

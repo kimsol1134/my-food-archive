@@ -8,10 +8,10 @@ class PrivacyPolicyScreen extends StatelessWidget {
   const PrivacyPolicyScreen({super.key});
 
   static final Uri _policyUri = Uri.parse(
-    'https://github.com/kimsol1134/my-food-archive/blob/main/docs/privacy-policy.md',
+    'https://kimsol1134.github.io/my-food-archive/privacy-policy/',
   );
   static final Uri _supportUri = Uri.parse(
-    'https://github.com/kimsol1134/my-food-archive/issues/new',
+    'https://kimsol1134.github.io/my-food-archive/support/',
   );
 
   Future<void> _open(Uri uri) async {
@@ -32,7 +32,7 @@ class PrivacyPolicyScreen extends StatelessWidget {
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700),
             ),
             const SizedBox(height: 6),
-            const Text('개발자: solkim · 시행일: 2026년 7월 12일'),
+            const Text('개발자: solkim · 최종 수정일: 2026년 8월 12일'),
             const SizedBox(height: 24),
             const _PolicySection(
               title: '기기에 저장되는 정보',
@@ -46,8 +46,12 @@ class PrivacyPolicyScreen extends StatelessWidget {
             ),
             const _PolicySection(
               title: '계정과 광고',
+              body: '회원가입과 사용자 로그인 기능이 없으며 광고를 표시하지 않습니다.',
+            ),
+            const _PolicySection(
+              title: '서비스 보호 정보',
               body:
-                  '회원가입과 로그인 기능이 없으며 광고를 표시하지 않습니다. Firebase App Check와 Play Integrity는 무단 API 사용을 막기 위해 앱·기기 식별 정보를 처리할 수 있습니다.',
+                  'Firebase AI Logic과 App Check는 서비스 식별자, SDK·앱 정보와 기기 무결성 증명 정보를 처리할 수 있습니다. iPhone에서는 App Attest 또는 DeviceCheck를, Android에서는 Play Integrity를 사용합니다.',
             ),
             const _PolicySection(
               title: '문의 및 정책 변경',

@@ -5,22 +5,25 @@ require "pathname"
 require "uri"
 
 ROOT = Pathname.new(__dir__).join("..").expand_path
-SITE_ROOT = Pathname.new(ENV.fetch("SITE_ROOT", ROOT.join("site", "android").to_s)).expand_path
-PUBLIC_ROOT = "/my-food-archive/android"
+SITE_ROOT = Pathname.new(ENV.fetch("SITE_ROOT", ROOT.join("site").to_s)).expand_path
+PUBLIC_ROOT = "/my-food-archive"
 RAW_ROOT = "https://raw.githubusercontent.com/kimsol1134/my-food-archive/main/"
 
 errors = []
 pages = SITE_ROOT.glob("**/index.html").sort
 expected_pages = %w[
-  app-screenshots
-  internal-test
-  overview
-  privacy-policy
-  release
-  tester-recruitment
+  index.html
+  support/index.html
+  privacy-policy/index.html
+  android/index.html
+  android/app-screenshots/index.html
+  android/internal-test/index.html
+  android/overview/index.html
+  android/release/index.html
+  android/tester-recruitment/index.html
 ]
 
-missing_pages = expected_pages.reject { |slug| SITE_ROOT.join(slug, "index.html").file? }
+missing_pages = expected_pages.reject { |path| SITE_ROOT.join(path).file? }
 errors << "Missing generated pages: #{missing_pages.join(', ')}" unless missing_pages.empty?
 
 def page_for_public_url(href)
@@ -34,7 +37,7 @@ pages.each do |page|
   html = page.read
   ids = html.scan(/\bid="([^"]+)"/).flatten.map { |id| CGI.unescapeHTML(id) }
 
-  if html.match?(%r{https://github\.com/kimsol1134/my-food-archive})
+  if page.to_s.include?("/android/") && html.match?(%r{https://github\.com/kimsol1134/my-food-archive})
     errors << "#{page.relative_path_from(ROOT)} links to the GitHub repository UI"
   end
 
@@ -81,7 +84,7 @@ pages.each do |page|
 end
 
 if errors.empty?
-  puts "Android reader check passed: #{pages.length} pages"
+  puts "Reader site check passed: #{pages.length} pages"
 else
   warn errors.join("\n")
   exit 1

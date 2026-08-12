@@ -31,7 +31,8 @@ android {
     }
 
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
+        // This is the author's example ID. Readers must choose their own unique ID
+        // before registering an app with Firebase or Google Play.
         applicationId = "com.solkim.my_food_archive"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
