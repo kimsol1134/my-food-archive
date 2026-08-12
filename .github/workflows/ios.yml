@@ -27,7 +27,7 @@ permissions:
 jobs:
   validate:
     # 책의 고정 참고본은 가변적인 macos-latest 대신 검증한 세대에 고정한다.
-    runs-on: macos-15
+    runs-on: macos-15-intel
     timeout-minutes: 40
 
     steps:
