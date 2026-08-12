@@ -3,11 +3,42 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta http-equiv="refresh" content="0; url=./android/" />
-    <title>Android 온라인 실습 자료</title>
-    <link rel="canonical" href="./android/" />
+    <meta name="description" content="My Food Archive 공식 실습 자료와 지원 페이지" />
+    <title>My Food Archive 공식 실습 자료</title>
+    <style>
+      :root { color-scheme: light; font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif; color: #202124; background: #f7f5f2; }
+      * { box-sizing: border-box; }
+      body { margin: 0; padding: 40px 20px 64px; }
+      main { width: min(720px, 100%); margin: 0 auto; }
+      h1 { margin: 0 0 18px; font-size: clamp(2.1rem, 8vw, 3.5rem); line-height: 1.12; }
+      .intro { margin-bottom: 30px; font-size: 1.08rem; line-height: 1.75; }
+      .card { display: block; margin: 14px 0; padding: 22px; border: 1px solid #ded7cf; border-radius: 18px; background: #fff; color: inherit; text-decoration: none; }
+      .card:hover, .card:focus-visible { border-color: #77543a; box-shadow: 0 8px 24px rgba(70, 46, 28, .09); outline: none; }
+      .card strong { display: block; margin-bottom: 8px; font-size: 1.2rem; }
+      .card span { color: #5f6368; line-height: 1.6; }
+      footer { margin-top: 30px; color: #6d655f; font-size: .92rem; line-height: 1.7; }
+      footer a { color: #135f9b; }
+    </style>
   </head>
   <body>
-    <p><a href="./android/">Android 온라인 실습 자료로 이동합니다.</a></p>
+    <main>
+      <h1>My Food Archive<br />공식 실습 자료</h1>
+      <p class="intro">길벗출판사 도서 《클로드 코드로 앱스토어까지》에서 만드는 맛집 아카이브의 온라인 자료입니다.</p>
+
+      <a class="card" href="./android/">
+        <strong>Android 온라인 실습 자료</strong>
+        <span>Google Play 내부 테스트부터 비공개 테스트와 공개까지 이어서 진행합니다.</span>
+      </a>
+      <a class="card" href="./support/">
+        <strong>지원 및 문의</strong>
+        <span>오류를 제보하거나 실습 중 막힌 내용을 문의하는 방법을 확인합니다.</span>
+      </a>
+      <a class="card" href="./privacy-policy/">
+        <strong>개인정보처리방침</strong>
+        <span>사진, 로컬 기록, AI 분석과 앱 보호 정보의 처리 방식을 확인합니다.</span>
+      </a>
+
+      <footer>완성 코드와 저자 예시 문서는 <a href="https://github.com/kimsol1134/my-food-archive">공식 GitHub 저장소</a>에서 볼 수 있습니다.</footer>
+    </main>
   </body>
 </html>

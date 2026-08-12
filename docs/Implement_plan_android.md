@@ -131,7 +131,7 @@ android/
   - `compileSdk = 36`
     > **사유**: `firebase_app_check`가 끌어오는 `androidx.core:core-ktx:1.18.0` / `androidx.core:core:1.18.0`가 **compileSdk 36 이상을 강제**한다. 35로 두면 `Dependency 'androidx.core:core-ktx:1.18.0' requires libraries and applications that depend on it to compile against version 36 or later of the Android APIs.` 에러로 두 번째 빌드에서 실패. (AVD 검증 2026-05-21 확정)
   - `minSdk` = **Flutter 기본값 유지 (현재 `flutter.minSdkVersion` = 24)** — `flutter create` 템플릿이 자동으로 채우므로 명시 숫자로 덮어쓰지 않아도 됨. Firebase·image_picker 모두 24에서 정상 동작.
-  - `targetSdk = flutter.targetSdkVersion` — 2026년 7월 기준 Google Play 제출 최소값(API 35 이상)을 만족하는지 배포 직전에 확인
+  - `targetSdk = flutter.targetSdkVersion` — 현재 Flutter 3.41 환경의 빌드 결과는 API 36. 2026년 8월 31일부터 Google Play의 새 앱과 업데이트는 API 36 이상이 필요하므로 업로드 직전에 생성된 AAB와 [Google Play의 대상 API 요구사항](https://developer.android.com/google/play/requirements/target-sdk)을 다시 확인
   - `applicationId = "com.solkim.my_food_archive"` (Firebase Android 등록과 일치)
   - Java 17 source/target compatibility (Flutter 3.41 템플릿이 기본 설정)
 - **`android/settings.gradle.kts`의 `plugins {}` 블록에 Google Services classpath 선언만 추가** (Firebase 적용은 Task 11에서):

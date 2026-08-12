@@ -1,9 +1,10 @@
 # App Store Connect 입력 가이드 (My Food Archive 1.0)
 
-> App Store Connect 좌측 메뉴 순서대로, **앱 정보 → iOS 앱 1.0** 페이지의 각 필드에 그대로 입력하세요.
-> 이미 채워진 값(빌드, 번들 ID 등)은 "확인"만 하면 됩니다.
+> 이 문서는 **저자 앱의 입력 예시**입니다. 앱 이름·번들 ID·Apple ID·연락처·스크린샷·개인정보 답변을 독자 앱에 그대로 복사하지 마세요. 자신의 프로젝트와 실제 배포 빌드를 확인한 뒤 해당 값으로 바꿉니다.
+> 저자 앱을 제출할 때도 App Store Connect가 이미 채운 값과 이 문서가 일치하는지 마지막으로 확인합니다.
 
 작성일: 2026-05-19
+최종 검토일: 2026-08-12
 빌드: **1.0.0(5)** — iPhone 전용 / 위치 권한 제거 / 런치 이미지 적용 / 빈 화면 개선
 Apple ID: `6770387817`
 배포 대상: **iPhone 전용** (iPad 미지원)
@@ -20,6 +21,7 @@ Apple ID: `6770387817`
 |---|---|
 | **이름** (30자) | `My Food Archive` |
 | **부제** (30자) | `내가 먹은 음식을 기록하는 다이어리` |
+| **개인정보처리방침 URL** | `https://kimsol1134.github.io/my-food-archive/privacy-policy/` |
 
 > 이미 입력된 값을 그대로 유지하면 됩니다. 부제는 검색 노출에 영향이 크니 키워드 의식해서 정해도 좋습니다.
 
@@ -38,7 +40,7 @@ Apple ID: `6770387817`
 
 ## A-3. 연령 등급 설정 🚨 (중요 — 상세 가이드)
 
-**"연령 등급 설정"** 버튼 클릭 시 6개 카테고리 설문이 나옵니다. 각 항목 답변 가이드:
+**"연령 등급 설정"** 버튼 클릭 시 7개 카테고리 설문이 나옵니다. 각 항목 답변 가이드:
 
 ### 1) 앱 내 제어 (App-Level Controls)
 
@@ -152,27 +154,25 @@ Apple ID: `6770387817`
 
 **답변: 예 (Yes)** — Gemini API에 사진을 전송하므로 "수집"으로 분류됨.
 
-## B-2. 수집 항목 체크
+## B-2. 저자 빌드에서 확인할 수집 항목
 
-다음 한 항목만 체크:
+이 앱은 선택한 **원본 사진 파일**을 Firebase AI Logic으로 보냅니다. 원본에는 EXIF 위치 정보가 남아 있을 수 있습니다. 또한 Firebase AI Logic, Authentication과 App Check가 서비스 식별자와 기기 무결성 증명 정보를 처리합니다. 따라서 사진 한 항목만 신고하면 안 됩니다.
 
-### ☑ 사용자 콘텐츠 → 사진 또는 비디오 (Photos or Videos)
+| 데이터 유형 | 저자 빌드의 확인 기준 | 목적 | 추적 사용 |
+|---|---|---|---|
+| **사용자 콘텐츠 → 사진 또는 비디오** | 원본 사진을 AI 서비스로 보내므로 우선 선택 | 앱 기능 | 사용 안 함 |
+| **위치 → 정확한 위치** | 원본 사진에 EXIF GPS가 포함될 수 있으므로 보수적으로 선택하고 최종 빌드에서 확인 | 앱 기능 | 사용 안 함 |
+| **식별자** | Firebase Authentication/App Check가 식별·증명 정보를 처리하므로 Privacy Report에서 유형과 연결 여부를 확인한 뒤 선택 | 앱 기능·보안 | 사용 안 함 |
 
-후속 질문:
+회원 계정이 없더라도 기기나 앱 인스턴스 식별 정보가 처리될 수 있습니다. 위 표는 누락을 막는 **보수적인 출발점**입니다. 각 항목의 최종 선택과 **사용자 신원 연결 여부**는 실제 배포 아카이브에서 Xcode가 생성한 Privacy Report, Firebase의 공개 안내와 현재 콘솔 설정을 기준으로 답합니다. 근거 없이 모두 "연결 안 됨"으로 고정하지 않습니다.
 
-| 질문 | 답변 |
-|---|---|
-| 데이터의 사용 목적 | **앱 기능 (App Functionality)** |
-| 데이터가 사용자 신원과 연결됩니까? | **아니요 (Not Linked to User)** |
-| 데이터가 사용자 추적에 사용됩니까? | **아니요 (Not Used for Tracking)** |
+## B-3. 저장하기 전 교차 확인
 
-### 체크하지 않을 항목 (참고)
-
-- 위치 (EXIF 좌표는 디바이스 외부로 전송 안 됨)
-- 연락처
-- 식별자
-- 사용량 데이터
-- 진단
+1. Xcode에서 실제 배포용으로 Product → Archive를 실행합니다.
+2. Organizer에서 아카이브를 보조 클릭한 뒤 **Generate Privacy Report**를 선택합니다. 자세한 순서는 [Apple의 Privacy Report 생성 안내](https://developer.apple.com/documentation/BundleResources/describing-data-use-in-privacy-manifests)를 참고합니다.
+3. [Firebase의 Apple 플랫폼 데이터 공개 안내](https://firebase.google.com/docs/ios/app-store-data-collection)에서 `FirebaseAILogic`, `FirebaseAppCheck`, `FirebaseAuthentication` 항목을 대조합니다.
+4. 사진의 EXIF를 전송 전에 제거하도록 코드를 바꿨다면 그 배포 빌드에서 다시 확인한 뒤 위치 답변을 조정합니다.
+5. 앱 기능이나 SDK가 바뀔 때마다 이 답변과 개인정보처리방침을 함께 갱신합니다.
 
 ---
 
@@ -195,7 +195,7 @@ Apple ID: `6770387817`
 
 ### iPad
 
-→ **불필요** ✅ (1.0.0(4)부터 iPhone 전용으로 빌드됨, `TARGETED_DEVICE_FAMILY = 1`)
+→ **불필요** ✅ (1.0.0(5)는 iPhone 전용으로 빌드됨, `TARGETED_DEVICE_FAMILY = 1`)
 App Store Connect에서 iPad 탭이 자동으로 비활성화되어 스크린샷 업로드 칸이 표시되지 않습니다.
 
 ### Apple Watch
@@ -279,10 +279,10 @@ My Food Archive는 사진 한 장으로 끝나는 가장 단순한
 ## C-5. 지원 URL (필수)
 
 ```
-<PART D에서 만든 Notion 공개 페이지 URL을 그대로 입력>
+https://kimsol1134.github.io/my-food-archive/support/
 ```
 
-> **개인정보처리방침 URL과 동일한 URL을 입력해도 무방합니다.** 단, 그 페이지 안에 "지원/문의" 섹션이 반드시 포함되어 있어야 합니다 (PART D 통합 템플릿 사용). 지원 정보 없는 순수 개인정보처리방침 페이지만 양쪽에 넣으면 가이드라인 1.5 위반으로 반려될 수 있습니다.
+> 이메일과 문제 신고 경로가 함께 보이는 공개 지원 페이지입니다. 개인정보처리방침 URL과 역할이 다르므로 각각의 주소를 입력합니다.
 
 ## C-6. 마케팅 URL (선택)
 
@@ -346,17 +346,19 @@ My Food Archive는 사진 한 장으로 끝나는 가장 단순한
 ### 메모 (4,000자)
 
 ```
-This app is a personal food journal that stores all user data
-locally in Hive (on-device DB). It does not require sign-in.
+This app is a personal food journal. Saved records and copied
+photos are stored locally in Hive and the app's private storage.
+It does not require sign-in.
 
 AI usage:
 The app uses Google Gemini (gemini-2.5-flash) via Firebase AI
 Logic to analyze a user-selected photo and suggest the menu
 name and food category (Korean, Chinese, Japanese, Western,
-Cafe/Dessert, etc.) when the user explicitly taps the
-"AI Analyze" button on the new-record screen. The restaurant
-name is entered manually by the user. No other data is sent
-off-device.
+Cafe/Dessert, etc.). Analysis starts automatically after the
+user selects a photo. The restaurant name is entered manually.
+The selected image file can include EXIF capture-date or GPS
+metadata. Firebase SDK/app information and App Check attestation
+data can also be processed as described in the privacy policy.
 
 Permissions:
 - Photo library: required to import food photos selected by
@@ -367,8 +369,9 @@ Permissions:
   (no live location tracking, no NSLocationWhenInUseUsageDescription).
 
 Security:
-Firebase App Check verifies the legitimacy of API calls. The
-only encryption used is standard HTTPS (exempt under U.S.
+Firebase App Check uses App Attest with a DeviceCheck fallback
+to verify the legitimacy of API calls. The only encryption used
+is standard HTTPS (exempt under U.S.
 export regulations; declared via
 ITSAppUsesNonExemptEncryption = false).
 
@@ -407,127 +410,23 @@ No demo account, login, or special configuration is required.
 
 ---
 
-# 📝 PART D. 통합 페이지: 지원 + 개인정보처리방침 (필수, 가장 먼저 준비)
+# 📝 PART D. 공개 지원 페이지와 개인정보처리방침 (필수)
 
-> App Store Connect에서 요구하는 두 가지 URL:
-> - **개인정보처리방침 URL** (앱 정보 > 현지화 가능한 정보, 그리고 앱 개인정보 보호 섹션)
-> - **지원 URL** (iOS 앱 1.0)
->
-> 한 페이지 안에 **"지원/문의" 섹션 + "개인정보처리방침" 섹션**을 모두 포함시키면, **같은 URL을 양쪽에 입력**해도 됩니다.
+저자 앱의 공개 페이지는 이미 저장소와 GitHub Pages에서 관리합니다. 별도의 Notion 페이지를 만들거나 같은 내용을 두 곳에 복사하지 않습니다.
 
-## 가장 빠른 방법: Notion 공개 페이지
+| App Store Connect 필드 | 입력할 공개 URL |
+|---|---|
+| **지원 URL** | `https://kimsol1134.github.io/my-food-archive/support/` |
+| **개인정보처리방침 URL** | `https://kimsol1134.github.io/my-food-archive/privacy-policy/` |
 
-1. Notion에서 새 페이지 만들기 → 제목 `My Food Archive — 지원 및 개인정보처리방침`
-2. 아래 통합 본문을 그대로 복사·붙여넣기
-3. `<본인 이메일>` 자리(총 2곳)만 교체
-4. 우측 상단 **공유** → **웹에 게시** 활성화
-5. 게시된 URL을 복사 → App Store Connect의 **지원 URL**과 **개인정보처리방침 URL** 양쪽에 동일하게 입력
+원문은 각각 저장소의 `site/support/index.html`과 `docs/privacy-policy.md`에서 관리합니다. 앱 내부 화면도 같은 공개 URL을 엽니다.
 
-> 깔끔하게 분리하고 싶다면 Notion 페이지 안에서 두 섹션을 각각 **서브페이지로 만들고 각자의 공개 URL을 따로 입력**해도 됩니다. 하지만 한 페이지가 가장 간단합니다.
+## 제출 전에 확인할 것
 
-## 통합 본문 (그대로 복사 가능, 이메일 2곳만 교체)
-
-```markdown
-# My Food Archive
-
-iOS용 개인 음식 기록 앱.
-사진 한 장으로 끝나는 가장 단순한 "먹은 것 일기" 앱입니다.
-
----
-
-## 📮 지원 / 문의 (Support)
-
-문의 사항이나 버그 신고, 기능 제안은 아래 이메일로 연락주세요.
-보통 영업일 기준 1–2일 이내에 답변드립니다.
-
-- **이메일**: <본인 이메일>
-- **앱 버전**: 1.0
-- **지원 OS**: iOS 13.0 이상 (iPhone 전용)
-
-### 자주 묻는 질문 (FAQ)
-
-**Q. 기록이 다른 기기로 동기화되나요?**
-A. 현재 1.0 버전은 디바이스 내 로컬 저장만 지원합니다.
-   동기화는 향후 업데이트에서 검토할 예정입니다.
-
-**Q. AI가 음식 이름을 잘못 인식해요.**
-A. 사진의 각도·조명·구도에 따라 결과가 달라질 수 있습니다.
-   저장 전 새 기록 화면에서 직접 수정하실 수 있습니다.
-
-**Q. 데이터를 백업할 수 있나요?**
-A. iOS의 "이 iPhone 백업"(iCloud 또는 Mac/PC 백업)에 앱
-   데이터가 포함됩니다. 별도의 수동 백업 기능은 1.0에 없습니다.
-
-**Q. 사진이 외부 서버에 저장되나요?**
-A. 아니요. 모든 사진과 기록은 디바이스에만 저장됩니다.
-   단, 사용자가 "AI 분석" 버튼을 직접 눌렀을 때에 한해
-   해당 사진 1장이 Google Gemini API로 전송되어 분석됩니다.
-   자세한 내용은 아래 개인정보처리방침을 참고하세요.
-
-**Q. 앱을 삭제하면 데이터는 어떻게 되나요?**
-A. 앱 삭제 시 디바이스에 저장된 모든 음식 기록이 함께
-   영구 삭제됩니다. 사전 백업을 권장합니다.
-
----
-
-## 🔒 개인정보처리방침 (Privacy Policy)
-
-최종 업데이트: 2026-05-19
-
-본 앱(My Food Archive, 이하 "앱")은 사용자가 음식 사진과
-관련 기록을 디바이스에 보관할 수 있도록 돕는 도구입니다.
-
-### 1. 수집하는 정보
-앱은 다음 정보를 처리합니다.
-- 사용자가 직접 선택한 음식 사진 (디바이스 갤러리에서 불러옴)
-- 사진의 EXIF 정보 중 촬영 위치(위·경도) — 지역명 자동
-  입력에만 사용
-- 사용자가 입력한 음식 이름, 메모, 평점 등 텍스트
-
-### 2. 정보의 저장
-모든 정보는 사용자의 디바이스 내부 저장소(Hive 로컬 DB)에만
-저장되며, 본 앱의 운영자 서버로 전송되거나 저장되지 않습니다.
-
-### 3. 외부 서비스로의 전송
-앱은 사진 분석 기능을 제공하기 위해 사용자가 새 기록
-화면에서 사진을 선택했을 때, 해당 사진을 Google의 Gemini
-API(Firebase AI Logic 경유, 모델: gemini-2.5-flash)로
-전송하여 메뉴 이름과 음식 카테고리(한식/중식/일식/양식/
-카페·디저트 등)를 자동 추출합니다.
-- 전송되는 데이터: 사용자가 선택한 사진 1장
-- 목적: 메뉴 이름·카테고리 자동 분석 (식당 이름은 사용자가
-  직접 입력)
-- 보관: Google의 정책을 따름
-  (https://ai.google.dev/gemini-api/terms 참고)
-
-또한 앱은 Firebase App Check를 통해 API 호출의 정당성을
-검증하기 위한 기기 식별 토큰을 Google에 전송합니다.
-
-### 4. 위치 정보
-앱은 디바이스의 실시간 위치를 요청하거나 추적하지 않습니다.
-별도의 위치 권한도 요청하지 않습니다. 사용자가 선택한 사진에
-포함된 EXIF 촬영 좌표(위·경도)만 읽어, 이를 지역명으로
-변환하기 위해 디바이스 내장 Geocoding 기능을 사용합니다.
-EXIF가 없는 사진은 지역 정보가 비어 있을 뿐 다른 영향은
-없습니다.
-
-### 5. 제3자 광고/분석 SDK
-본 앱은 광고 SDK 및 사용자 행동을 추적하는 분석 SDK를
-포함하지 않습니다.
-
-### 6. 만 13세 미만 아동의 개인정보
-본 앱은 만 13세 미만 아동을 대상으로 하지 않으며, 해당
-아동으로부터 의도적으로 개인정보를 수집하지 않습니다.
-
-### 7. 사용자 권리
-사용자는 언제든지 앱 내에서 기록을 삭제할 수 있고, iOS의
-"앱 삭제"를 통해 모든 로컬 데이터를 영구 삭제할 수 있습니다.
-
-### 8. 문의
-개인정보 처리에 관한 문의: <본인 이메일>
-```
-
-> 위 본문 중 `<본인 이메일>` 2곳만 교체하면 그대로 사용 가능합니다.
+1. 두 주소를 로그아웃한 브라우저나 시크릿 창에서 엽니다.
+2. 지원 페이지에서 이메일과 문제 신고 링크가 보이는지 확인합니다.
+3. 개인정보처리방침에 사진 전송, EXIF 메타데이터, Firebase AI Logic, Authentication, App Check, App Attest/DeviceCheck 내용이 포함됐는지 확인합니다.
+4. 앱 기능이나 SDK를 바꿨다면 `docs/privacy-policy.md`, 앱 내부 개인정보 화면, App Store Connect 개인정보 답변을 같은 날 함께 갱신합니다.
 
 ---
 
@@ -613,7 +512,7 @@ EXIF가 없는 사진은 지역 정보가 비어 있을 뿐 다른 영향은
 
 | 거절 사유 코드 | 내용 | My Food Archive 대응 |
 |---|---|---|
-| **5.1.1** | 개인정보처리방침 누락 | ⚠️ PART D에서 직접 준비 필요 |
+| **5.1.1** | 개인정보처리방침 누락 | ✅ PART D의 공개 URL 준비 완료, 제출 직전 접속 확인 |
 | **2.3.1** | 스크린샷이 실제 앱과 다름 | 시뮬레이터에서 실제 화면 그대로 캡처 |
 | **2.1** | 크래시 또는 버그 | ✅ QA 완료 (Task 17) |
 | **4.0** | 디자인 미완성 | ✅ UI 폴리시 완료 |
@@ -627,5 +526,5 @@ EXIF가 없는 사진은 지역 정보가 비어 있을 뿐 다른 영향은
 - Apple ID: `6770387817`
 - Team ID: `D48DDX5D5W`
 - Bundle ID: `com.solkim.myFoodArchive`
-- 현재 빌드: **1.0.0 (4)** (iPhone 전용)
+- 현재 빌드: **1.0.0 (5)** (iPhone 전용, iOS 15.0 이상)
 - Delivery UUID: `8bbcb95f-3a4e-4502-b07f-8433f70b3361`

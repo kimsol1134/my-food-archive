@@ -65,7 +65,7 @@ flutter build appbundle --release
 
 ## 스토어 심사용 비(非)코드 준비물
 
-- **개인정보처리방침 URL**: `docs/privacy-policy.md`를 공개된 읽기 전용 URL로 제공하고 앱 내부의 개인정보처리방침 화면과 내용이 일치하게 유지한다.
+- **개인정보처리방침 URL**: `https://kimsol1134.github.io/my-food-archive/privacy-policy/`를 사용하고, 원문 `docs/privacy-policy.md`와 앱 내부의 개인정보처리방침 화면을 일치하게 유지한다.
 - **데이터 보안**: 기록과 사진은 로컬 저장되지만, 사용자가 고른 사진은 AI 분석을 위해 Firebase AI Logic/Gemini로 전송된다. "서버 미전송"으로 답하면 안 된다.
 - **그래픽 리소스**: 512×512 앱 아이콘, 기능 그래픽 1024×500, 독자의 실제 Android 설치본에서 촬영한 원본 스크린샷 2장 이상. `docs/book-screenshots/android-app/`은 저자 앱의 출판 참고본이며 독자의 제출 이미지가 아니다.
 - **콘텐츠 등급 설문**, 대상 연령, 카테고리(음식/라이프스타일).
