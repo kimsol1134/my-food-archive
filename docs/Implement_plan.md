@@ -1,5 +1,7 @@
 # 📱 [마이 맛집 아카이브] MVP 구현 계획서
 
+> **문서 상태:** 책에 실린 iPhone 앱의 최종 코드와 동기화한 저자 예시본입니다. 체크된 항목은 저자 앱에서 구현과 확인을 마쳤다는 뜻입니다. 독자의 새 프로젝트 진행 상태를 뜻하지 않습니다.
+
 ## 진행 체크리스트
 
 - [x] Task 1: Flutter 프로젝트 생성 및 패키지 의존성 추가
@@ -64,6 +66,7 @@ Task 1 (프로젝트 생성)
 ```
 lib/
 ├── main.dart
+├── firebase_options.dart
 ├── constants/
 │   ├── app_colors.dart
 │   └── app_text_styles.dart
@@ -83,7 +86,10 @@ lib/
 ├── screens/
 │   ├── home_screen.dart
 │   ├── detail_screen.dart
-│   └── add_edit_record_screen.dart
+│   ├── add_edit_record_screen.dart
+│   └── privacy_policy_screen.dart
+├── utils/
+│   └── app_paths.dart
 └── widgets/
     ├── archive_grid_card.dart
     └── toast_message.dart
@@ -106,6 +112,7 @@ lib/
   - `firebase_core`, `firebase_ai`, `firebase_app_check` (Firebase AI Logic을 통한 Gemini Vision; 키는 Firebase 서버 보관)
   - `uuid` (고유 ID 생성)
   - `path_provider` (로컬 파일 경로)
+  - `url_launcher` (온라인 개인정보처리방침과 지원 문의 열기)
 - `dev_dependencies`에 추가:
   - `hive_generator`, `build_runner` (Hive TypeAdapter 코드 생성)
 
@@ -120,18 +127,21 @@ lib/
 
 ## Task 2: iOS 권한 설정
 
-**목표:** iOS에서 갤러리 접근과 위치 정보 사용에 필요한 권한 문구를 설정한다.
+**목표:** iOS에서 사용자가 고른 사진에 접근하는 데 필요한 권한 문구만 설정한다.
 
 **구현할 기능:**
-- `ios/Runner/Info.plist`에 권한 추가:
+- `ios/Runner/Info.plist`에 사진 권한만 추가:
   - `NSPhotoLibraryUsageDescription`: "음식 사진을 불러오고 저장하기 위해 갤러리 접근 권한이 필요합니다."
-  - `NSLocationWhenInUseUsageDescription`: "사진의 촬영 위치(EXIF)를 기반으로 맛집의 지역 정보를 자동으로 입력하기 위해 권한이 필요합니다."
+- `NSLocationWhenInUseUsageDescription`는 추가하지 않음:
+  - 이 앱은 현재 위치를 실시간으로 조회하지 않는다.
+  - 사용자가 고른 사진에 EXIF GPS가 있을 때만 그 좌표를 지역명으로 바꾼다.
 
 **예상 수정 파일:**
 - `ios/Runner/Info.plist`
 
 **완료 확인 방법:**
-- iOS 시뮬레이터에서 앱 실행 시 권한 요청 팝업이 한국어 문구로 표시됨
+- 사진을 처음 고를 때 사진 접근 안내가 한국어로 표시됨
+- 앱 실행과 사진 선택 과정에서 현재 위치 권한 팝업이 표시되지 않음
 
 ---
 
@@ -181,7 +191,7 @@ lib/
   - `updateItem(ArchiveItem)`: Update
   - `deleteItem(String id)`: Delete
   - `getAllItems()`: 전체 조회 (최신순 정렬)
-  - `searchItems(String query)`: `searchKeyword.contains(query)` 필터링
+  - `searchItems(String query)`: 검색어를 공백 기준으로 나누고, 각 단어가 `searchKeyword`에 모두 포함되는 항목만 필터링
 
 **예상 수정 파일:**
 - `lib/models/archive_item.dart` (신규)
@@ -230,8 +240,10 @@ lib/
 **구현할 기능:**
 - `lib/screens/home_screen.dart` 생성:
   - 상단 검색 `TextField`: Surface 배경, borderRadius 10, 좌측 돋보기 아이콘, 높이 36px, 밑줄 없음
+  - AppBar 우측 정보 아이콘: `PrivacyPolicyScreen`으로 이동
   - 본문: `Consumer<ArchiveProvider>`로 데이터 상태 분기
-    - Empty State (0개): 중앙에 `CupertinoIcons.photo_on_rectangle`(64px) + "아직 저장된 맛집이 없어요." (TextSub 컬러)
+    - Empty State (0개): `CupertinoIcons.photo_on_rectangle`(72px) + "아직 저장된 맛집이 없어요" + "사진 한 장을 골라 첫 맛집 기록을 만들어보세요" + `첫 기록 추가` 버튼
+    - 검색 결과 없음: 검색 아이콘 + "검색 결과가 없습니다"
     - Data State: `GridView.builder` (crossAxisCount: 2, crossAxisSpacing: 12, mainAxisSpacing: 16)
   - FAB: 우측 하단, 56x56, Primary 배경, 그림자 `blurRadius: 10`
   - 전역 `BouncingScrollPhysics`
@@ -242,11 +254,13 @@ lib/
 
 **예상 수정 파일:**
 - `lib/screens/home_screen.dart` (신규)
+- `lib/screens/privacy_policy_screen.dart` (신규)
 - `lib/widgets/archive_grid_card.dart` (신규)
 - `lib/main.dart` (home 화면 지정)
 
 **완료 확인 방법:**
 - 시뮬레이터에서 Empty State 화면 정상 표시
+- `첫 기록 추가` 버튼과 우측 정보 아이콘이 각각 사진 선택과 개인정보처리방침 화면으로 연결됨
 - 검색창이 iOS 스타일로 렌더링 (Surface 배경, 밑줄 없음)
 - FAB 버튼이 우측 하단에 파란색으로 표시
 
@@ -341,9 +355,10 @@ lib/
 
 **구현할 기능:**
 - `lib/services/photo_service.dart` 생성:
-  - `pickImage()`: `ImagePicker.pickImage(source: ImageSource.gallery)` 호출
-  - 선택된 이미지를 앱 로컬 디렉토리(`getApplicationDocumentsDirectory`)로 복사
-  - 권한 거부 시 null 반환
+  - `pickAndPersistImage()`: `ImagePicker.pickImage(source: ImageSource.gallery, imageQuality: 90)` 호출
+  - 선택된 이미지를 앱 로컬 디렉토리의 `images/` 폴더로 복사
+  - DB에는 절대 경로가 아닌 `images/<파일명>` 상대 경로 저장. `AppPaths.resolve()`로 현재 앱 문서 경로와 결합
+  - 결과를 `success`, `cancelled`, `permissionDenied`, `error`로 구분
 - `lib/services/exif_service.dart` 생성:
   - `extractMetadata(String filePath)`: EXIF 파싱
   - 촬영 날짜(`DateTime`) 추출: `DateTimeOriginal` 태그
@@ -364,6 +379,7 @@ lib/
 - `lib/services/exif_service.dart` (신규)
 - `lib/services/location_service.dart` (신규)
 - `lib/models/exif_result.dart` (신규)
+- `lib/utils/app_paths.dart` (신규, 상대 경로를 현재 앱 문서 경로로 변환)
 - `lib/screens/home_screen.dart` (FAB에 사진 선택 로직 연결)
 - `lib/screens/add_edit_record_screen.dart` (이미지 경로 수신 및 EXIF 추출)
 
@@ -390,7 +406,11 @@ lib/
 **구현할 기능:**
 - `lib/main.dart` 초기화:
   - `await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform)`
-  - `await FirebaseAppCheck.instance.activate(appleProvider: AppleProvider.appAttest)`
+  - `await FirebaseAppCheck.instance.activate(...)`
+    - Debug 빌드: `AppleDebugProvider`
+    - 배포 빌드: `AppleAppAttestWithDeviceCheckFallbackProvider`
+    - Android 공통 코드에서는 Debug Provider와 Play Integrity도 함께 분기
+  - Firebase 초기화가 실패해도 앱을 종료하지 않고 로컬 저장 기능은 계속 실행. AI 분석만 사용할 수 없는 상태로 처리
 - `lib/services/vision_ai_service.dart` 생성:
   - `firebase_ai` SDK로 Gemini Vision 모델 인스턴스 생성: `FirebaseAI.googleAI().generativeModel(model: 'gemini-2.5-flash')`
   - `analyzeImage(String imagePath)`:
@@ -419,7 +439,7 @@ lib/
 - 로딩 중 화면 터치 차단 동작 확인
 - 네트워크 끊긴 상태: 타임아웃 후 빈 폼 + 안내 메시지 표시
 - App Check 토큰 발급 실패 시에도 빈 폼 + 안내 토스트로 정상 처리
-- 앱 코드 어디에도 Gemini API 키가 들어가지 않음 (`grep -r "AIza" lib/` 결과 0건)
+- `firebase_options.dart`의 Firebase 클라이언트 식별값과 Gemini 서버 자격 증명을 구분함. 서비스 계정 키, 비밀번호, 인증 토큰과 Gemini 서버 키가 저장소에 없음
 - 앱 크래시 없이 모든 실패 케이스 정상 처리
 
 ---
@@ -483,10 +503,11 @@ lib/
 **구현할 기능:**
 - HomeScreen 검색창 연결:
   - `TextEditingController` + `onChanged` 콜백
-  - 입력 텍스트에서 공백 제거 후 `ArchiveProvider.search(query)` 호출
+  - 입력한 검색어를 그대로 `ArchiveProvider.search(query)`에 전달
   - 검색어 비어있으면 전체 목록 복원
 - ArchiveProvider 검색 로직:
-  - `search(String query)`: 공백 제거된 query로 `item.searchKeyword.contains(query)` 필터링
+  - `LocalDBService.searchItems(String query)`: 검색어를 공백 기준으로 나눠 빈 단어 제거
+  - 모든 검색 단어가 `item.searchKeyword`에 포함된 항목만 필터링. 예: "연남동 파스타"는 두 단어를 모두 포함한 기록 반환
   - 빈 query 시 전체 목록 반환
 - 검색 결과 없을 때: "검색 결과가 없습니다" 텍스트 표시
 
@@ -496,7 +517,7 @@ lib/
 
 **완료 확인 방법:**
 - 여러 레코드 저장 후 "파스타" 입력 → 파스타 관련 레코드만 필터링
-- "연남동 한식" 입력 → "연남동한식"으로 변환되어 검색
+- "연남동 한식" 입력 → "연남동"과 "한식"을 모두 포함한 기록만 검색
 - 검색어 전체 삭제 → 전체 목록 복원
 - 매칭 결과 없을 때 안내 텍스트 표시
 
@@ -509,11 +530,11 @@ lib/
 **구현할 기능:**
 - 사진 미리보기 영역에 `GestureDetector` 또는 '사진 변경' 버튼 추가
 - 탭 시:
-  1. `PhotoService.pickImage()` 재호출
+  1. `PhotoService.pickAndPersistImage()` 재호출
   2. 새 이미지 선택됨 → 이전 복사 이미지 삭제
-  3. 로딩 오버레이 재표시
+  3. 지역·메뉴·카테고리·날짜를 비우고 로딩 오버레이 재표시
   4. EXIF 추출 + AI 분석 재실행
-  5. 결과로 폼 TextField 값 덮어쓰기 (식당명은 유지)
+  5. 새 결과로 지역·메뉴·카테고리·날짜를 채움. 식당명은 유지
 - 재선택 취소 → 기존 상태 유지
 
 **예상 수정 파일:**
@@ -560,16 +581,17 @@ lib/
 
 ## Task 17: 전체 통합 테스트 및 UI 폴리시
 
-**목표:** 전체 유스케이스(UC-01 ~ UC-06)를 시뮬레이터에서 검증하고, 디자인 가이드 준수 여부를 최종 확인한다.
+**목표:** 전체 유스케이스(UC-01 ~ UC-07)를 시뮬레이터에서 검증하고, 디자인 가이드 준수 여부를 최종 확인한다.
 
 **구현할 기능:**
 - 유스케이스 검증:
-  - UC-01: 앱 실행 → Empty State → 데이터 추가 후 갤러리 최신순 정렬
+  - UC-01: 앱 실행 → 개선된 Empty State의 `첫 기록 추가` → 데이터 추가 후 갤러리 최신순 정렬
   - UC-02: 검색 "연남동 파스타" → 필터링 → 검색어 삭제 → 전체 복원
   - UC-03: FAB → 사진 선택 → AI 로딩 → 폼 채움 → 식당명 입력 → 저장 → 홈 갱신
   - UC-04: 카드 탭 → 상세 화면 → 원본 사진 + 메타데이터
   - UC-05: 상세 → 수정 → 텍스트 변경 → 저장 → 홈에서 변경 확인
   - UC-06: 상세 → 삭제 → 확인 팝업 → 삭제 → 홈 복귀
+  - UC-07: 홈 정보 아이콘 → 앱 정보 및 개인정보처리방침 → 외부 링크 확인
 - 디자인 가이드 체크리스트:
   - 모든 컬러가 `AppColors` 상수 사용 (하드코딩 제거)
   - 타이포그래피가 `AppTextStyles` 상수 사용
@@ -582,7 +604,8 @@ lib/
 - 전체 화면 파일 (미세 수정)
 
 **완료 확인 방법:**
-- 6개 유스케이스 모두 정상 동작
+- 7개 유스케이스 모두 정상 동작
 - 디자인 가이드 체크리스트 전항목 통과
 - 앱 종료 후 재실행 시 데이터 영속성 확인
+- 앱 실행과 사진 선택 과정에서 현재 위치 권한을 요청하지 않는지 확인
 - 엣지 케이스(EXIF 없는 사진, 네트워크 끊김, 권한 거부) 모두 크래시 없이 처리

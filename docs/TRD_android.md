@@ -3,6 +3,7 @@
 > **이 문서의 역할**: Android 앱을 처음 구현하는 사람과 코딩 에이전트가 함께 사용하는 기술 기준입니다. Android Studio, Android 에뮬레이터, 실제 Android 기기에서 확인할 항목만 설명합니다.
 > **구현 원칙**: 권한 매니페스트, Photo Picker, Firebase Android 설정, App Check Provider, 빌드 환경을 Android 기준으로 구현합니다. Flutter 공통 Dart 코드는 기존 프로젝트 구조를 재사용합니다.
 > **디자인 원칙**: 현재 앱의 밝고 단정한 공통 디자인을 유지합니다. `ThemeData.light()`, `CupertinoAlertDialog`, `BouncingScrollPhysics`, `CupertinoIcons`는 제품 디자인 사양이므로 임의로 Material 다이얼로그나 스낵바로 교체하지 않습니다.
+> **동기화 상태**: 이 저장소의 최종 Flutter 공통 코드와 2026-08-12에 다시 맞춘 저자 예시본입니다.
 
 ## 1. 아키텍처 개요 (Architecture Overview)
 본 앱은 별도 백엔드 서버를 운영하지 않는 **클라이언트 전용(Client-Side Only) 아키텍처**로 설계되었습니다. 모든 데이터는 기기 내부에 저장되며, 이미지 분석을 위한 Vision AI 통신은 **Firebase AI Logic**을 통해 Gemini Vision API를 호출합니다. Firebase가 API 키를 자체 서버에 보관하므로 클라이언트(앱)에는 키가 노출되지 않으며, App Check로 정상 앱의 요청만 허용합니다.
@@ -12,7 +13,7 @@
     2. **지오코딩 (역방향):** 추출된 GPS 좌표를 Android OS에 내장된 `Geocoder`(`geocoding` 패키지 경유)를 통해 텍스트 형태의 주소(예: 연남동, 역삼동)로 변환합니다.
     3. **AI Vision 분석:** 원본 이미지를 Firebase AI Logic을 통해 Gemini Vision 모델로 전송하여 '메뉴명'과 '카테고리'를 JSON 형태로 반환받습니다. App Check 토큰(Play Integrity 기반)이 함께 전송되어 정상 앱의 요청임이 검증됩니다.
     4. **데이터 검증 및 수동 입력:** AI가 추출한 데이터와 위치 정보를 UI(TextField)에 뿌려주어 사용자가 확인 및 수정할 수 있게 하고, '식당명'을 추가로 입력받습니다.
-    5. **로컬 저장 및 검색 최적화:** 모든 데이터를 NoSQL 로컬 데이터베이스에 저장합니다. 이때 빠른 검색을 위해 입력된 모든 텍스트를 공백 없이 합친 `searchKeyword` 필드를 함께 생성하여 저장합니다.
+    5. **로컬 저장 및 검색 최적화:** 모든 데이터를 NoSQL 로컬 데이터베이스에 저장합니다. 입력된 모든 텍스트를 공백 없이 합친 `searchKeyword` 필드를 만들고, 여러 검색 단어가 모두 포함된 기록만 보여 줍니다.
 
 ## 2. 주요 모듈 및 컴포넌트 (Core Modules & Components)
 
@@ -32,22 +33,26 @@
 * **`LocationService`:** 사진의 EXIF 데이터에서 추출한 좌표를 `geocoding` 패키지의 `placemarkFromCoordinates()`로 변환합니다. Android에서는 내부적으로 `android.location.Geocoder`가 호출되며 **별도 위치 권한이 필요 없습니다**(좌표 → 지명 변환이지 기기 GPS 조회가 아님). (실패 시 빈 문자열 반환)
 * **`VisionAIService`:** Firebase AI Logic의 `firebase_ai` SDK로 Gemini Vision 모델을 호출합니다. API 키는 Firebase가 보관하므로 앱 코드/번들에 키가 들어가지 않습니다.
     * **[중요 프롬프트 지시]:** "제공된 음식 사진을 분석하여 메뉴명과 카테고리(한식, 중식, 일식, 양식, 카페/디저트 등)를 파악해라. 응답은 반드시 `{"menu": "메뉴이름", "category": "카테고리명"}` 형태의 순수 JSON 포맷으로만 반환하라."
-* **`LocalDBService`:** 로컬 DB(Hive)를 초기화하고, `ArchiveItem`의 CRUD(생성, 읽기, 수정, 삭제)를 담당합니다. 검색 시 `searchKeyword.contains(검색어)` 로직을 사용하여 쿼리 속도를 극대화합니다.
+* **`LocalDBService`:** 로컬 DB(Hive)를 초기화하고, `ArchiveItem`의 CRUD(생성, 읽기, 수정, 삭제)를 담당합니다. 검색어를 공백 기준으로 나누고 각 단어가 `searchKeyword`에 모두 포함되는지 확인합니다.
 
 ### C. UI 화면 (UI Screens)
 > UI 스펙은 `Design_guide.md`를 기준으로 합니다. 아래 위젯과 색상은 현재 앱의 제품 디자인이므로 Android에서도 동일하게 유지합니다.
 
 * **`HomeScreen` (메인 갤러리 뷰):**
     * 상단: 검색창 (`TextField`). 텍스트 입력 시 하단 그리드가 실시간으로 필터링됨. 안드로이드식 밑줄(Underline) 절대 금지.
+    * 우측 상단: 앱 정보 및 개인정보처리방침으로 이동하는 정보 아이콘.
+    * 기록 없음: 안내 문구와 `첫 기록 추가` 버튼. 검색 결과 없음: "검색 결과가 없습니다" 안내.
     * 본문: `GridView.builder`를 사용한 사진 썸네일 바둑판 배열.
     * 하단: Floating Action Button (사진 추가). 56x56, Primary `#007AFF`.
-* **`AddRecordScreen` (입력 및 AI 분석 화면):**
+* **`AddEditRecordScreen` (입력 및 AI 분석 화면):**
     * 진입 즉시 로딩 스피너(`CupertinoActivityIndicator`) 표시 (AI 분석 및 위치 추출 대기).
     * 완료 시: 사진 썸네일과 함께 식당명, 위치, 메뉴명, 카테고리를 입력/수정할 수 있는 `TextField` 목록 표시.
     * 하단: '저장' 버튼.
 * **`DetailScreen` (상세 보기 화면):**
     * 사진 원본과 함께 저장된 텍스트 정보를 깔끔하게 나열하는 읽기 전용 뷰.
     * 삭제 확인은 Material `AlertDialog`가 아닌 **`CupertinoAlertDialog`** 사용.
+* **`PrivacyPolicyScreen` (앱 정보 및 개인정보처리방침):**
+    * 기기 저장, AI 사진 전송, App Check 처리와 문의 경로를 앱 안에서 안내.
 
 ## 3. 기술 스택 및 선택 근거 (Tech Stack)
 
@@ -60,7 +65,7 @@
 | **위치 변환** | `geocoding` | Android 내장 `Geocoder` 사용. 추가 비용/권한 없음. |
 | **AI 비전** | `firebase_core` + `firebase_ai` + `firebase_app_check` | Firebase AI Logic 공식 SDK. App Check는 **Play Integrity**(release) / **Debug Provider**(debug) 사용. |
 | **고유 ID** | `uuid` | 맛집 기록마다 충돌 가능성이 낮은 식별자 생성. |
-| **로컬 경로** | `path_provider` | Android 앱 전용 문서 디렉토리 경로 제공. `path_provider_foundation` 오버라이드는 추가하지 않음. |
+| **로컬 경로** | `path_provider` | Android 앱 전용 문서 디렉토리 경로 제공. 공통 `pubspec.yaml`의 `path_provider_foundation` 오버라이드는 iOS/macOS 호환용이며 Android 동작에는 영향을 주지 않음. |
 
 ## 4. [코딩 에이전트 필수 지시 사항] Android 권한 및 빌드 환경 설정
 
@@ -186,9 +191,9 @@ Firebase CLI에 `apps:android:sha:create` / `apps:android:sha:list` / `apps:andr
 앱 진입점(`main.dart`)에서 디버그/릴리스 분기:
 ```dart
 await FirebaseAppCheck.instance.activate(
-  androidProvider: kDebugMode
-      ? AndroidProvider.debug
-      : AndroidProvider.playIntegrity,
+  providerAndroid: kDebugMode
+      ? const AndroidDebugProvider()
+      : const AndroidPlayIntegrityProvider(),
 );
 ```
 - **Debug Provider 사용 절차**: 디버그 빌드 첫 실행 시 Logcat에 출력되는 토큰을 Firebase 콘솔 → App Check → Android 앱 → "관리"에서 등록.
@@ -205,5 +210,5 @@ Android에서 반드시 처리할 예외는 다음과 같습니다.
 ## 5. 보안 (Security)
 * **API 키 노출 방지:** Gemini API 키는 Firebase AI Logic이 Google 서버에 보관함. 앱 번들·소스코드·`.env` 어디에도 키가 들어가지 않으므로 디컴파일로도 추출 불가. (`firebase_options.dart`의 `apiKey` 필드는 Firebase 식별용 공개 키로, Gemini API 키와 별개.)
 * **App Check (Android):** **Play Integrity** Provider가 Google Play 보안 검증을 통과한 앱 인스턴스만 토큰을 발급. 루팅 기기·복제 앱·디컴파일 앱의 무단 호출 차단. 디버그 빌드는 Debug Provider 토큰을 Firebase 콘솔에 사전 등록한 경우에만 허용.
-* **클라이언트 코드 원칙:** API 키, 토큰, 시크릿을 코드/`.env`/주석 어디에도 두지 않음. Firebase 콘솔에서 1회 세팅 후 자동 관리. 따라서 클로드 코드 같은 AI 코딩 도구에 키 평문을 입력하는 시나리오 자체가 발생하지 않음.
+* **클라이언트 코드 원칙:** Gemini 서버 자격 증명, 서비스 계정 키, 비밀번호와 토큰을 코드/`.env`/주석에 두지 않음. `firebase_options.dart`와 `google-services.json`의 Firebase 클라이언트 식별값은 공개 설정이며 Gemini 서버 키와 구분함. 실제 호출은 App Check와 Firebase AI Logic 적용으로 보호함.
 * **저장 영역:** Hive Box와 복사된 이미지가 모두 앱 전용 저장소(`getApplicationDocumentsDirectory`)에 위치 → 다른 앱이 접근 불가, 앱 삭제 시 자동 제거.

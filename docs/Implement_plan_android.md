@@ -3,6 +3,7 @@
 > **이 문서의 역할**: Android 앱을 처음 구현하는 사람과 코딩 에이전트가 Task 1부터 17까지 순서대로 사용하는 실행 계획입니다. 모든 플랫폼 설정과 완료 확인은 Android를 기준으로 합니다.
 > **완료 확인 환경**: 모든 "완료 확인 방법"은 **Android Studio 에뮬레이터(Pixel 7 / API 34, Pixel 5 / API 30 2종)** 기준으로 재서술했습니다.
 > **호스트 예시**: Windows 11 + Android Studio Hedgehog+ + JDK 17 + Flutter SDK ^3.11.4. 다른 운영체제에서도 Android Studio와 Android 에뮬레이터를 사용하면 같은 순서로 진행할 수 있습니다.
+> **동기화 상태**: 이 저장소의 최종 Flutter 공통 코드와 2026-08-12에 다시 맞춘 저자 예시본입니다.
 
 ## 진행 체크리스트
 
@@ -68,6 +69,7 @@ Task 1 (프로젝트 생성 + Android 빌드 설정)
 ```
 lib/
 ├── main.dart
+├── firebase_options.dart
 ├── constants/
 │   ├── app_colors.dart
 │   └── app_text_styles.dart
@@ -87,7 +89,10 @@ lib/
 ├── screens/
 │   ├── home_screen.dart
 │   ├── detail_screen.dart
-│   └── add_edit_record_screen.dart
+│   ├── add_edit_record_screen.dart
+│   └── privacy_policy_screen.dart
+├── utils/
+│   └── app_paths.dart
 └── widgets/
     ├── archive_grid_card.dart
     └── toast_message.dart
@@ -119,6 +124,7 @@ android/
   - `firebase_core`, `firebase_ai`, `firebase_app_check`
   - `uuid` (고유 ID 생성)
   - `path_provider` (앱 전용 저장 경로)
+  - `url_launcher` (온라인 개인정보처리방침과 지원 문의 열기)
 - **명시적 제외**: 실제 코드(`lib/services/vision_ai_service.dart`)는 `firebase_ai` SDK만 사용하므로 `google_generative_ai`는 추가하지 않는다. 사용하지 않는 패키지는 앱 크기와 빌드 시간만 늘린다.
 - `dev_dependencies`에 추가: `hive_generator`, `build_runner`
 - **`android/app/build.gradle.kts` 핵심 설정**:
@@ -136,7 +142,7 @@ android/
   }
   ```
   > **⚠️ Flutter 3.41 신 템플릿 변경 — 위치 주의**: 과거에는 `android/build.gradle.kts`(프로젝트 레벨)에 classpath를 적었으나, Flutter 3.41 이후 신 템플릿은 **`android/settings.gradle.kts`의 `plugins {}` 블록**으로 모인다. 옛 경로에 넣으면 Gradle Sync 실패. (AVD 검증 2026-05-21 확정)
-- **불필요한 오버라이드 제외**: Android 빌드에는 `path_provider_foundation` 오버라이드를 추가하지 않는다.
+- **공통 저장소 참고**: 이 저장소의 `path_provider_foundation` 오버라이드는 iOS/macOS 호환을 위한 값이다. Android 전용 새 프로젝트에는 보통 필요하지 않지만, 공통 프로젝트를 따라갈 때 임의로 삭제하지 않는다.
 
 **예상 수정 파일:**
 - `pubspec.yaml`
@@ -225,7 +231,7 @@ android/
   - `updateItem(ArchiveItem)`: Update
   - `deleteItem(String id)`: Delete
   - `getAllItems()`: 전체 조회 (최신순 정렬)
-  - `searchItems(String query)`: `searchKeyword.contains(query)` 필터링
+  - `searchItems(String query)`: 검색어를 공백 기준으로 나누고, 각 단어가 `searchKeyword`에 모두 포함되는 항목만 필터링
 
 **예상 수정 파일:**
 - `lib/models/archive_item.dart` (신규)
@@ -293,8 +299,10 @@ android/
 **구현할 기능:**
 - `lib/screens/home_screen.dart` 생성:
   - 상단 검색 `TextField`: Surface 배경, borderRadius 10, 좌측 돋보기 아이콘, 높이 36px, 밑줄 없음 (Material `InputDecoration.collapsed` 또는 `border: InputBorder.none` 사용)
+  - AppBar 우측 정보 아이콘: `PrivacyPolicyScreen`으로 이동
   - 본문: `Consumer<ArchiveProvider>`로 데이터 상태 분기
-    - Empty State (0개): 중앙 `CupertinoIcons.photo_on_rectangle`(64px) + "아직 저장된 맛집이 없어요." (TextSub 컬러)
+    - Empty State (0개): `CupertinoIcons.photo_on_rectangle`(72px) + "아직 저장된 맛집이 없어요" + "사진 한 장을 골라 첫 맛집 기록을 만들어보세요" + `첫 기록 추가` 버튼
+    - 검색 결과 없음: 검색 아이콘 + "검색 결과가 없습니다"
     - Data State: `GridView.builder` (crossAxisCount: 2, crossAxisSpacing: 12, mainAxisSpacing: 16)
   - FAB: 우측 하단, 56x56, Primary 배경, 그림자 `blurRadius: 10`
   - 전역 `BouncingScrollPhysics`
@@ -305,11 +313,13 @@ android/
 
 **예상 수정 파일:**
 - `lib/screens/home_screen.dart` (신규)
+- `lib/screens/privacy_policy_screen.dart` (신규)
 - `lib/widgets/archive_grid_card.dart` (신규)
 - `lib/main.dart` (home 화면 지정)
 
 **완료 확인 방법:**
 - Android 에뮬레이터에서 Empty State 화면 정상 표시
+- `첫 기록 추가` 버튼과 정보 아이콘이 각각 사진 선택과 개인정보처리방침 화면으로 연결됨
 - 검색창이 Surface 배경과 둥근 모서리로 렌더링되고 Material 언더라인이 없음
 - FAB 버튼이 우측 하단에 파란색으로 표시
 
@@ -520,7 +530,8 @@ firebase apps:android:sha:create <ANDROID_APP_ID> <SHA-256> --project=my-food-ar
 
 - `lib/main.dart` 초기화:
   - `await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform)`
-  - `await FirebaseAppCheck.instance.activate(androidProvider: kDebugMode ? AndroidProvider.debug : AndroidProvider.playIntegrity, appleProvider: kDebugMode ? AppleProvider.debug : AppleProvider.appAttestWithDeviceCheckFallback)`
+  - `await FirebaseAppCheck.instance.activate(providerAndroid: kDebugMode ? const AndroidDebugProvider() : const AndroidPlayIntegrityProvider(), providerApple: kDebugMode ? const AppleDebugProvider() : const AppleAppAttestWithDeviceCheckFallbackProvider())`
+  - Firebase 초기화 실패 시 앱을 종료하지 않고 로컬 기록 기능은 유지. AI 분석만 비활성화
 - `lib/services/vision_ai_service.dart` 생성:
   - `firebase_ai` SDK로 Gemini Vision: `FirebaseAI.googleAI().generativeModel(model: 'gemini-2.5-flash', generationConfig: GenerationConfig(responseMimeType: 'application/json', temperature: 0.2))`
   - `analyzeImage(String imagePath)`:
@@ -614,10 +625,11 @@ firebase apps:android:sha:create <ANDROID_APP_ID> <SHA-256> --project=my-food-ar
 **구현할 기능:**
 - HomeScreen 검색창 연결:
   - `TextEditingController` + `onChanged`
-  - 입력 텍스트 공백 제거 후 `ArchiveProvider.search(query)`
+  - 입력한 검색어를 그대로 `ArchiveProvider.search(query)`에 전달
   - 검색어 비어있으면 전체 목록 복원
 - ArchiveProvider 검색 로직:
-  - `search(String query)`: `item.searchKeyword.contains(공백제거된 query)`
+  - `LocalDBService.searchItems(String query)`: 검색어를 공백 기준으로 나눠 빈 단어 제거
+  - 모든 검색 단어가 `item.searchKeyword`에 포함된 항목만 반환
   - 빈 query 시 전체 목록 반환
 - 검색 결과 없을 때: "검색 결과가 없습니다" 텍스트 표시
 
@@ -627,7 +639,7 @@ firebase apps:android:sha:create <ANDROID_APP_ID> <SHA-256> --project=my-food-ar
 
 **완료 확인 방법:**
 - 여러 레코드 저장 후 Android 에뮬레이터에서 "파스타" 입력 → 파스타 관련만 필터링
-- "연남동 한식" 입력 → "연남동한식"으로 변환되어 검색
+- "연남동 한식" 입력 → 두 단어를 모두 포함한 기록만 검색
 - 검색어 전체 삭제 → 전체 목록 복원
 - 매칭 결과 없을 때 안내 텍스트 표시
 
@@ -642,9 +654,9 @@ firebase apps:android:sha:create <ANDROID_APP_ID> <SHA-256> --project=my-food-ar
 - 탭 시:
   1. `PhotoService.pickAndPersistImage()` 재호출
   2. 새 이미지 선택됨 → 이전 복사 이미지 삭제
-  3. 로딩 오버레이 재표시
+  3. 지역·메뉴·카테고리·날짜를 비우고 로딩 오버레이 재표시
   4. EXIF 추출 + AI 분석 재실행
-  5. 결과로 폼 덮어쓰기 (식당명은 유지)
+  5. 새 결과로 지역·메뉴·카테고리·날짜를 채움. 식당명은 유지
 - 재선택 취소 → 기존 상태 유지
 
 **예상 수정 파일:**
@@ -689,16 +701,17 @@ firebase apps:android:sha:create <ANDROID_APP_ID> <SHA-256> --project=my-food-ar
 
 ## Task 17: 전체 통합 테스트 및 UI 폴리시
 
-**목표:** 전체 유스케이스(UC-01 ~ UC-06)를 Android 에뮬레이터에서 검증하고, 디자인 가이드 준수 여부를 최종 확인한다.
+**목표:** 전체 유스케이스(UC-01 ~ UC-07)를 Android 에뮬레이터에서 검증하고, 디자인 가이드 준수 여부를 최종 확인한다.
 
 **구현할 기능:**
 - 유스케이스 검증 (Pixel 7 / API 34, Pixel 5 / API 30 양쪽):
-  - UC-01: 앱 실행 → Empty State → 데이터 추가 후 갤러리 최신순 정렬
+  - UC-01: 앱 실행 → Empty State의 `첫 기록 추가` → 데이터 추가 후 갤러리 최신순 정렬
   - UC-02: 검색 "연남동 파스타" → 필터링 → 검색어 삭제 → 전체 복원
   - UC-03: FAB → 사진 선택 → AI 로딩 → 폼 채움 → 식당명 입력 → 저장 → 홈 갱신
   - UC-04: 카드 탭 → 상세 화면 → 원본 사진 + 메타데이터
   - UC-05: 상세 → 수정 → 텍스트 변경 → 저장 → 홈에서 변경 확인
   - UC-06: 상세 → 삭제 → 확인 팝업 → 삭제 → 홈 복귀
+  - UC-07: 홈 정보 아이콘 → 앱 정보 및 개인정보처리방침 → 외부 링크 확인
 - 디자인 가이드 체크리스트 (Pure Native 강제 확인):
   - 모든 컬러가 `AppColors` 상수 사용
   - 타이포그래피가 `AppTextStyles` 상수 사용
@@ -712,7 +725,7 @@ firebase apps:android:sha:create <ANDROID_APP_ID> <SHA-256> --project=my-food-ar
 - 전체 화면 파일 (미세 수정)
 
 **완료 확인 방법:**
-- 6개 유스케이스 모두 정상 동작 (양쪽 에뮬레이터)
+- 7개 유스케이스 모두 정상 동작 (양쪽 에뮬레이터)
 - 디자인 가이드 체크리스트 전항목 통과
 - 앱 강제 종료 후 재실행 시 데이터 영속성 확인
 - 엣지 케이스(EXIF 없는 사진, 네트워크 끊김, 권한 거부, App Check Debug 토큰 미등록) 모두 크래시 없이 처리
