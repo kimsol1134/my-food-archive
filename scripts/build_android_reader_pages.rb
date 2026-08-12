@@ -14,6 +14,14 @@ RAW_ROOT = "https://raw.githubusercontent.com/kimsol1134/my-food-archive/main"
 GITHUB_ROOT = "https://github.com/kimsol1134/my-food-archive"
 
 PAGES = {
+  ROOT.join("START_HERE.md") => {
+    output: "start",
+    public_path: "#{SITE_PUBLIC_ROOT}/start",
+    title: "책 독자라면 여기부터",
+    description: "《클로드 코드로 앱스토어까지》 독자를 위한 My Food Archive 실습 자료 시작 안내",
+    nav_path: "#{SITE_PUBLIC_ROOT}/",
+    nav_label: "← 공식 실습 자료 첫 화면"
+  },
   ROOT.join("docs/privacy-policy.md") => {
     output: "privacy-policy",
     public_path: "#{SITE_PUBLIC_ROOT}/privacy-policy",

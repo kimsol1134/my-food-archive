@@ -1,0 +1,42 @@
+name: 책 또는 온라인 자료 오류 제보
+description: 오탈자, 끊어진 링크, 실제 화면과 다른 안내를 알려 주세요.
+title: "[오류 제보] "
+body:
+  - type: input
+    id: location
+    attributes:
+      label: 오류가 있는 위치
+      description: 책의 장·절 또는 온라인 페이지 주소를 적어 주세요.
+      placeholder: 예) 15장 15.3절 / Android 내부 테스트 가이드 4절
+    validations:
+      required: true
+
+  - type: textarea
+    id: current_content
+    attributes:
+      label: 현재 적힌 내용
+      description: 문제가 되는 문장이나 끊어진 링크를 붙여 주세요.
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: 무엇이 다른가요?
+      description: 실제로 보이는 화면이나 예상한 내용과의 차이를 적어 주세요.
+    validations:
+      required: true
+
+  - type: textarea
+    id: suggestion
+    attributes:
+      label: 제안하는 수정
+      description: 알고 있다면 적어 주세요. 비워 두어도 됩니다.
+
+  - type: checkboxes
+    id: privacy
+    attributes:
+      label: 공개 전 확인
+      options:
+        - label: 첨부 내용에서 개인정보와 비공개 링크를 제거했습니다.
+          required: true

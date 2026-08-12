@@ -4,6 +4,7 @@ on:
   push:
     branches: [main]
     paths:
+      - "START_HERE.md"
       - "site/**"
       - "docs/android/**"
       - "docs/book-screenshots/**"

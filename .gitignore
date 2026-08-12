@@ -54,3 +54,12 @@ firebase_app_id_file.json
 
 # QA verification artifacts
 qa_screenshots/
+
+# GitHub Pages output generated from Markdown during validation/deploy.
+/site/start/
+/site/privacy-policy/
+/site/android/app-screenshots/
+/site/android/internal-test/
+/site/android/overview/
+/site/android/release/
+/site/android/tester-recruitment/
