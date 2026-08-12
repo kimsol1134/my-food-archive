@@ -130,6 +130,7 @@ def page_template(config, body)
           li + li { margin-top: .32rem; }
           a { color: #135f9b; text-underline-offset: 3px; }
           img { display: block; max-width: 100%; height: auto; margin: 24px auto; border: 1px solid #e3ded8; border-radius: 10px; background: #fff; }
+          p[align="center"] > img[width="30%"] { display: inline-block; width: 30%; margin: 24px .7%; vertical-align: top; }
           table { display: block; width: 100%; overflow-x: auto; border-collapse: collapse; margin: 20px 0 28px; background: #fff; }
           th, td { min-width: 130px; padding: 12px 14px; border: 1px solid #ded7cf; text-align: left; vertical-align: top; line-height: 1.6; }
           th { background: #efe8e0; }
@@ -142,6 +143,7 @@ def page_template(config, body)
             nav span { display: none; }
             main { width: min(100% - 24px, 860px); padding-top: 26px; }
             th, td { min-width: 165px; }
+            p[align="center"] > img[width="30%"] { display: block; width: min(100%, 320px); margin: 18px auto; }
           }
         </style>
       </head>

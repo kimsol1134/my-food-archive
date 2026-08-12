@@ -4,12 +4,10 @@ GitHub를 처음 보더라도 괜찮습니다. 이 페이지에서 지금 필요
 
 ## 지금 어떤 단계인가요?
 
-| 지금의 나 | 바로 할 일 |
-|---|---|
-| 책을 처음부터 따라 만드는 중 | 이 저장소의 완성 코드를 복사하지 않고, 책에서 자신의 앱과 문서를 먼저 만듭니다. 저자 예시가 필요할 때만 [책 실습 문서](#저자-예시-문서가-필요할-때)를 엽니다. |
-| 8~14장에서 막혀 완성 결과와 비교하고 싶음 | 아래의 [출판 기준 자료 ZIP](https://github.com/kimsol1134/my-food-archive/archive/refs/tags/book-v1.0.1.zip)을 별도 폴더에 받아 비교합니다. |
-| Mac 또는 Windows에서 Android 앱을 만드는 중 | [Android 기술 설계서](docs/TRD_android.md)와 [Android 구현계획서](docs/Implement_plan_android.md)를 사용합니다. |
-| 15~18장에서 Google Play 배포를 진행 중 | [Android 온라인 실습 자료](https://kimsol1134.github.io/my-food-archive/android/)에서 현재 장을 선택합니다. |
+- **책을 처음부터 따라 만드는 중**: 완성 코드를 복사하지 않고 책에서 자신의 앱과 문서를 먼저 만듭니다. 저자 예시가 필요할 때만 [책 실습 문서](#저자-예시-문서가-필요할-때)를 엽니다.
+- **8~14장에서 막혀 완성 결과와 비교하고 싶음**: 아래의 [출판 기준 자료 ZIP](https://github.com/kimsol1134/my-food-archive/archive/refs/tags/book-v1.0.1.zip)을 별도 폴더에 받아 비교합니다.
+- **Mac 또는 Windows에서 Android 앱을 만드는 중**: [Android 기술 설계서](docs/TRD_android.md)와 [Android 구현계획서](docs/Implement_plan_android.md)를 사용합니다.
+- **15~18장에서 Google Play 배포를 진행 중**: [Android 온라인 실습 자료](https://kimsol1134.github.io/my-food-archive/android/)에서 현재 장을 선택합니다.
 
 ## 완성 앱은 이렇게 생겼습니다
 
