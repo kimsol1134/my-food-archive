@@ -8,6 +8,7 @@ on:
       - "site/**"
       - "docs/android/**"
       - "docs/book-screenshots/**"
+      - "docs/AppStore_Submission_Checklist.md"
       - "docs/privacy-policy.md"
       - "scripts/build_android_reader_pages.rb"
       - ".github/workflows/pages.yml"

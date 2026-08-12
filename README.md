@@ -21,7 +21,7 @@
 | GitHub와 저장소가 처음임 | [책 독자를 위한 시작 안내](START_HERE.md) |
 | 3~7장 · 저자가 만든 기획 문서와 구현계획서 예시 | [책 실습 문서 보기](#책-실습-문서) |
 | 8~14장 · 완성 앱 코드와 내 프로젝트 비교 | [완성 앱 참고본 보기](#완성-앱-참고본) |
-| 15~18장 · iPhone 앱의 App Store 제출 항목 확인 | [App Store 제출 체크리스트](docs/AppStore_Submission_Checklist.md) |
+| 15~18장 · iPhone 앱의 App Store 제출 항목 확인 | [App Store 제출 체크리스트](https://kimsol1134.github.io/my-food-archive/app-store/) |
 | 15~18장 · Android 앱을 Google Play에 배포 | [Android 온라인 실습 자료](https://kimsol1134.github.io/my-food-archive/android/) |
 
 완성 참고본을 한 번에 받고 싶다면 [출판 기준 자료 ZIP 내려받기](https://github.com/kimsol1134/my-food-archive/archive/refs/tags/book-v1.0.1.zip)를 누르세요. 내려받은 파일의 압축을 풀면 됩니다. 이 링크는 책과 맞춘 `book-v1.0.1` 버전에 고정되어 있어 이후 코드가 바뀌어도 내용이 달라지지 않습니다.
@@ -42,7 +42,7 @@
 | 사용 흐름 | [Usecase.md](docs/Usecase.md) |
 | 색상과 화면 디자인 | [Design_guide.md](docs/Design_guide.md) |
 | Claude Code가 따르는 구현 순서 | [Implement_plan.md](docs/Implement_plan.md) |
-| App Store Connect 입력 항목 | [AppStore_Submission_Checklist.md](docs/AppStore_Submission_Checklist.md) |
+| App Store Connect 입력 항목 | [App Store 제출 체크리스트](https://kimsol1134.github.io/my-food-archive/app-store/) |
 
 ### Android 앱을 만드는 독자 · Mac 또는 Windows
 

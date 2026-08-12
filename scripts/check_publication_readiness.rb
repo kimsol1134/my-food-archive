@@ -54,6 +54,8 @@ errors << "site/index.html has no fixed book ZIP link" unless site_home.include?
 
 errors << "README.md does not lead first-time readers to START_HERE.md" unless readme.include?("START_HERE.md")
 errors << "Reader site does not lead first-time readers to /start/" unless site_home.include?("./start/")
+errors << "Reader site does not expose the App Store checklist" unless site_home.include?("./app-store/")
+errors << "Reader site does not expose the Android guide" unless site_home.include?("./android/")
 
 if readme.include?("Windows 또는 Android 독자") || start_here.include?("Windows 또는 Android 독자")
   errors << "Computer environment and app target are combined into one reader label"

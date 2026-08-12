@@ -57,6 +57,7 @@ qa_screenshots/
 
 # GitHub Pages output generated from Markdown during validation/deploy.
 /site/start/
+/site/app-store/
 /site/privacy-policy/
 /site/android/app-screenshots/
 /site/android/internal-test/

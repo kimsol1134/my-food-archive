@@ -14,6 +14,7 @@ pages = SITE_ROOT.glob("**/index.html").sort
 expected_pages = %w[
   index.html
   start/index.html
+  app-store/index.html
   support/index.html
   privacy-policy/index.html
   android/index.html
