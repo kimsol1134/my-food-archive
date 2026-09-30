@@ -23,24 +23,24 @@
 - [x] AAB 빌드 파이프라인 검증 (`flutter build appbundle --release` 성공)
 - [x] **업로드 키스토어 생성** (`upload-keystore.jks`) — 저장소에는 미포함
 - [x] **`android/key.properties` 작성** — 저장소에는 미포함
-- [ ] 키스토어 + 비밀번호 **별도 안전한 곳에 2차 백업**
+- [x] 키스토어 + 비밀번호 **별도 안전한 곳에 2차 백업** (iCloud Drive AES-256 암호화본 + macOS 로그인 키체인)
 - [x] **서명된 AAB 생성 및 업로드 키 서명 확인**
 - [x] AAB 인증서가 `CN=Android Debug`가 아님을 확인
 
 ## 4. 권한 & 개인정보 (Play 정책)
 - [x] 권한 최소화 확인 (`INTERNET`만 선언, Photo Picker 사용, 사진·위치 권한 없음)
 - [x] **개인정보처리방침 본문과 앱 내부 화면** 준비 (`docs/privacy-policy.md`)
-- [ ] Play Console에 공개 개인정보처리방침 URL 입력
-- [ ] **데이터 보안 양식** 작성 (수집 데이터/전송 여부)
-- [ ] 사용자 선택 사진이 Firebase AI Logic/Gemini로 전송된다는 설명이 앱·방침·데이터 보안 양식에서 일치하는지 확인
+- [x] Play Console에 공개 개인정보처리방침 URL 입력
+- [x] **데이터 보안 양식** 작성 (수집 데이터/전송 여부)
+- [x] 사용자 선택 사진이 Firebase AI Logic/Gemini로 전송된다는 설명이 앱·방침·데이터 보안 양식에서 일치하는지 확인
 
 ## 5. 스토어 등록정보 자산
-- [ ] 앱 아이콘 512×512 (스토어용)
-- [ ] 기능 그래픽 1024×500
+- [x] 앱 아이콘 512×512 (스토어용, `store-assets/google-play/app-icon-512.png`)
+- [x] 기능 그래픽 1024×500 (`store-assets/google-play/feature-graphic-1024x500.png`)
 - [x] 출판 참고용 Android 앱 화면 6장 (`docs/book-screenshots/android-app/`)
-- [ ] Google Play 제출용 Android 휴대전화 스크린샷 2장 이상(실제 배포 설치본에서 별도 촬영)
-- [ ] 앱 짧은 설명 / 자세한 설명 (한국어)
-- [ ] 카테고리(음식/라이프스타일) · 콘텐츠 등급 설문 · 대상 연령
+- [x] Google Play 제출용 Android 휴대전화 스크린샷 4장 (`store-assets/google-play/screenshots/`, Play Console에 업로드됨)
+- [x] 앱 짧은 설명 / 자세한 설명 (한국어)
+- [x] 카테고리(음식/음료) · 콘텐츠 등급 설문 · 대상 연령
 
 ## 6. Play Console
 - [x] 개발자 계정 등록
@@ -49,11 +49,11 @@
 - [x] 내부 테스트 트랙에서 AAB가 테스터에게 제공되는 상태 확인
 - [x] Firebase Android 앱·Google Services·App Check Play Integrity 연결
 - [ ] 내부 테스트 설치본에서 Gemini 자동 분석 최종 확인
-- [ ] 앱 콘텐츠와 기본 스토어 등록정보 완료
-- [ ] 비공개 테스트 시작 및 12명 이상 참여 상태 확인
-- [ ] Play Console에 신청 가능 상태가 표시될 때까지 테스트 유지
-- [ ] 프로덕션 접근 신청 및 승인 확인
-- [ ] 프로덕션 출시 제출
+- [x] 앱 콘텐츠와 기본 스토어 등록정보 완료 (등록정보 게시 중)
+- [x] 비공개 테스트 시작 및 12명 이상 참여 상태 확인
+- [x] Play Console에 신청 가능 상태가 표시될 때까지 테스트 유지
+- [x] 프로덕션 접근 신청 및 승인 확인
+- [x] 프로덕션 출시 제출 (1.0.0+5, 2026-08-17, 검토 대기/사전 검사 중)
 - [ ] 앱 심사 승인 뒤 Google Play 공개 링크 확인
 
 ## 7. v1 범위 확인
