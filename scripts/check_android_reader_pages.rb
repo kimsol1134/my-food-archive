@@ -13,6 +13,8 @@ errors = []
 pages = SITE_ROOT.glob("**/index.html").sort
 expected_pages = %w[
   index.html
+  chapters/index.html
+  android/development/index.html
   start/index.html
   app-store/index.html
   support/index.html

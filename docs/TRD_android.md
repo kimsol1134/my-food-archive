@@ -1,5 +1,7 @@
 # 📱 [마이 맛집 아카이브] MVP 기술 설계 문서 (TRD) — Android 앱 버전
 
+> **책과 비교할 때:** 10장 이후 Firebase 전환과 출시 전 수정을 반영한 최종 예시본입니다. [장별 차이와 사용 방법](CHAPTER_GUIDE.md#책의-중간-결과와-최종-예시본의-차이)을 먼저 확인합니다.
+
 > **이 문서의 역할**: Android 앱을 처음 구현하는 사람과 코딩 에이전트가 함께 사용하는 기술 기준입니다. Android Studio, Android 에뮬레이터, 실제 Android 기기에서 확인할 항목만 설명합니다.
 > **구현 원칙**: 권한 매니페스트, Photo Picker, Firebase Android 설정, App Check Provider, 빌드 환경을 Android 기준으로 구현합니다. Flutter 공통 Dart 코드는 기존 프로젝트 구조를 재사용합니다.
 > **디자인 원칙**: 현재 앱의 밝고 단정한 공통 디자인을 유지합니다. `ThemeData.light()`, `CupertinoAlertDialog`, `BouncingScrollPhysics`, `CupertinoIcons`는 제품 디자인 사양이므로 임의로 Material 다이얼로그나 스낵바로 교체하지 않습니다.
@@ -58,7 +60,7 @@
 
 | 구분 | 추천 패키지 | 선택 근거 |
 | :--- | :--- | :--- |
-| **프레임워크** | `Flutter` (SDK ^3.11.4) | 단일 코드베이스에서 공통 Dart 화면과 서비스를 재사용. |
+| **프레임워크** | `Flutter` (Dart SDK 조건: ^3.11.4) | 단일 코드베이스에서 공통 Dart 화면과 서비스를 재사용. |
 | **상태 관리** | `Provider` | MVP 규모에서 데이터 흐름을 단순하게 유지하기에 적합. |
 | **로컬 DB** | `Hive` + `hive_flutter` | NoSQL. `getApplicationDocumentsDirectory()`가 Android에서도 동일하게 작동(앱 전용 영역). |
 | **사진 및 메타데이터** | `image_picker` + `exif` | `image_picker` 1.1.x는 Android 13+에서 **Photo Picker**를 자동 사용하여 권한 없이 EXIF 보존된 원본 접근 가능. |
@@ -103,7 +105,7 @@ void enforceAndroidPhotoPicker() {
   - `minSdk` = **Flutter 기본값 유지 (현재 `flutter.minSdkVersion` = 24)**. 명시 숫자로 덮어쓰지 않아도 Firebase·image_picker 모두 정상 작동.
   - `targetSdk = flutter.targetSdkVersion` — 현재 Flutter 3.41 환경의 빌드 결과는 API 36을 대상으로 합니다. 2026년 8월 31일부터 Google Play의 새 앱과 업데이트는 API 36 이상이 필요하므로, 업로드 직전에 생성된 AAB와 [Google Play의 대상 API 요구사항](https://developer.android.com/google/play/requirements/target-sdk)을 다시 확인합니다.
 - **Gradle 파일 위치**: `android/app/build.gradle.kts` (Kotlin DSL — Flutter 3.41 신 템플릿 기본). 플러그인 버전 선언은 `android/settings.gradle.kts`의 `plugins {}` 블록에 모인다(§4.4 참조).
-- **Flutter SDK**: `^3.11.4`
+- **Dart SDK 조건**: `^3.11.4` (`pubspec.yaml`의 `environment.sdk`). Flutter 버전과는 별개이며 `flutter --version`으로 두 버전을 함께 확인합니다.
 - **Windows 환경 변수**:
   - `ANDROID_HOME = %LOCALAPPDATA%\Android\Sdk`
   - `Path`에 `%ANDROID_HOME%\platform-tools`, `%ANDROID_HOME%\emulator` 추가

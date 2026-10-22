@@ -6,6 +6,7 @@
 
 현재 읽는 장에 맞는 자료 하나만 열면 됩니다.
 
+- 6~14장: **[Android 개발 준비와 Firebase 연결](development-guide.md)**
 - 15~16장: **[Android 앱을 Google Play 내부 테스트에 올리기](google-play-internal-test-guide.md)**
 - 17~18장: **[비공개 테스트에서 Google Play 공개까지](release-roadmap.md)**
 
