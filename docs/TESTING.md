@@ -15,7 +15,7 @@ flutter analyze --no-pub
 flutter test --no-pub
 ```
 
-`pubspec.lock`과 iOS의 `Podfile.lock`은 저장소에 포함됩니다. 자동 검증은 잠금 파일을 유지한 채 의존성을 설치하며, 이후 분석·테스트·빌드에서 패키지를 다시 결정하지 않습니다. SDK를 올릴 때는 `.flutter-version`을 수정한 PR에서 양 플랫폼 빌드와 아래 테스트를 다시 확인합니다. 기존 `book-v1.0.1` 태그와 ZIP은 변경하지 않습니다.
+`pubspec.lock`과 iOS의 `Podfile.lock`은 저장소에 포함됩니다. iOS CI는 잠금 파일을 작성한 **CocoaPods 1.16.2**도 고정합니다. CocoaPods 1.17에서는 플러그인 체크섬이 달라져 `pod install --deployment`가 실패하는 것을 확인했습니다. 자동 검증은 잠금 파일을 유지한 채 의존성을 설치하며, 이후 분석·테스트·빌드에서 패키지를 다시 결정하지 않습니다. SDK를 올릴 때는 `.flutter-version`을 수정한 PR에서 양 플랫폼 빌드와 아래 테스트를 다시 확인합니다. 기존 `book-v1.0.1` 태그와 ZIP은 변경하지 않습니다.
 
 ## 자동으로 확인하는 동작
 
