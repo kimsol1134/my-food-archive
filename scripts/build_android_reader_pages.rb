@@ -14,6 +14,15 @@ RAW_ROOT = "https://raw.githubusercontent.com/kimsol1134/my-food-archive/main"
 GITHUB_ROOT = "https://github.com/kimsol1134/my-food-archive"
 
 PAGES = {
+  ROOT.join("docs/CHAPTER_GUIDE.md") => {
+    output: "chapters", public_path: "#{SITE_PUBLIC_ROOT}/chapters",
+    title: "장별 자료 찾아보기", nav_path: "#{SITE_PUBLIC_ROOT}/",
+    nav_label: "← 공식 실습 자료 첫 화면"
+  },
+  ROOT.join("docs/android/development-guide.md") => {
+    output: "android/development", public_path: "#{ANDROID_PUBLIC_ROOT}/development",
+    title: "6~14장 · Android 앱 만들기"
+  },
   ROOT.join("START_HERE.md") => {
     output: "start",
     public_path: "#{SITE_PUBLIC_ROOT}/start",

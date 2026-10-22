@@ -1,8 +1,10 @@
 # 📱 [마이 맛집 아카이브] MVP 구현 계획서 — Android 앱 버전
 
+> **책과 비교할 때:** 10장 이후 Firebase 전환과 출시 전 수정을 반영한 최종 예시본입니다. [장별 차이와 사용 방법](CHAPTER_GUIDE.md#책의-중간-결과와-최종-예시본의-차이)을 먼저 확인합니다.
+
 > **이 문서의 역할**: Android 앱을 처음 구현하는 사람과 코딩 에이전트가 Task 1부터 17까지 순서대로 사용하는 실행 계획입니다. 모든 플랫폼 설정과 완료 확인은 Android를 기준으로 합니다.
 > **완료 확인 환경**: 모든 "완료 확인 방법"은 **Android Studio 에뮬레이터(Pixel 7 / API 34, Pixel 5 / API 30 2종)** 기준으로 재서술했습니다.
-> **호스트 예시**: Windows 11 + Android Studio Hedgehog+ + JDK 17 + Flutter SDK ^3.11.4. 다른 운영체제에서도 Android Studio와 Android 에뮬레이터를 사용하면 같은 순서로 진행할 수 있습니다.
+> **호스트 예시**: Windows 11 + Android Studio Hedgehog+ + JDK 17 + Flutter (Dart SDK 조건 ^3.11.4). 다른 운영체제에서도 Android Studio와 Android 에뮬레이터를 사용하면 같은 순서로 진행할 수 있습니다.
 > **동기화 상태**: 이 저장소의 최종 Flutter 공통 코드와 2026-08-12에 다시 맞춘 저자 예시본입니다.
 
 ## 진행 체크리스트

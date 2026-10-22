@@ -12,6 +12,8 @@
   <img src="docs/book-screenshots/android-app/a-04-saved.png" width="30%" alt="첫 맛집 기록이 저장된 홈 화면" />
 </p>
 
+[장별 자료 찾아보기](docs/CHAPTER_GUIDE.md)에서 책의 현재 장, 비교할 파일, 다음에 돌아갈 위치를 확인할 수 있습니다.
+
 ## 처음 오셨다면
 
 현재 읽는 장에 맞는 한 곳만 열면 됩니다.
