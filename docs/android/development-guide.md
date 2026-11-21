@@ -25,7 +25,7 @@ docs/TRD_android.md와 docs/Implement_plan_android.md를 읽고,
 
 ## Firebase 연결
 
-사진 AI 자동 입력이 안 되면 [10~11장 사진 AI 자동 입력 안내](../../START_HERE.md#ai-photo-input-update)를 먼저 확인하세요. 메뉴와 카테고리를 직접 입력해 기록을 저장할 수 있습니다.
+사진 AI 자동 입력이 안 되면 [10~11장 사진 AI 자동 입력 안내](../../START_HERE.md#ai-photo-input-update)를 먼저 확인하세요. 사진 분석 표시가 사라지면 **식당명**을 입력하고 **저장**을 누르세요. 메뉴와 카테고리는 직접 채워도 되고 비워 둬도 됩니다.
 
 **10.1~10.2절에서 연결을 준비하고 11장에서 AI 자동 입력을 확인합니다.** Firebase 프로젝트 생성과 AI Logic 활성화는 책의 공통 설명을 따릅니다. Apple 앱 등록 화면은 실행하지 않고, 책의 Android 분기에 따라 클로드 코드에게 Android 앱 등록과 Flutter 연결을 맡깁니다.
 
