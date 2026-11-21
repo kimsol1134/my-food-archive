@@ -22,8 +22,17 @@ import '../widgets/toast_message.dart';
 class AddEditRecordScreen extends StatefulWidget {
   final ArchiveItem? existingItem;
   final String? imagePath;
+  // Optional services keep analysis reproducible in tests; normal app uses defaults.
+  final VisionAIService? visionAIService;
+  final ExifService? exifService;
 
-  const AddEditRecordScreen({super.key, this.existingItem, this.imagePath});
+  const AddEditRecordScreen({
+    super.key,
+    this.existingItem,
+    this.imagePath,
+    this.visionAIService,
+    this.exifService,
+  });
 
   bool get isEditMode => existingItem != null;
 
@@ -108,7 +117,8 @@ class _AddEditRecordScreenState extends State<AddEditRecordScreen> {
   Future<void> _runAnalysisPipeline(String imagePath) async {
     final absolutePath = AppPaths.resolve(imagePath);
     final exifFuture = _resolveExifAndLocation(absolutePath);
-    final aiFuture = VisionAIService().analyzeImage(absolutePath);
+    final aiFuture = (widget.visionAIService ?? VisionAIService())
+        .analyzeImage(absolutePath);
 
     final results = await Future.wait([exifFuture, aiFuture]);
     if (!mounted) return;
@@ -142,7 +152,8 @@ class _AddEditRecordScreenState extends State<AddEditRecordScreen> {
   }
 
   Future<_ExifBundle> _resolveExifAndLocation(String imagePath) async {
-    final ExifResult exif = await ExifService().extract(imagePath);
+    final ExifResult exif =
+        await (widget.exifService ?? ExifService()).extract(imagePath);
     String region = '';
     if (exif.hasGps) {
       region = await LocationService().reverseGeocode(

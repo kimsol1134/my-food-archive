@@ -76,12 +76,12 @@ AI 자동 입력은 자신의 Firebase 프로젝트 연결과 App Check 설정�
 <details>
 <summary>터미널 사용 경험이 있는 독자: 예제 앱 실행 명령 보기</summary>
 
-Flutter 개발 환경이 이미 준비되어 있을 때만 아래 명령을 사용하세요.
+Flutter 개발 환경이 이미 준비되어 있을 때만 아래 명령을 사용하세요. 현재 검증 기준은 **Flutter 3.41.6 / Dart 3.11.4**이며, [SDK 설정과 테스트 안내](docs/TESTING.md)에서 같은 환경을 준비할 수 있습니다.
 
 ```bash
-flutter pub get
-flutter analyze
-flutter test
+flutter pub get --enforce-lockfile
+flutter analyze --no-pub
+flutter test --no-pub
 flutter run
 ```
 
