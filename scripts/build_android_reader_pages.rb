@@ -27,7 +27,7 @@ PAGES = {
     output: "start",
     public_path: "#{SITE_PUBLIC_ROOT}/start",
     title: "책 독자라면 여기부터",
-    description: "《클로드 코드로 앱스토어까지》 독자를 위한 My Food Archive 실습 자료 시작 안내",
+    description: "《바이브 코딩 도전기》 독자를 위한 My Food Archive 실습 자료 시작 안내",
     nav_path: "#{SITE_PUBLIC_ROOT}/",
     nav_label: "← 공식 실습 자료 첫 화면"
   },
@@ -35,7 +35,7 @@ PAGES = {
     output: "app-store",
     public_path: "#{SITE_PUBLIC_ROOT}/app-store",
     title: "iPhone · App Store 제출 체크리스트",
-    description: "《클로드 코드로 앱스토어까지》 독자를 위한 App Store Connect 입력과 제출 확인 자료",
+    description: "《바이브 코딩 도전기》 독자를 위한 App Store Connect 입력과 제출 확인 자료",
     nav_path: "#{SITE_PUBLIC_ROOT}/",
     nav_label: "← 공식 실습 자료 첫 화면"
   },
